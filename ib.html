@@ -3,56 +3,65 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Messages</title>
+<title>Blended - Messages</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,Arial}
 body{background:#000;color:#fff;height:100vh;display:flex;flex-direction:column}
-.top{display:flex;justify-content:space-between;align-items:center;padding:20px}
-.top h1{font-size:28px}
-.badge{background:#a78bfa;padding:8px 18px;border-radius:20px;color:#fff;font-size:14px}
-.list{flex:1;padding:10px;overflow-y:auto}
-.item{display:flex;gap:15px;padding:18px;background:#1a1a1a;border-radius:20px;margin-bottom:12px;align-items:center;cursor:pointer}
-.item:active{background:#2a2a2a}
-.avatar{width:55px;height:55px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:22px}
+.top{padding:18px 20px;display:flex;justify-content:space-between;align-items:center}
+.top h1{font-size:26px;font-weight:800}
+.badge{background:#a78bfa;padding:7px 16px;border-radius:20px;font-size:13px}
+.list{flex:1;overflow:auto;padding:12px}
+.item{display:flex;gap:14px;padding:16px;background:#121212;border-radius:18px;margin-bottom:10px;align-items:center}
+.item:active{background:#222}
+.ava{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px}
 .s{background:linear-gradient(135deg,#a855f7,#ec4899)} .j{background:linear-gradient(135deg,#0ea5e9,#3b82f6)} .a{background:linear-gradient(135deg,#f97316,#ef4444)}
-.info b{display:block;font-size:17px} .info span{font-size:14px;color:#aaa}
-.time{margin-left:auto;color:#a78bfa;font-size:13px}
-.chat-page{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:100;display:none;flex-direction:column}
-.chat-page.open{display:flex}
-.chat-header{padding:15px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #222}
-.msgs{flex:1;padding:15px;display:flex;flex-direction:column;gap:10px;overflow-y:auto}
-.m{max-width:75%;padding:12px 16px;border-radius:20px;font-size:15px}
-.me{background:#a78bfa;align-self:flex-end} .other{background:#1a1a1a;align-self:flex-start}
-.input-bar{padding:12px;display:flex;gap:10px;border-top:1px solid #222}
-.input-bar input{flex:1;background:#1a1a1a;border:none;padding:15px 20px;border-radius:30px;color:#fff;outline:none}
-.input-bar button{width:50px;height:50px;border-radius:50%;border:none;background:#fff;font-size:20px;cursor:pointer}
+.info b{display:block} .info span{color:#888;font-size:13px}
+.time{margin-left:auto;color:#a78bfa;font-size:12px}
+#chat{position:fixed;inset:0;background:#000;z-index:10;display:none;flex-direction:column}
+#chat.open{display:flex}
+.h{padding:14px;border-bottom:1px solid #1e1e1e;display:flex;align-items:center;gap:10px}
+.ms{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.bubble{max-width:78%;padding:11px 15px;border-radius:20px;font-size:14.5px;line-height:1.3}
+.me{background:#a78bfa;align-self:flex-end;border-bottom-right-radius:6px}
+.other{background:#1e1e1e;align-self:flex-start;border-bottom-left-radius:6px}
+.bar{padding:10px;display:flex;gap:8px;border-top:1px solid #1e1e1e}
+.bar input{flex:1;background:#1e1e1e;border:0;padding:14px 18px;border-radius:30px;color:#fff;outline:none}
+.bar button{width:48px;height:48px;border-radius:50%;border:0;background:#a78bfa;color:#fff;font-size:20px}
 </style>
 </head>
 <body>
 <div class="top"><h1>Messages</h1><span class="badge">3 en ligne</span></div>
 <div class="list">
-<div class="item" onclick="openChat('Sophie, 22','S','Hey! ça va? 😊')"><div class="avatar s">S</div><div class="info"><b>Sophie, 22</b><span>Hey! ça va? 😊</span></div><span class="time">2m</span></div>
-<div class="item" onclick="openChat('Junior','J','On se capte à Bafoussam?')"><div class="avatar j">J</div><div class="info"><b>Junior</b><span>On se capte à Bafoussam?</span></div><span class="time">1h</span></div>
-<div class="item" onclick="openChat('Aminata','A','Tu as vu mon profil?')"><div class="avatar a">A</div><div class="info"><b>Aminata</b><span>Tu as vu mon profil?</span></div><span class="time">3h</span></div>
+<div class="item" onclick="openC('Sophie, 22','S')"><div class="ava s">S</div><div class="info"><b>Sophie, 22</b><span>Hey! ça va? 😊</span></div><span class="time">2m</span></div>
+<div class="item" onclick="openC('Junior','J')"><div class="ava j">J</div><div class="info"><b>Junior</b><span>On se capte à Bafoussam?</span></div><span class="time">1h</span></div>
+<div class="item" onclick="openC('Aminata','A')"><div class="ava a">A</div><div class="info"><b>Aminata</b><span>Tu as vu mon profil?</span></div><span class="time">3h</span></div>
 </div>
-<div class="chat-page" id="chatPage">
-<div class="chat-header"><span onclick="closeChat()" style="font-size:30px;cursor:pointer">‹</span><div class="avatar s" id="cAvatar">S</div><b id="cName">Sophie</b><button onclick="alert('Paiement Orange Money 5000 FCFA pour chatter')" style="margin-left:auto;background:#ff8c00;border:none;padding:8px 14px;border-radius:15px;color:#fff;font-weight:bold">Payer</button></div>
-<div class="msgs" id="msgs"></div>
-<div class="input-bar"><input id="inp" placeholder="Écris un message..." onkeypress="if(event.key==='Enter')send()"><button onclick="send()">→</button></div>
+
+<div id="chat">
+<div class="h"><span onclick="closeC()" style="font-size:28px;padding:0 10px">‹</span><div class="ava s" id="ca">S</div><b id="cn">Sophie</b></div>
+<div class="ms" id="ms"></div>
+<div class="bar"><input id="inp" placeholder="Écris un message..." onkeydown="if(event.key==='Enter')send()"><button onclick="send()">↑</button></div>
 </div>
+
 <script>
-function openChat(name,letter,lastMsg){
- document.getElementById('cName').innerText=name;
- document.getElementById('cAvatar').innerText=letter;
- document.getElementById('chatPage').classList.add('open');
- document.getElementById('msgs').innerHTML = '<div class="m other">'+lastMsg+'</div><div class="m other">Tu es à Bafoussam? On peut se voir?</div>';
+function openC(name,letter){
+ document.getElementById('cn').innerText=name;
+ document.getElementById('ca').innerText=letter;
+ document.getElementById('chat').classList.add('open');
+ document.getElementById('ms').innerHTML='<div class="bubble other">Hey! ça va? 😊</div>';
 }
-function closeChat(){document.getElementById('chatPage').classList.remove('open');}
+function closeC(){document.getElementById('chat').classList.remove('open');}
 function send(){
- let i=document.getElementById('inp'); if(!i.value)return;
- let d=document.createElement('div'); d.className='m me'; d.innerText=i.value;
- document.getElementById('msgs').appendChild(d); i.value='';
- setTimeout(()=>{let r=document.createElement('div');r.className='m other';r.innerText='Super! 😊 On continue?';document.getElementById('msgs').appendChild(r);},1000);
+ let i=document.getElementById('inp'); if(!i.value.trim()) return;
+ let m=document.createElement('div'); m.className='bubble me'; m.innerText=i.value;
+ document.getElementById('ms').appendChild(m);
+ i.value='';
+ document.getElementById('ms').scrollTop=99999;
+ setTimeout(()=>{
+   let r=document.createElement('div'); r.className='bubble other'; r.innerText='D\'accord 😉 tu es à Bafoussam?';
+   document.getElementById('ms').appendChild(r);
+   document.getElementById('ms').scrollTop=99999;
+ },800);
 }
 </script>
 </body>
