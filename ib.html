@@ -1,68 +1,30 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blended - Messages</title>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat - Blended</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,Arial}
-body{background:#000;color:#fff;height:100vh;display:flex;flex-direction:column}
-.top{padding:18px 20px;display:flex;justify-content:space-between;align-items:center}
-.top h1{font-size:26px;font-weight:800}
-.badge{background:#a78bfa;padding:7px 16px;border-radius:20px;font-size:13px}
-.list{flex:1;overflow:auto;padding:12px}
-.item{display:flex;gap:14px;padding:16px;background:#121212;border-radius:18px;margin-bottom:10px;align-items:center}
-.item:active{background:#222}
-.ava{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px}
-.s{background:linear-gradient(135deg,#a855f7,#ec4899)} .j{background:linear-gradient(135deg,#0ea5e9,#3b82f6)} .a{background:linear-gradient(135deg,#f97316,#ef4444)}
-.info b{display:block} .info span{color:#888;font-size:13px}
-.time{margin-left:auto;color:#a78bfa;font-size:12px}
-#chat{position:fixed;inset:0;background:#000;z-index:10;display:none;flex-direction:column}
-#chat.open{display:flex}
-.h{padding:14px;border-bottom:1px solid #1e1e1e;display:flex;align-items:center;gap:10px}
-.ms{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
-.bubble{max-width:78%;padding:11px 15px;border-radius:20px;font-size:14.5px;line-height:1.3}
-.me{background:#a78bfa;align-self:flex-end;border-bottom-right-radius:6px}
-.other{background:#1e1e1e;align-self:flex-start;border-bottom-left-radius:6px}
-.bar{padding:10px;display:flex;gap:8px;border-top:1px solid #1e1e1e}
-.bar input{flex:1;background:#1e1e1e;border:0;padding:14px 18px;border-radius:30px;color:#fff;outline:none}
-.bar button{width:48px;height:48px;border-radius:50%;border:0;background:#a78bfa;color:#fff;font-size:20px}
-</style>
-</head>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#000;color:#fff;display:flex;flex-direction:column;height:100vh}
+.top{padding:14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #1e1e1e}
+.ava{width:40px;height:40px;background:linear-gradient(135deg,#a78bfa,#ec4899);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800}
+#msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.bubble{max-width:75%;padding:12px 16px;border-radius:20px;font-size:15px}
+.me{align-self:flex-end;background:#a78bfa;border-bottom-right-radius:6px}
+.other{align-self:flex-start;background:#1e1e1e;border-bottom-left-radius:6px}
+.bottom{padding:12px;display:flex;gap:10px;border-top:1px solid #1e1e1e}
+.bottom input{flex:1;background:#1e1e1e;border:1px solid #2a2a2a;padding:14px;border-radius:24px;color:#fff;outline:none}
+.bottom button{width:48px;height:48px;background:#a78bfa;border:0;border-radius:50%;color:#fff;font-size:20px}
+</style></head>
 <body>
-<div class="top"><h1>Messages</h1><span class="badge">3 en ligne</span></div>
-<div class="list">
-<div class="item" onclick="openC('Sophie, 22','S')"><div class="ava s">S</div><div class="info"><b>Sophie, 22</b><span>Hey! ça va? 😊</span></div><span class="time">2m</span></div>
-<div class="item" onclick="openC('Junior','J')"><div class="ava j">J</div><div class="info"><b>Junior</b><span>On se capte à Bafoussam?</span></div><span class="time">1h</span></div>
-<div class="item" onclick="openC('Aminata','A')"><div class="ava a">A</div><div class="info"><b>Aminata</b><span>Tu as vu mon profil?</span></div><span class="time">3h</span></div>
-</div>
-
-<div id="chat">
-<div class="h"><span onclick="closeC()" style="font-size:28px;padding:0 10px">‹</span><div class="ava s" id="ca">S</div><b id="cn">Sophie</b></div>
-<div class="ms" id="ms"></div>
-<div class="bar"><input id="inp" placeholder="Écris un message..." onkeydown="if(event.key==='Enter')send()"><button onclick="send()">↑</button></div>
-</div>
-
+<div class="top"><div class="ava">A</div><b>Aminata</b></div>
+<div id="msgs"></div>
+<div class="bottom"><input id="input" placeholder="Écris un message..." onkeypress="if(event.key==='Enter')send()"><button onclick="send()">↑</button></div>
 <script>
-function openC(name,letter){
- document.getElementById('cn').innerText=name;
- document.getElementById('ca').innerText=letter;
- document.getElementById('chat').classList.add('open');
- document.getElementById('ms').innerHTML='<div class="bubble other">Hey! ça va? 😊</div>';
-}
-function closeC(){document.getElementById('chat').classList.remove('open');}
-function send(){
- let i=document.getElementById('inp'); if(!i.value.trim()) return;
- let m=document.createElement('div'); m.className='bubble me'; m.innerText=i.value;
- document.getElementById('ms').appendChild(m);
- i.value='';
- document.getElementById('ms').scrollTop=99999;
- setTimeout(()=>{
-   let r=document.createElement('div'); r.className='bubble other'; r.innerText='D\'accord 😉 tu es à Bafoussam?';
-   document.getElementById('ms').appendChild(r);
-   document.getElementById('ms').scrollTop=99999;
- },800);
-}
+const msgs=document.getElementById('msgs');
+const input=document.getElementById('input');
+function add(text,me){let d=document.createElement('div');d.className='bubble '+(me?'me':'other');d.innerText=text;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;save();}
+function save(){localStorage.setItem('chat_aminata',msgs.innerHTML);}
+function load(){let s=localStorage.getItem('chat_aminata');if(s){msgs.innerHTML=s;}else{add('Hey! ça va? 😊',false);}}
+function send(){if(!input.value.trim())return;add(input.value,true);input.value='';setTimeout(()=>{add('D\'accord 😊',false);},800);}
+load();
 </script>
-</body>
-</html>
+</body></html>
