@@ -1,27 +1,48 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Inscription</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body style="background:black;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px">
-<div style="width:100%;max-width:380px;background:#18181b;border-radius:40px;padding:28px;border:1px solid #27272a">
-<h1 style="color:white;font-weight:900;font-size:32px;text-align:center">BLENDED<span style="color:#8b5cf6">.</span></h1>
-<input id="nom" placeholder="Ton nom complet" style="width:100%;background:#27272a;color:white;padding:16px;border-radius:16px;margin-top:24px;border:0">
-<input id="contact" placeholder="Numéro ou Email" style="width:100%;background:#27272a;color:white;padding:16px;border-radius:16px;margin-top:12px;border:0">
-<input id="naissance" type="date" style="width:100%;background:#27272a;color:white;padding:16px;border-radius:16px;margin-top:12px;border:0">
-<select id="genre" style="width:100%;background:#27272a;color:white;padding:16px;border-radius:16px;margin-top:12px;border:0">
-<option value="">Genre</option><option>Homme</option><option>Femme</option><option>Autre</option>
-</select>
-<button onclick="go()" style="width:100%;background:white;color:black;font-weight:900;padding:16px;border-radius:999px;margin-top:20px">CREER MON COMPTE</button>
-<p id="msg" style="text-align:center;color:#4ade80;margin-top:12px"></p>
-<a href="chat.html" style="display:block;text-align:center;color:#71717a;font-size:12px;margin-top:16px">Va au Chat IB →</a>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blended - Inscription WhatsApp</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Helvetica,Arial}
+body{background:#fff}
+.top{background:#075e54;padding:15px;color:#fff;display:flex;gap:15px;align-items:center}
+.top h2{font-size:18px;font-weight:400}
+.content{padding:25px}
+.content p{color:#667781;font-size:14px;text-align:center;margin-bottom:20px}
+.label{color:#008069;font-size:13px;margin:20px 0 5px;display:block}
+.box{display:flex;gap:10px;border-bottom:2px solid #008069;padding:8px 0}
+.box select,.box input{border:none;flex:1;font-size:16px;outline:none;background:none}
+.btn{position:fixed;bottom:20px;left:5%;width:90%;background:#25d366;color:#fff;border:none;padding:15px;border-radius:25px;font-size:16px;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="top"><span onclick="history.back()">‹</span><h2>Vérification du numéro</h2></div>
+<div class="content">
+<p>On va vérifier ton numéro. Entre ton numéro WhatsApp.</p>
+<span class="label">Cameroun</span>
+<div class="box"><select><option>🇨🇲 +237</option></select><input id="contact" placeholder="6 12 34 56 78"></div>
+<span class="label">Ton nom complet</span>
+<div class="box"><input id="nom" placeholder="Ex: Junior"></div>
+<span class="label">Date de naissance</span>
+<div class="box"><input id="naissance" type="date"></div>
+<span class="label">Genre</span>
+<div class="box"><select id="genre"><option value="">Genre</option><option>Homme</option><option>Femme</option></select></div>
+<p id="msg" style="text-align:center;margin-top:20px;color:green"></p>
 </div>
+<button class="btn" onclick="go()">SUIVANT</button>
 <script>
 function go(){
-let n=document.getElementById('nom').value;
-let c=document.getElementById('contact').value;
-let d=document.getElementById('naissance').value;
-let g=document.getElementById('genre').value;
-if(!n||!c||!d||!g){document.getElementById('msg').innerHTML='⚠️ Remplis tout';return;}
-localStorage.setItem('blended_user',JSON.stringify({nom:n,contact:c,naissance:d,genre:g}));
-document.getElementById('msg').innerHTML='✅ Bienvenue '+n;
-setTimeout(()=>location.href='chat.html',1000);
+ let n=document.getElementById('nom').value
+ let c=document.getElementById('contact').value
+ let d=document.getElementById('naissance').value
+ let g=document.getElementById('genre').value
+ if(!n||!c||!d||!g){document.getElementById('msg').innerHTML='Remplis tout!';return}
+ localStorage.setItem('blended_user',JSON.stringify({nom:n,contact:c,naissance:d,genre:g}))
+ document.getElementById('msg').innerHTML='✅ Vérifié! Redirection...'
+ setTimeout(()=>location.href='chat.html',1000)
 }
-</script></body></html>
+</script>
+</body>
+</html>
