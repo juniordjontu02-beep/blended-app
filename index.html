@@ -1,1 +1,50 @@
-<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=inscription.html"></head><body></body></html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blended - Vérification</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#000;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{width:100%;max-width:380px;background:#121212;border-radius:28px;padding:28px;border:1px solid #1e1e1e}
+.logo{width:64px;height:64px;background:linear-gradient(135deg,#a78bfa,#ec4899);border-radius:18px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:32px;margin:0 auto 14px}
+h1{text-align:center;font-size:22px;font-weight:800}.sub{text-align:center;color:#888;font-size:13px;margin:8px 0 20px}
+.row{display:flex;gap:8px;margin-bottom:12px}
+select{flex:1.2;background:#1e1e1e;border:1px solid #2a2a2a;padding:16px 10px;border-radius:16px;color:#fff;font-size:15px;outline:none}
+input{flex:2;background:#1e1e1e;border:1px solid #2a2a2a;padding:16px;border-radius:16px;color:#fff;font-size:16px;outline:none}
+.btn{width:100%;background:#a78bfa;border:0;padding:16px;border-radius:16px;color:#fff;font-weight:800;font-size:16px}
+.codebox{display:flex;gap:6px;justify-content:center;margin:14px 0}
+.codebox input{width:44px;height:50px;text-align:center;font-size:20px;font-weight:800;flex:none}
+#step2{display:none}
+</style>
+</head>
+<body>
+<div class="card">
+<div class="logo">B</div>
+<h1>BLENDED</h1>
+<div class="sub">Choisis ton pays et reçois le code</div>
+<div id="step1">
+<div class="row">
+<select id="country"></select>
+<input id="phone" type="tel" placeholder="6XX XX XX XX">
+</div>
+<button class="btn" onclick="sendCode()">Recevoir le code</button>
+</div>
+<div id="step2">
+<div class="sub" id="sentTo"></div>
+<div class="codebox">
+<input maxlength="1" id="c1"><input maxlength="1" id="c2"><input maxlength="1" id="c3"><input maxlength="1" id="c4"><input maxlength="1" id="c5"><input maxlength="1" id="c6">
+</div>
+<button class="btn" onclick="verify()">Vérifier</button>
+<div id="showCode" style="text-align:center;color:#a78bfa;font-weight:700;margin-top:12px"></div>
+</div>
+</div>
+<script>
+const countries=[["🇨🇲 Cameroun","+237"],["🇫🇷 France","+33"],["🇺🇸 USA","+1"],["🇨🇦 Canada","+1"],["🇧🇪 Belgique","+32"],["🇨🇭 Suisse","+41"],["🇩🇪 Allemagne","+49"],["🇬🇧 UK","+44"],["🇮🇹 Italie","+39"],["🇪🇸 Espagne","+34"],["🇵🇹 Portugal","+351"],["🇲🇦 Maroc","+212"],["🇩🇿 Algérie","+213"],["🇹🇳 Tunisie","+216"],["🇸🇳 Sénégal","+221"],["🇨🇮 Côte d'Ivoire","+225"],["🇨🇩 RDC","+243"],["🇨🇬 Congo","+242"],["🇬🇦 Gabon","+241"],["🇧🇯 Bénin","+229"],["🇹🇬 Togo","+228"],["🇲🇱 Mali","+223"],["🇧🇫 Burkina","+226"],["🇳🇪 Niger","+227"],["🇬🇳 Guinée","+224"],["🇳🇬 Nigeria","+234"],["🇬🇭 Ghana","+233"],["🇿🇦 Afrique du Sud","+27"],["🇪🇬 Égypte","+20"],["🇦🇪 Émirats","+971"],["🇸🇦 Arabie","+966"],["🇹🇷 Turquie","+90"],["🇮🇳 Inde","+91"],["🇨🇳 Chine","+86"],["🇯🇵 Japon","+81"],["🇰🇷 Corée","+82"],["🇧🇷 Brésil","+55"],["🇲🇽 Mexique","+52"],["🇦🇺 Australie","+61"],["🇷🇺 Russie","+7"]];
+const sel=document.getElementById('country');countries.forEach(c=>{let o=document.createElement('option');o.value=c[1];o.text=c[0]+' '+c[1];sel.appendChild(o);});sel.value="+237";
+let realCode="";function sendCode(){let dial=sel.value;let num=document.getElementById('phone').value.trim();if(num.length<5){alert('Mets ton numéro');return}realCode=Math.floor(100000+Math.random()*900000).toString();let full=dial+num;document.getElementById('sentTo').innerText='Code envoyé au '+full;document.getElementById('showCode').innerText='CODE TEST: '+realCode;document.getElementById('step1').style.display='none';document.getElementById('step2').style.display='block';}
+function verify(){let code=["c1","c2","c3","c4","c5","c6"].map(id=>document.getElementById(id).value).join('');if(code===realCode){window.location.href='ib.html?verified=1';}else{alert('Code faux! Vrai: '+realCode);}}
+</script>
+</body>
+</html>
