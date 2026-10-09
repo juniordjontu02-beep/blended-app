@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messenger - Blended</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Helvetica,Arial}
+body{display:flex;height:100vh;overflow:hidden}
+.left{width:100%;max-width:360px;border-right:1px solid #e4e6eb;display:flex;flex-direction:column}
+@media(max-width:700px){.left{max-width:100%}}
+.header{padding:12px;display:flex;justify-content:space-between;align-items:center}
+.header b{font-size:20px}
+.avatar{width:36px;height:36px;background:#0084ff;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold}
+.search-box{padding:0 12px 10px}
+.search-box input{width:100%;padding:9px 14px;border-radius:20px;border:none;background:#f0f2f5;outline:none}
+.chat{padding:10px 12px;display:flex;gap:10px;align-items:center;cursor:pointer}
+.chat:hover{background:#f5f5f5}
+.chat.active{background:#e7f3ff}
+.chat img{width:56px;height:56px;border-radius:50%;background:#ddd}
+.info{flex:1;overflow:hidden}
+.info b{font-size:15px;display:block}
+.info p{font-size:13px;color:#65676b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.right{flex:1;display:none;flex-direction:column;background:#fff}
+.right.open{display:flex}
+.top{padding:10px;border-bottom:1px solid #e4e6eb;display:flex;align-items:center;gap:10px}
+.msgs{flex:1;background:#f0f2f5;padding:15px;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+.bubble{max-width:70%;padding:10px 14px;border-radius:18px;font-size:14px;line-height:1.3}
+.me{background:#0084ff;color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.other{background:#e4e6eb;align-self:flex-start;border-bottom-left-radius:4px}
+.input{padding:10px;display:flex;gap:8px;align-items:center}
+.input input{flex:1;padding:10px 14px;border-radius:20px;border:none;background:#f0f2f5;outline:none}
+.input button{width:36px;height:36px;border-radius:50%;border:none;background:#0084ff;color:#fff;font-size:18px}
+.back{font-size:22px;cursor:pointer;padding:0 5px}
+</style>
+</head>
+<body>
+<div class="left">
+<div class="header"><b>Chats</b><div class="avatar">B</div></div>
+<div class="search-box"><input placeholder="Rechercher sur Messenger"></div>
+<div id="list"></div>
+</div>
+<div class="right" id="right">
+<div class="top"><span class="back" onclick="closeChat()">‹</span><div class="avatar" id="av">S</div><b id="name">Chat</b></div>
+<div class="msgs" id="msgs"></div>
+<div class="input"><input id="txt" placeholder="Aa" onkeypress="if(event.key==='Enter')send()"><button onclick="send()">➤</button></div>
+</div>
+<script>
+let user=JSON.parse(localStorage.getItem('blended_user')||'{}');
+let contacts=[
+{nom:user.nom||'Moi ('+ (user.contact||'') +')', last:'Tu es en ligne ✅', img:''},
+{nom:'Support Blended', last:'Bienvenue! Ton profil est actif ✅', img:''},
+{nom:'Aïcha - Yaoundé', last:'Salut! On se voit?', img:''},
+{nom:'Marie - Douala', last:'Tu es de Bafoussam?', img:''}
+];
+let cur=0;
+function render(){
+ document.getElementById('list').innerHTML=contacts.map((c,i)=>`
+ <div class="chat ${i===cur?'active':''}" onclick="openChat(${i})">
+  <div class="avatar">${c.nom[0]}</div>
+  <div class="info"><b>${c.nom}</b><p>${c.last}</p></div>
+ </div>`).join('');
+}
+function openChat(i){
+ cur=i;render();
+ document.getElementById('name').innerText=contacts[i].nom;
+ document.getElementById('av').innerText=contacts[i].nom[0];
+ document.getElementById('right').classList.add('open');
+ let k='blended_msg_'+i;
+ let m=JSON.parse(localStorage.getItem(k)||'[]');
+ document.getElementById('msgs').innerHTML=m.map(x=>`<div class="bubble ${x.me?'me':'other'}">${x.t}</div>`).join('')||`<p style="text-align:center;color:#999;margin-top:30px">Début avec ${contacts[i].nom}</p>`;
+}
+function closeChat(){document.getElementById('right').classList.remove('open')}
+function send(){
+ let t=document.getElementById('txt').value.trim();if(!t)return;
+ let k='blended_msg_'+cur;
+ let m=JSON.parse(localStorage.getItem(k)||'[]');
+ m.push({t:t,me:true});localStorage.setItem(k,JSON.stringify(m));
+ contacts[cur].last='Toi: '+t;
+ document.getElementById('txt').value='';render();openChat(cur);
+ setTimeout(()=>{m.push({t:'Reçu ✅ C’est Blended! On te répond vite.',me:false});localStorage.setItem(k,JSON.stringify(m));openChat(cur)},800);
+}
+render();
+</script>
+</body>
+</html>
