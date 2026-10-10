@@ -1,113 +1,79 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Blended Privé</title>
+<html><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blended - Facebook</title>
 <style>
-body{background:#000;color:#fff;font-family:sans-serif;margin:0}
-.header{padding:15px;background:#111;display:flex;gap:10px;align-items:center}
-.header img{width:32px;height:32px;border-radius:50%}
-.user-list{padding:10px}
-.user-card{display:flex;align-items:center;gap:12px;padding:12px;background:#1a1a1a;border-radius:15px;margin-bottom:8px}
-.user-card img{width:45px;height:45px;border-radius:50%;object-fit:cover}
-.chat-box{height:70vh;overflow-y:auto;padding:10px}
-.msg{background:#222;padding:10px 15px;border-radius:15px;margin:5px 0;max-width:70%}
-.msg.me{background:#005c4b;margin-left:auto}
-input{width:100%;padding:12px;background:#222;border:none;border-radius:25px;color:#fff;box-sizing:border-box}
+*{box-sizing:border-box;margin:0}body{background:#0a0a0a;color:#fff;font-family:sans-serif}
+.header{position:sticky;top:0;background:#111;padding:12px;display:flex;justify-content:space-between;z-index:10;border-bottom:1px solid #222}
+.post-box{background:#1a1a1a;margin:10px;border-radius:15px;padding:15px}
+.post-box textarea{width:100%;background:#222;border:none;color:#fff;padding:12px;border-radius:10px;resize:none}
+.btn{padding:10px 18px;border-radius:20px;border:none;font-weight:bold;cursor:pointer}
+.btn-green{background:#00e676;color:#000}.btn-dark{background:#222;color:#fff}
+.avatar{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.action{display:flex;justify-content:space-around;padding-top:10px;border-top:1px solid #222;margin-top:10px}
+.action span{cursor:pointer;padding:5px 15px;border-radius:20px}
+.action span:active{background:#222}
+.auth{max-width:380px;margin:40px auto;background:#1a1a1a;padding:25px;border-radius:20px}
+.auth input{width:100%;padding:14px;margin:7px 0;background:#222;border:none;border-radius:12px;color:#fff}
+.feed{max-width:500px;margin:0 auto}
 </style>
-</head>
-<body>
-<div class="header">
-<img src="https://i.pravatar.cc/100?img=12"><b>Blended - Privé</b>
+</head><body>
+
+<!-- AUTH -->
+<div id="auth" class="auth">
+<img id="prev" src="https://i.pravatar.cc/100" style="width:80px;height:80px;border-radius:50%;display:block;margin:0 auto 10px">
+<input type="file" id="file" accept="image/*">
+<h2 id="t" style="text-align:center;margin:10px">Créer un compte</h2>
+<input id="n" placeholder="Nom complet">
+<input id="e" placeholder="Email">
+<input id="p" type="password" placeholder="Mot de passe">
+<button class="btn btn-green" style="width:100%;margin-top:10px" id="b" onclick="signup()">S'inscrire</button>
+<p style="text-align:center;margin-top:15px"><small><a href="#" onclick="toggle()" id="s" style="color:#00e676">Déjà un compte? Se connecter</a></small></p>
 </div>
 
-<div id="userListView">
-<div style="padding:10px"><input id="search" placeholder="🔍 Rechercher..." oninput="filtrer(this.value)"></div>
-<div class="user-list" id="userList"></div>
+<!-- APP -->
+<div id="app" style="display:none">
+<div class="header">
+<b style="font-size:20px">blended</b>
+<div style="display:flex;gap:10px;align-items:center">
+<img id="myAv" class="avatar" src=""><b id="myNm"></b>
+<button onclick="logout()" class="btn btn-dark" style="padding:6px 12px">✕</button>
+</div>
 </div>
 
-<div id="chatView" style="display:none">
-<div class="header">
-<span onclick="retour()" style="cursor:pointer">← Retour</span>
-<img id="chatPhoto" src=""><b id="chatName"></b>
+<div class="feed">
+<div class="post-box">
+<div style="display:flex;gap:10px"><img id="myAv2" class="avatar" src=""><textarea id="postText" placeholder="Quoi de neuf, Junior?" rows="2"></textarea></div>
+<input type="file" id="postFile" accept="image/*" style="margin-top:10px">
+<button class="btn btn-green" style="width:100%;margin-top:10px" onclick="publier()">Publier</button>
 </div>
-<div class="chat-box" id="messages"></div>
-<div style="padding:10px;display:flex;gap:8px">
-<input id="msgInput" placeholder="Message...">
-<button onclick="envoyer()" style="background:#005c4b;border:none;color:#fff;padding:12px 20px;border-radius:25px">Envoyer</button>
+<div id="feed"></div>
 </div>
+</div>
+
+<!-- CHAT MODAL -->
+<div id="chat" style="display:none;position:fixed;bottom:0;right:10px;width:300px;background:#1a1a1a;border-radius:15px 15px 0 0;border:1px solid #333;z-index:20">
+<div style="padding:10px;background:#222;display:flex;justify-content:space-between"><b id="chatName"></b><span onclick="document.getElementById('chat').style.display='none'" style="cursor:pointer">✕</span></div>
+<div id="chatMsgs" style="height:200px;overflow-y:auto;padding:10px"></div>
+<div style="display:flex;padding:8px"><input id="chatIn" style="flex:1;background:#222;border:none;padding:10px;border-radius:20px;color:#fff"><button onclick="sendMsg()" class="btn btn-green" style="margin-left:5px">></button></div>
 </div>
 
 <script>
-let users = [
-{name:"Vanne", photo:"https://i.pravatar.cc/150?img=5", lastSeen: new Date()},
-{name:"Djontu", photo:"https://i.pravatar.cc/150?img=8", lastSeen: new Date(Date.now() - 1000*60*30)},
-{name:"Nouma ❤️", photo:"https://i.pravatar.cc/150?img=9", lastSeen: new Date()},
-{name:"Junior", photo:"https://i.pravatar.cc/150?img=12", lastSeen: new Date()}
-];
-
-let messages = [
-{from:"Vanne", to:"Junior", text:"Salut"},
-{from:"Nouma ❤️", to:"Junior", text:"Bonjour, C'est comment"},
-{from:"Junior", to:"Nouma ❤️", text:"Çava et toi"}
-];
-
-let currentChat = null;
-
-function getStatus(lastSeen){
-let diff = (new Date() - new Date(lastSeen))/60000;
-if(diff < 2) return "🟢 En ligne";
-if(diff < 60) return `Vu il y a ${Math.floor(diff)} min`;
-return "Vu aujourd'hui";
-}
-
-function afficherUsers(list){
-document.getElementById('userList').innerHTML = list.map(u=>`
-<div class="user-card" onclick="ouvrirChat('${u.name}')">
-<div style="position:relative">
-<img src="${u.photo}">
-${(new Date() - new Date(u.lastSeen))/60000 < 2 ? '<span style="position:absolute;bottom:0;right:0;width:12px;height:12px;background:#00e676;border-radius:50%;border:2px solid #1a1a1a"></span>' : ''}
-</div>
-<div><b>${u.name}</b><br><small style="color:#888">${getStatus(u.lastSeen)}</small></div>
-</div>
-`).join('');
-}
-
-function ouvrirChat(nom){
-currentChat = users.find(u=>u.name===nom);
-document.getElementById('userListView').style.display='none';
-document.getElementById('chatView').style.display='block';
-document.getElementById('chatName').innerText = currentChat.name;
-document.getElementById('chatPhoto').src = currentChat.photo;
-afficherMessages();
-}
-
-function retour(){
-document.getElementById('chatView').style.display='none';
-document.getElementById('userListView').style.display='block';
-}
-
-function afficherMessages(){
-let moi = "Junior";
-let filtres = messages.filter(m=> (m.from===moi && m.to===currentChat.name) || (m.from===currentChat.name && m.to===moi));
-document.getElementById('messages').innerHTML = filtres.map(m=>`<div class="msg ${m.from===moi?'me':''}">${m.text}</div>`).join('');
-}
-
-function envoyer(){
-let txt = document.getElementById('msgInput').value;
-if(!txt) return;
-messages.push({from:"Junior", to:currentChat.name, text:txt});
-document.getElementById('msgInput').value='';
-afficherMessages();
-}
-
-function filtrer(q){
-let f = users.filter(u=>u.name.toLowerCase().includes(q.toLowerCase()));
-afficherUsers(f);
-}
-
-afficherUsers(users);
+let mode="up", users=JSON.parse(localStorage.getItem("b_users")||"[]"), posts=JSON.parse(localStorage.getItem("b_posts")||"[]"), cur=JSON.parse(localStorage.getItem("b_cur")||"null"), myPic="", curChat=null, msgs=JSON.parse(localStorage.getItem("b_msgs")||"[]");
+document.getElementById("file").addEventListener("change",e=>{let r=new FileReader();r.onload=ev=>{myPic=ev.target.result;document.getElementById("prev").src=myPic};r.readAsDataURL(e.target.files[0])});
+function toggle(){if(mode=="up"){mode="in";document.getElementById("t").innerText="Se connecter";document.getElementById("n").style.display="none";document.getElementById("file").style.display="none";document.getElementById("b").innerText="Se connecter";document.getElementById("b").setAttribute("onclick","login()");document.getElementById("s").innerText="Pas de compte? S'inscrire"}else{mode="up";document.getElementById("t").innerText="Créer un compte";document.getElementById("n").style.display="block";document.getElementById("file").style.display="block";document.getElementById("b").innerText="S'inscrire";document.getElementById("b").setAttribute("onclick","signup()");document.getElementById("s").innerText="Déjà un compte? Se connecter"}}
+function signup(){let n=document.getElementById("n").value,e=document.getElementById("e").value,p=document.getElementById("p").value;if(!n||!e||!p)return alert("Remplis tout");if(users.find(u=>u.e===e))return alert("Email déjà pris");let u={n,e,p,pic:myPic||`https://i.pravatar.cc/150?u=${e}`,id:Date.now()};users.push(u);localStorage.setItem("b_users",JSON.stringify(users));localStorage.setItem("b_cur",JSON.stringify(u));cur=u;showApp()}
+function login(){let e=document.getElementById("e").value,p=document.getElementById("p").value;let u=users.find(x=>x.e===e&&x.p===p);if(!u)return alert("Faux");localStorage.setItem("b_cur",JSON.stringify(u));cur=u;showApp()}
+function showApp(){document.getElementById("auth").style.display="none";document.getElementById("app").style.display="block";document.getElementById("myAv").src=cur.pic;document.getElementById("myAv2").src=cur.pic;document.getElementById("myNm").innerText=cur.n;render()}
+function render(){let h="";posts.slice().reverse().forEach((po,i)=>{let idx=posts.length-1-i;let u=users.find(x=>x.id===po.uid)||{n:"Anonyme",pic:""};h+=`<div class="post-box"><div style="display:flex;gap:10px;align-items:center"><img src="${u.pic}" class="avatar"><div><b>${u.n}</b><br><small style="color:#888">${po.time}</small></div><span style="margin-left:auto;cursor:pointer" onclick="chatWith('${u.n}')">💬</span></div><p style="margin:10px 0">${po.txt}</p>${po.img?`<img src="${po.img}" style="width:100%;border-radius:12px">`:''}<div class="action"><span onclick="like(${idx})">❤️ ${po.likes||0} J'aime</span><span onclick="commenter(${idx})">💬 ${po.coms?po.coms.length:0}</span><span>↗️ Partager</span></div>${po.coms?po.coms.map(c=>`<div style="background:#222;padding:8px 12px;border-radius:15px;margin-top:6px"><b>${c.n}</b> ${c.t}</div>`).join(''):''}</div>`});document.getElementById("feed").innerHTML=h||"<p style='text-align:center;color:#888;padding:20px'>Aucune publication. Sois le premier!</p>"}
+function publier(){let t=document.getElementById("postText").value;if(!t&&!document.getElementById("postFile").files[0])return;let f=document.getElementById("postFile").files[0];if(f){let r=new FileReader();r.onload=ev=>{savePost(t,ev.target.result);};r.readAsDataURL(f)}else savePost(t,"")}
+function savePost(txt,img){posts.push({uid:cur.id,txt,img,time:new Date().toLocaleString(),likes:0,coms:[]});localStorage.setItem("b_posts",JSON.stringify(posts));document.getElementById("postText").value="";document.getElementById("postFile").value="";render()}
+function like(i){posts[i].likes=(posts[i].likes||0)+1;localStorage.setItem("b_posts",JSON.stringify(posts));render()}
+function commenter(i){let t=prompt("Ton commentaire:");if(!t)return;posts[i].coms=posts[i].coms||[];posts[i].coms.push({n:cur.n,t});localStorage.setItem("b_posts",JSON.stringify(posts));render()}
+function chatWith(name){curChat=name;document.getElementById("chatName").innerText=name;document.getElementById("chat").style.display="block";renderChat()}
+function sendMsg(){let t=document.getElementById("chatIn").value;if(!t)return;msgs.push({from:cur.n,to:curChat,t,time:Date.now()});localStorage.setItem("b_msgs",JSON.stringify(msgs));document.getElementById("chatIn").value="";renderChat()}
+function renderChat(){let f=msgs.filter(m=>(m.from===cur.n&&m.to===curChat)||(m.from===curChat&&m.to===cur.n));document.getElementById("chatMsgs").innerHTML=f.map(m=>`<div style="margin:5px 0;padding:8px 12px;border-radius:15px;max-width:80%;background:${m.from===cur.n?'#005c4b':'#222'};margin-left:${m.from===cur.n?'auto':0}">${m.t}</div>`).join('')}
+function logout(){localStorage.removeItem("b_cur");location.reload()}
+if(cur)showApp();
 </script>
-</body>
-</html>
+</body></html>
