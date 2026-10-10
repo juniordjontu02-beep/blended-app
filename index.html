@@ -1,50 +1,117 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blended - Vérification</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
-body{background:#000;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-.card{width:100%;max-width:380px;background:#121212;border-radius:28px;padding:28px;border:1px solid #1e1e1e}
-.logo{width:64px;height:64px;background:linear-gradient(135deg,#a78bfa,#ec4899);border-radius:18px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:32px;margin:0 auto 14px}
-h1{text-align:center;font-size:22px;font-weight:800}.sub{text-align:center;color:#888;font-size:13px;margin:8px 0 20px}
-.row{display:flex;gap:8px;margin-bottom:12px}
-select{flex:1.2;background:#1e1e1e;border:1px solid #2a2a2a;padding:16px 10px;border-radius:16px;color:#fff;font-size:15px;outline:none}
-input{flex:2;background:#1e1e1e;border:1px solid #2a2a2a;padding:16px;border-radius:16px;color:#fff;font-size:16px;outline:none}
-.btn{width:100%;background:#a78bfa;border:0;padding:16px;border-radius:16px;color:#fff;font-weight:800;font-size:16px}
-.codebox{display:flex;gap:6px;justify-content:center;margin:14px 0}
-.codebox input{width:44px;height:50px;text-align:center;font-size:20px;font-weight:800;flex:none}
-#step2{display:none}
+body{background:#000;color:#fff;font-family:sans-serif;margin:0}
+.header{padding:15px;background:#111;display:flex;justify-content:space-between;align-items:center}
+.user-list{padding:10px}
+.user-card{display:flex;align-items:center;gap:12px;padding:12px;background:#1a1a1a;border-radius:15px;margin-bottom:8px;cursor:pointer}
+.user-card img{width:45px;height:45px;border-radius:50%;object-fit:cover}
+.user-card.initial{width:45px;height:45px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-weight:bold}
+.chat-box{height:70vh;overflow-y:auto;padding:10px}
+.msg{background:#222;padding:10px 15px;border-radius:15px;margin:5px 0;max-width:70%}
+.msg.me{background:#005c4b;margin-left:auto}
+input{width:100%;padding:12px;background:#222;border:none;border-radius:25px;color:#fff}
 </style>
 </head>
 <body>
-<div class="card">
-<div class="logo">B</div>
-<h1>BLENDED</h1>
-<div class="sub">Choisis ton pays et reçois le code</div>
-<div id="step1">
-<div class="row">
-<select id="country"></select>
-<input id="phone" type="tel" placeholder="6XX XX XX XX">
+
+<div class="header">
+  <b>Blended - Privé</b>
+  <span id="myName">Junior</span>
 </div>
-<button class="btn" onclick="sendCode()">Recevoir le code</button>
+
+<!-- LISTE AVEC PHOTOS -->
+<div id="userListView">
+  <div style="padding:10px">
+    <input id="search" placeholder="🔍 Rechercher..." oninput="filtrer(this.value)">
+  </div>
+  <div class="user-list" id="userList">
+    <!-- Généré automatiquement -->
+  </div>
 </div>
-<div id="step2">
-<div class="sub" id="sentTo"></div>
-<div class="codebox">
-<input maxlength="1" id="c1"><input maxlength="1" id="c2"><input maxlength="1" id="c3"><input maxlength="1" id="c4"><input maxlength="1" id="c5"><input maxlength="1" id="c6">
+
+<!-- CHAT PRIVÉ -->
+<div id="chatView" style="display:none">
+  <div class="header">
+    <span onclick="retour()" style="cursor:pointer">← Retour</span>
+    <div style="display:flex;align-items:center;gap:8px">
+      <img id="chatPhoto" src="" style="width:30px;height:30px;border-radius:50%">
+      <b id="chatName"></b>
+    </div>
+  </div>
+  <div class="chat-box" id="messages"></div>
+  <div style="padding:10px;display:flex;gap:8px">
+    <input id="msgInput" placeholder="Écris un message...">
+    <button onclick="envoyer()" style="background:#005c4b;border:none;color:#fff;padding:12px 20px;border-radius:25px">Envoyer</button>
+  </div>
 </div>
-<button class="btn" onclick="verify()">Vérifier</button>
-<div id="showCode" style="text-align:center;color:#a78bfa;font-weight:700;margin-top:12px"></div>
-</div>
-</div>
+
 <script>
-const countries=[["🇨🇲 Cameroun","+237"],["🇫🇷 France","+33"],["🇺🇸 USA","+1"],["🇨🇦 Canada","+1"],["🇧🇪 Belgique","+32"],["🇨🇭 Suisse","+41"],["🇩🇪 Allemagne","+49"],["🇬🇧 UK","+44"],["🇮🇹 Italie","+39"],["🇪🇸 Espagne","+34"],["🇵🇹 Portugal","+351"],["🇲🇦 Maroc","+212"],["🇩🇿 Algérie","+213"],["🇹🇳 Tunisie","+216"],["🇸🇳 Sénégal","+221"],["🇨🇮 Côte d'Ivoire","+225"],["🇨🇩 RDC","+243"],["🇨🇬 Congo","+242"],["🇬🇦 Gabon","+241"],["🇧🇯 Bénin","+229"],["🇹🇬 Togo","+228"],["🇲🇱 Mali","+223"],["🇧🇫 Burkina","+226"],["🇳🇪 Niger","+227"],["🇬🇳 Guinée","+224"],["🇳🇬 Nigeria","+234"],["🇬🇭 Ghana","+233"],["🇿🇦 Afrique du Sud","+27"],["🇪🇬 Égypte","+20"],["🇦🇪 Émirats","+971"],["🇸🇦 Arabie","+966"],["🇹🇷 Turquie","+90"],["🇮🇳 Inde","+91"],["🇨🇳 Chine","+86"],["🇯🇵 Japon","+81"],["🇰🇷 Corée","+82"],["🇧🇷 Brésil","+55"],["🇲🇽 Mexique","+52"],["🇦🇺 Australie","+61"],["🇷🇺 Russie","+7"]];
-const sel=document.getElementById('country');countries.forEach(c=>{let o=document.createElement('option');o.value=c[1];o.text=c[0]+' '+c[1];sel.appendChild(o);});sel.value="+237";
-let realCode="";function sendCode(){let dial=sel.value;let num=document.getElementById('phone').value.trim();if(num.length<5){alert('Mets ton numéro');return}realCode=Math.floor(100000+Math.random()*900000).toString();let full=dial+num;document.getElementById('sentTo').innerText='Code envoyé au '+full;document.getElementById('showCode').innerText='CODE TEST: '+realCode;document.getElementById('step1').style.display='none';document.getElementById('step2').style.display='block';}
-function verify(){let code=["c1","c2","c3","c4","c5","c6"].map(id=>document.getElementById(id).value).join('');if(code===realCode){window.location.href='ib.html?verified=1';}else{alert('Code faux! Vrai: '+realCode);}}
+// TES UTILISATEURS AVEC PHOTOS - change les liens
+let users = [
+  {name:"Vanne", photo:"https://i.pravatar.cc/150?img=5"},
+  {name:"Djontu", photo:"https://i.pravatar.cc/150?img=8"},
+  {name:"Nouma ❤️", photo:"https://i.pravatar.cc/150?img=9"},
+  {name:"Junior", photo:"https://i.pravatar.cc/150?img=12"}
+];
+
+let currentChat = null;
+let messages = [
+  {from:"Vanne", to:"Junior", text:"Salut"},
+  {from:"Nouma ❤️", to:"Junior", text:"Bonjour, C'est comment"},
+  {from:"Junior", to:"Nouma ❤️", text:"Çava et toi"}
+];
+
+function afficherUsers(list){
+  document.getElementById('userList').innerHTML = list.map(u=>`
+    <div class="user-card" onclick="ouvrirChat('${u.name}')">
+      ${u.photo? `<img src="${u.photo}">` : `<div class="initial">${u.name[0]}</div>`}
+      <div><b>${u.name}</b><br><small style="color:#888">En ligne</small></div>
+    </div>
+  `).join('');
+}
+
+function ouvrirChat(nom){
+  currentChat = users.find(u=>u.name===nom);
+  document.getElementById('userListView').style.display='none';
+  document.getElementById('chatView').style.display='block';
+  document.getElementById('chatName').innerText = currentChat.name;
+  document.getElementById('chatPhoto').src = currentChat.photo;
+  afficherMessages();
+}
+
+function retour(){
+  document.getElementById('chatView').style.display='none';
+  document.getElementById('userListView').style.display='block';
+}
+
+function afficherMessages(){
+  let moi = "Junior";
+  let filtres = messages.filter(m=>
+    (m.from===moi && m.to===currentChat.name) ||
+    (m.from===currentChat.name && m.to===moi)
+  );
+  document.getElementById('messages').innerHTML = filtres.map(m=>`
+    <div class="msg ${m.from===moi?'me':''}">${m.text}</div>
+  `).join('');
+}
+
+function envoyer(){
+  let txt = document.getElementById('msgInput').value;
+  if(!txt) return;
+  messages.push({from:"Junior", to:currentChat.name, text:txt});
+  document.getElementById('msgInput').value='';
+  afficherMessages();
+}
+
+function filtrer(q){
+  let f = users.filter(u=>u.name.toLowerCase().includes(q.toLowerCase()));
+  afficherUsers(f);
+}
+
+afficherUsers(users);
 </script>
 </body>
 </html>
