@@ -1,47 +1,48 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blended - Inscription WhatsApp</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Helvetica,Arial}
-body{background:#fff}
-.top{background:#075e54;padding:15px;color:#fff;display:flex;gap:15px;align-items:center}
-.top h2{font-size:18px;font-weight:400}
-.content{padding:25px}
-.content p{color:#667781;font-size:14px;text-align:center;margin-bottom:20px}
-.label{color:#008069;font-size:13px;margin:20px 0 5px;display:block}
-.box{display:flex;gap:10px;border-bottom:2px solid #008069;padding:8px 0}
-.box select,.box input{border:none;flex:1;font-size:16px;outline:none;background:none}
-.btn{position:fixed;bottom:20px;left:5%;width:90%;background:#25d366;color:#fff;border:none;padding:15px;border-radius:25px;font-size:16px;font-weight:bold}
+body{background:#000;color:#fff;font-family:Arial;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0}
+.box{background:#111;padding:25px;border-radius:16px;width:90%;max-width:360px;text-align:center}
+input{width:100%;padding:12px;margin:8px 0;border-radius:22px;border:none;background:#222;color:#fff;box-sizing:border-box}
+.btn{background:#00e676;color:#000;border:none;padding:12px;width:100%;border-radius:22px;font-weight:bold;margin-top:10px;cursor:pointer}
+img{width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:10px}
 </style>
 </head>
 <body>
-<div class="top"><span onclick="history.back()">‹</span><h2>Vérification du numéro</h2></div>
-<div class="content">
-<p>On va vérifier ton numéro. Entre ton numéro WhatsApp.</p>
-<span class="label">Cameroun</span>
-<div class="box"><select><option>🇨🇲 +237</option></select><input id="contact" placeholder="6 12 34 56 78"></div>
-<span class="label">Ton nom complet</span>
-<div class="box"><input id="nom" placeholder="Ex: Junior"></div>
-<span class="label">Date de naissance</span>
-<div class="box"><input id="naissance" type="date"></div>
-<span class="label">Genre</span>
-<div class="box"><select id="genre"><option value="">Genre</option><option>Homme</option><option>Femme</option></select></div>
-<p id="msg" style="text-align:center;margin-top:20px;color:green"></p>
+<div class="box">
+<img id="prev" src="https://i.pravatar.cc/100">
+<input type="file" id="file" accept="image/*">
+<h2>Créer compte</h2>
+<input id="n" placeholder="Nom complet">
+<input id="e" placeholder="Email">
+<input id="p" type="password" placeholder="Mot de passe">
+<button class="btn" onclick="signup()">Créer et Entrer</button>
+<p style="margin-top:15px;font-size:14px">Déjà un compte? <span onclick="login()" style="color:#00e676;cursor:pointer">Se connecter</span></p>
 </div>
-<button class="btn" onclick="go()">SUIVANT</button>
 <script>
-function go(){
- let n=document.getElementById('nom').value
- let c=document.getElementById('contact').value
- let d=document.getElementById('naissance').value
- let g=document.getElementById('genre').value
- if(!n||!c||!d||!g){document.getElementById('msg').innerHTML='Remplis tout!';return}
- localStorage.setItem('blended_user',JSON.stringify({nom:n,contact:c,naissance:d,genre:g}))
- document.getElementById('msg').innerHTML='✅ Vérifié! Redirection...'
- setTimeout(()=>location.href='chat.html',1000)
+let avatar="https://i.pravatar.cc/100"
+document.getElementById('file').addEventListener('change',e=>{
+  let r=new FileReader();r.onload=()=>{avatar=r.result;document.getElementById('prev').src=avatar};r.readAsDataURL(e.target.files[0])
+})
+function signup(){
+  let n=document.getElementById('n').value,e=document.getElementById('e').value,p=document.getElementById('p').value
+  if(!n||!e||!p) return alert('Remplis tout')
+  let users=JSON.parse(localStorage.getItem('users')||'[]')
+  if(users.find(u=>u.e===e)) return alert('Email déjà utilisé')
+  let u={n,e,p,av:avatar}
+  users.push(u);localStorage.setItem('users',JSON.stringify(users))
+  localStorage.setItem('blended_cur',JSON.stringify(u))
+  location.href='index.html'
+}
+function login(){
+  let e=document.getElementById('e').value,p=document.getElementById('p').value
+  let users=JSON.parse(localStorage.getItem('users')||'[]')
+  let u=users.find(u=>u.e===e&&u.p===p)
+  if(!u) return alert('Email ou mot de passe faux')
+  localStorage.setItem('blended_cur',JSON.stringify(u))
+  location.href='index.html'
 }
 </script>
 </body>
