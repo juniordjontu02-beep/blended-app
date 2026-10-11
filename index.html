@@ -1,49 +1,70 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>blended 💬</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BLENDED</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}
-body{background:#000;color:#fff;font-family:Arial;margin:0}
-.header{padding:12px;background:#111;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;border-bottom:1px solid #222}
-.h-left{display:flex;gap:10px;align-items:center;cursor:pointer}
-.h-left img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #00e676}
-#list{max-width:600px;margin:0 auto}
-.user-card{display:flex;gap:12px;padding:14px;background:#111;margin:10px 12px;border-radius:16px;cursor:pointer;border:1px solid #222;align-items:center}
-.user-card img{width:52px;height:52px;border-radius:50%;object-fit:cover}
-.badge{margin-left:auto;background:#00e676;color:#000;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:bold}
+body{margin:0;font-family:Arial;background:#fff;color:#000;padding-bottom:80px}
+.header{position:sticky;top:0;background:#fff;padding:10px 15px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;z-index:10}
+.logo{width:40px;height:40px;object-fit:contain}
+.stories{display:flex;gap:14px;padding:12px;overflow-x:auto;border-bottom:1px solid #eee}
+.story{flex:0 0 65px;text-align:center}
+.ring{width:60px;height:60px;border-radius:50%;padding:2px;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#4f5bd5);display:flex;align-items:center;justify-content:center}
+.ring img{width:56px;height:56px;border-radius:50%;border:2px solid #fff;object-fit:cover}
+.post{border-bottom:1px solid #eee;margin-bottom:10px}
+.post img.main{width:100%;display:block}
+.bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;padding:12px 0}
+.bar button{padding:10px 18px;border-radius:20px;border:none;background:#000;color:#fff;font-weight:bold}
+#view{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:99}
+#view img{max-width:100%;max-height:90%}
 </style>
 </head>
 <body>
 <div class="header">
-<div class="h-left" onclick="location.href='profil.html'">
-<img id="myAv" src="https://i.pravatar.cc/100">
-<b>blended 💬</b>
+<div style="display:flex;gap:10px;align-items:center" onclick="location.href='profil.html'"><img class="logo" src="received_1751150316108638.jpeg"><b style="letter-spacing:4px">BLENDED</b></div>
+<img id="myAv" style="width:36px;height:36px;border-radius:50%;border:2px solid #000;object-fit:cover">
 </div>
-<div><b id="me" style="color:#00e676"></b> <span onclick="logout()" style="color:#ff5252;cursor:pointer;margin-left:12px;font-size:13px">Logout</span></div>
+
+<div class="stories" id="stories"></div>
+<div id="feed"></div>
+
+<div class="bar">
+<button onclick="mode='story';file.click()">+ Story</button>
+<button onclick="mode='post';file.click()">+ Pub</button>
+<button onclick="location.href='ib.html'" style="background:#fff;color:#000;border:1px solid #000">Messages</button>
 </div>
-<div id="list"></div>
+
+<div id="view" onclick="this.style.display='none'"><img id="vImg"></div>
+<input type="file" id="file" accept="image/*" style="display:none">
+
 <script>
 const supa=supabase.createClient('https://zdfxuhjobcbfzymejkcm.supabase.co','sb_publishable_KPfVjYwPXE12BZKkjYDkAQ_QRjDEZRy');
-let cur=JSON.parse(localStorage.getItem('blended_cur')||'null');
-if(!cur) location.href='inscription.html';
-document.getElementById('me').innerText=cur.n;
-document.getElementById('myAv').src=cur.av||'https://i.pravatar.cc/100';
-function logout(){localStorage.removeItem('blended_cur');location.href='inscription.html'}
+let cur=JSON.parse(localStorage.getItem('blended_cur')||'null'); if(!cur) location.href='inscription.html';
+myAv.src=cur.av; let mode='';
+
+file.onchange=e=>{
+ let f=e.target.files[0]; if(!f) return;
+ let r=new FileReader(); r.onload=async()=>{
+  let b64=r.result;
+  if(mode=='story'){ await supa.from('stories').insert([{username:cur.n,avatar:cur.av,image:b64}]); alert('Story ajoutée'); }
+  else { let cap=prompt('Légende?')||''; await supa.from('posts').insert([{username:cur.n,avatar:cur.av,image:b64,caption:cap}]); alert('Publication ajoutée'); }
+  load();
+ }; r.readAsDataURL(f);
+}
+
 async function load(){
-let{data,error}=await supa.from('users').select().order('n');
-if(error){document.getElementById('list').innerHTML='<p style="text-align:center;color:red">'+error.message+'</p>';return;}
-let h='';let c=0;
-data.forEach(u=>{
-if(u.n===cur.n) return;
-c++;
-h+=`<div class="user-card" onclick="location.href='ib.html?user=${encodeURIComponent(u.n)}'"><img src="${u.av||'https://i.pravatar.cc/100'}"><div><b>${u.n}</b><br><small style="color:#888">${u.e}</small></div><span class="badge">IB 📩</span></div>`;
-});
-if(c==0)h=`<div style="padding:60px 20px;text-align:center;color:#888"><p style="font-size:40px">👤</p>Aucun autre utilisateur<br><br><small>Crée un 2e compte en navigation privée pour tester!</small></div>`;
-document.getElementById('list').innerHTML=h;
+ let {data:s}=await supa.from('stories').select().order('created_at',{ascending:false}).limit(20);
+ let html=`<div class="story" onclick="mode='story';file.click()"><div class="ring" style="background:#eee"><span style="font-size:28px">+</span></div><div style="font-size:11px;margin-top:3px">Ajouter</div></div>`;
+ (s||[]).forEach(x=>{ html+=`<div class="story" onclick="vImg.src='${x.image}';view.style.display='flex'"><div class="ring"><img src="${x.avatar}"></div><div style="font-size:11px;margin-top:3px;overflow:hidden;white-space:nowrap">${x.username.split(' ')[0]}</div></div>` });
+ document.getElementById('stories').innerHTML=html;
+
+ let {data:p}=await supa.from('posts').select().order('created_at',{ascending:false}).limit(30);
+ let fhtml=''; (p||[]).forEach(x=>{
+  fhtml+=`<div class="post"><div style="display:flex;gap:8px;padding:10px;align-items:center"><img src="${x.avatar}" style="width:30px;height:30px;border-radius:50%"><b>${x.username}</b></div><img class="main" src="${x.image}" onclick="vImg.src='${x.image}';view.style.display='flex'"><div style="padding:10px"><b>${x.username}</b> ${x.caption||''}<br><span style="color:#888;font-size:12px">❤️ ${x.likes||0} likes</span></div></div>`;
+ });
+ if(!fhtml) fhtml=`<center style="padding:50px;color:#888">Pas encore de publications<br>Clique + Pub pour commencer</center>`;
+ document.getElementById('feed').innerHTML=fhtml;
 }
 load();
 </script>
