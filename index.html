@@ -1,25 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>blended 💬</title>
-<style>body{background:#000;color:#fff;font-family:Arial;margin:0}.header{padding:15px;background:#111;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;border-bottom:1px solid #222}.user-card{display:flex;gap:12px;padding:14px;background:#111;margin:8px 12px;border-radius:14px;cursor:pointer;border:1px solid #222;align-items:center}.user-card img{width:48px;height:48px;border-radius:50%;object-fit:cover}.badge{margin-left:auto;background:#00e676;color:#000;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:bold}.empty{padding:40px;text-align:center;color:#888}</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{background:#000;color:#fff;font-family:Arial;margin:0}
+.header{padding:12px;background:#111;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;border-bottom:1px solid #222}
+.h-left{display:flex;gap:10px;align-items:center;cursor:pointer}
+.h-left img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #00e676}
+#list{max-width:600px;margin:0 auto}
+.user-card{display:flex;gap:12px;padding:14px;background:#111;margin:10px 12px;border-radius:16px;cursor:pointer;border:1px solid #222;align-items:center}
+.user-card img{width:52px;height:52px;border-radius:50%;object-fit:cover}
+.badge{margin-left:auto;background:#00e676;color:#000;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:bold}
+</style>
 </head>
 <body>
-<div class="header"><b>blended 💬</b><div><b id="me" style="color:#00e676"></b> <span onclick="logout()" style="color:red;cursor:pointer;margin-left:10px;font-size:12px">Logout</span></div></div>
-<div id="list" style="max-width:600px;margin:0 auto"></div>
+<div class="header">
+<div class="h-left" onclick="location.href='profil.html'">
+<img id="myAv" src="https://i.pravatar.cc/100">
+<b>blended 💬</b>
+</div>
+<div><b id="me" style="color:#00e676"></b> <span onclick="logout()" style="color:#ff5252;cursor:pointer;margin-left:12px;font-size:13px">Logout</span></div>
+</div>
+<div id="list"></div>
 <script>
-const supa = supabase.createClient('https://zdfxuhjobcbfzymejkcm.supabase.co','sb_publishable_KPfVjYwPXE12BZKkjYDkAQ_QRjDEZRy');
-let cur=JSON.parse(localStorage.getItem('blended_cur')||'null');if(!cur)location.href='inscription.html';document.getElementById('me').innerText=cur.n;
+const supa=supabase.createClient('https://zdfxuhjobcbfzymejkcm.supabase.co','sb_publishable_KPfVjYwPXE12BZKkjYDkAQ_QRjDEZRy');
+let cur=JSON.parse(localStorage.getItem('blended_cur')||'null');
+if(!cur) location.href='inscription.html';
+document.getElementById('me').innerText=cur.n;
+document.getElementById('myAv').src=cur.av||'https://i.pravatar.cc/100';
 function logout(){localStorage.removeItem('blended_cur');location.href='inscription.html'}
 async function load(){
-  let {data,error}=await supa.from('users').select().order('n');
-  if(error) return document.getElementById('list').innerHTML=error.message;
-  let h='';let c=0;
-  data.forEach(u=>{if(u.n===cur.n) return;c++;h+=`<div class="user-card" onclick="location.href='ib.html?user=${encodeURIComponent(u.n)}'"><img src="${u.av||'https://i.pravatar.cc/100'}"><div><b>${u.n}</b><br><small style="color:#888">${u.e}</small></div><span class="badge">IB 📩</span></div>`});
-  if(c===0) h=`<div class="empty">Aucun autre utilisateur<br><br>Crée un 2ème compte sur un autre téléphone<br>avec un autre email pour tester!</div>`;
-  document.getElementById('list').innerHTML=h;
+let{data,error}=await supa.from('users').select().order('n');
+if(error){document.getElementById('list').innerHTML='<p style="text-align:center;color:red">'+error.message+'</p>';return;}
+let h='';let c=0;
+data.forEach(u=>{
+if(u.n===cur.n) return;
+c++;
+h+=`<div class="user-card" onclick="location.href='ib.html?user=${encodeURIComponent(u.n)}'"><img src="${u.av||'https://i.pravatar.cc/100'}"><div><b>${u.n}</b><br><small style="color:#888">${u.e}</small></div><span class="badge">IB 📩</span></div>`;
+});
+if(c==0)h=`<div style="padding:60px 20px;text-align:center;color:#888"><p style="font-size:40px">👤</p>Aucun autre utilisateur<br><br><small>Crée un 2e compte en navigation privée pour tester!</small></div>`;
+document.getElementById('list').innerHTML=h;
 }
 load();
 </script>
