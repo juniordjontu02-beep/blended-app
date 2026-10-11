@@ -1,34 +1,38 @@
 <!DOCTYPE html>
-<html><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Blended - Facebook</title>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>blended</title>
 <style>
-*{box-sizing:border-box;margin:0}body{background:#0a0a0a;color:#fff;font-family:sans-serif}
-.header{position:sticky;top:0;background:#111;padding:12px;display:flex;justify-content:space-between;z-index:10;border-bottom:1px solid #222}
-.post-box{background:#1a1a1a;margin:10px;border-radius:15px;padding:15px}
-.post-box textarea{width:100%;background:#222;border:none;color:#fff;padding:12px;border-radius:10px;resize:none}
-.btn{padding:10px 18px;border-radius:20px;border:none;font-weight:bold;cursor:pointer}
-.btn-green{background:#00e676;color:#000}.btn-dark{background:#222;color:#fff}
-.avatar{width:40px;height:40px;border-radius:50%;object-fit:cover}
-.action{display:flex;justify-content:space-around;padding-top:10px;border-top:1px solid #222;margin-top:10px}
-.action span{cursor:pointer;padding:5px 15px;border-radius:20px}
-.action span:active{background:#222}
-.auth{max-width:380px;margin:40px auto;background:#1a1a1a;padding:25px;border-radius:20px}
-.auth input{width:100%;padding:14px;margin:7px 0;background:#222;border:none;border-radius:12px;color:#fff}
-.feed{max-width:500px;margin:0 auto}
+*{box-sizing:border-box;margin:0;font-family:Arial}
+body{background:#000;color:#fff}
+.auth{max-width:380px;margin:40px auto;padding:20px;background:#111;border-radius:16px}
+.auth input{width:100%;padding:12px;margin:8px 0;border-radius:20px;border:none;background:#222;color:#fff}
+.btn{padding:10px 18px;border:none;border-radius:20px;font-weight:bold;cursor:pointer}
+.btn-green{background:#00e676;color:#000;width:100%}
+.header{position:sticky;top:0;z-index:10;background:#111;padding:10px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222}
+.avatar{width:36px;height:36px;border-radius:50%;object-fit:cover}
+.feed{max-width:500px;margin:0 auto;padding-bottom:80px}
+.post{background:#111;margin:10px;border-radius:16px;padding:12px;border:1px solid #222}
+.post img{width:100%;border-radius:12px;margin-top:8px}
+.post b{cursor:pointer}
+.actions{display:flex;gap:15px;margin-top:8px;color:#aaa}
+#chat{position:fixed;bottom:0;left:0;right:0;background:#000;border-top:1px solid #333;z-index:99;max-width:500px;margin:0 auto;width:100%;height:60vh;display:none;flex-direction:column}
 </style>
-</head><body>
+</head>
+<body>
 
 <!-- AUTH -->
 <div id="auth" class="auth">
 <img id="prev" src="https://i.pravatar.cc/100" style="width:80px;height:80px;border-radius:50%;display:block;margin:0 auto 10px">
 <input type="file" id="file" accept="image/*">
-<h2 id="t" style="text-align:center;margin:10px">Créer un compte</h2>
+<h2 id="t" style="text-align:center;margin:10px 0">Créer compte</h2>
 <input id="n" placeholder="Nom complet">
 <input id="e" placeholder="Email">
 <input id="p" type="password" placeholder="Mot de passe">
-<button class="btn btn-green" style="width:100%;margin-top:10px" id="b" onclick="signup()">S'inscrire</button>
-<p style="text-align:center;margin-top:15px"><small><a href="#" onclick="toggle()" id="s" style="color:#00e676">Déjà un compte? Se connecter</a></small></p>
+<button class="btn btn-green" style="width:100%;margin-top:10px" onclick="mode=='up'?signup():login()">Continuer</button>
+<p style="text-align:center;margin-top:15px"><span onclick="toggle()" style="color:#00e676;cursor:pointer" id="tog">J'ai déjà un compte</span></p>
 </div>
 
 <!-- APP -->
@@ -36,44 +40,82 @@
 <div class="header">
 <b style="font-size:20px">blended</b>
 <div style="display:flex;gap:10px;align-items:center">
-<img id="myAv" class="avatar" src=""><b id="myNm"></b>
-<button onclick="logout()" class="btn btn-dark" style="padding:6px 12px">✕</button>
+<img id="myAv" class="avatar" src=""><b id="myName"></b>
+<button onclick="logout()" class="btn" style="background:#222;color:#fff">Sortir</button>
 </div>
 </div>
-
 <div class="feed">
-<div class="post-box">
-<div style="display:flex;gap:10px"><img id="myAv2" class="avatar" src=""><textarea id="postText" placeholder="Quoi de neuf, Junior?" rows="2"></textarea></div>
-<input type="file" id="postFile" accept="image/*" style="margin-top:10px">
-<button class="btn btn-green" style="width:100%;margin-top:10px" onclick="publier()">Publier</button>
+<div class="post" style="display:flex;gap:8px">
+<input id="txt" placeholder="Quoi de neuf?" style="flex:1;padding:12px;border-radius:20px;border:none;background:#222;color:#fff">
+<button onclick="publier()" class="btn btn-green">Poster</button>
 </div>
 <div id="feed"></div>
 </div>
 </div>
 
-<!-- CHAT MODAL -->
-<div id="chat" style="display:none;position:fixed;bottom:0;right:10px;width:300px;background:#1a1a1a;border-radius:15px 15px 0 0;border:1px solid #333;z-index:20">
-<div style="padding:10px;background:#222;display:flex;justify-content:space-between"><b id="chatName"></b><span onclick="document.getElementById('chat').style.display='none'" style="cursor:pointer">✕</span></div>
-<div id="chatMsgs" style="height:200px;overflow-y:auto;padding:10px"></div>
-<div style="display:flex;padding:8px"><input id="chatIn" style="flex:1;background:#222;border:none;padding:10px;border-radius:20px;color:#fff"><button onclick="sendMsg()" class="btn btn-green" style="margin-left:5px">></button></div>
+<!-- CHAT MODAL - C'EST L'IB ICI -->
+<div id="chat" style="display:none;position:fixed;flex-direction:column">
+<div style="padding:10px;background:#222;display:flex;justify-content:space-between;align-items:center">
+<b id="chatTitle">IB</b><span onclick="document.getElementById('chat').style.display='none'" style="cursor:pointer;padding:5px 10px;background:#333;border-radius:10px">X</span>
+</div>
+<div id="chatMsgs" style="height:300px;overflow-y:auto;padding:10px;display:flex;flex-direction:column"></div>
+<div style="display:flex;padding:8px;gap:8px;background:#111">
+<input id="chatInput" placeholder="Message..." style="flex:1;padding:12px;border-radius:20px;border:none;background:#222;color:#fff">
+<button onclick="sendMsg()" class="btn btn-green">Envoyer</button>
+</div>
 </div>
 
 <script>
-let mode="up", users=JSON.parse(localStorage.getItem("b_users")||"[]"), posts=JSON.parse(localStorage.getItem("b_posts")||"[]"), cur=JSON.parse(localStorage.getItem("b_cur")||"null"), myPic="", curChat=null, msgs=JSON.parse(localStorage.getItem("b_msgs")||"[]");
-document.getElementById("file").addEventListener("change",e=>{let r=new FileReader();r.onload=ev=>{myPic=ev.target.result;document.getElementById("prev").src=myPic};r.readAsDataURL(e.target.files[0])});
-function toggle(){if(mode=="up"){mode="in";document.getElementById("t").innerText="Se connecter";document.getElementById("n").style.display="none";document.getElementById("file").style.display="none";document.getElementById("b").innerText="Se connecter";document.getElementById("b").setAttribute("onclick","login()");document.getElementById("s").innerText="Pas de compte? S'inscrire"}else{mode="up";document.getElementById("t").innerText="Créer un compte";document.getElementById("n").style.display="block";document.getElementById("file").style.display="block";document.getElementById("b").innerText="S'inscrire";document.getElementById("b").setAttribute("onclick","signup()");document.getElementById("s").innerText="Déjà un compte? Se connecter"}}
-function signup(){let n=document.getElementById("n").value,e=document.getElementById("e").value,p=document.getElementById("p").value;if(!n||!e||!p)return alert("Remplis tout");if(users.find(u=>u.e===e))return alert("Email déjà pris");let u={n,e,p,pic:myPic||`https://i.pravatar.cc/150?u=${e}`,id:Date.now()};users.push(u);localStorage.setItem("b_users",JSON.stringify(users));localStorage.setItem("b_cur",JSON.stringify(u));cur=u;showApp()}
-function login(){let e=document.getElementById("e").value,p=document.getElementById("p").value;let u=users.find(x=>x.e===e&&x.p===p);if(!u)return alert("Faux");localStorage.setItem("b_cur",JSON.stringify(u));cur=u;showApp()}
-function showApp(){document.getElementById("auth").style.display="none";document.getElementById("app").style.display="block";document.getElementById("myAv").src=cur.pic;document.getElementById("myAv2").src=cur.pic;document.getElementById("myNm").innerText=cur.n;render()}
-function render(){let h="";posts.slice().reverse().forEach((po,i)=>{let idx=posts.length-1-i;let u=users.find(x=>x.id===po.uid)||{n:"Anonyme",pic:""};h+=`<div class="post-box"><div style="display:flex;gap:10px;align-items:center"><img src="${u.pic}" class="avatar"><div><b>${u.n}</b><br><small style="color:#888">${po.time}</small></div><span style="margin-left:auto;cursor:pointer" onclick="chatWith('${u.n}')">💬</span></div><p style="margin:10px 0">${po.txt}</p>${po.img?`<img src="${po.img}" style="width:100%;border-radius:12px">`:''}<div class="action"><span onclick="like(${idx})">❤️ ${po.likes||0} J'aime</span><span onclick="commenter(${idx})">💬 ${po.coms?po.coms.length:0}</span><span>↗️ Partager</span></div>${po.coms?po.coms.map(c=>`<div style="background:#222;padding:8px 12px;border-radius:15px;margin-top:6px"><b>${c.n}</b> ${c.t}</div>`).join(''):''}</div>`});document.getElementById("feed").innerHTML=h||"<p style='text-align:center;color:#888;padding:20px'>Aucune publication. Sois le premier!</p>"}
-function publier(){let t=document.getElementById("postText").value;if(!t&&!document.getElementById("postFile").files[0])return;let f=document.getElementById("postFile").files[0];if(f){let r=new FileReader();r.onload=ev=>{savePost(t,ev.target.result);};r.readAsDataURL(f)}else savePost(t,"")}
-function savePost(txt,img){posts.push({uid:cur.id,txt,img,time:new Date().toLocaleString(),likes:0,coms:[]});localStorage.setItem("b_posts",JSON.stringify(posts));document.getElementById("postText").value="";document.getElementById("postFile").value="";render()}
-function like(i){posts[i].likes=(posts[i].likes||0)+1;localStorage.setItem("b_posts",JSON.stringify(posts));render()}
-function commenter(i){let t=prompt("Ton commentaire:");if(!t)return;posts[i].coms=posts[i].coms||[];posts[i].coms.push({n:cur.n,t});localStorage.setItem("b_posts",JSON.stringify(posts));render()}
-function chatWith(name){curChat=name;document.getElementById("chatName").innerText=name;document.getElementById("chat").style.display="block";renderChat()}
-function sendMsg(){let t=document.getElementById("chatIn").value;if(!t)return;msgs.push({from:cur.n,to:curChat,t,time:Date.now()});localStorage.setItem("b_msgs",JSON.stringify(msgs));document.getElementById("chatIn").value="";renderChat()}
-function renderChat(){let f=msgs.filter(m=>(m.from===cur.n&&m.to===curChat)||(m.from===curChat&&m.to===cur.n));document.getElementById("chatMsgs").innerHTML=f.map(m=>`<div style="margin:5px 0;padding:8px 12px;border-radius:15px;max-width:80%;background:${m.from===cur.n?'#005c4b':'#222'};margin-left:${m.from===cur.n?'auto':0}">${m.t}</div>`).join('')}
-function logout(){localStorage.removeItem("b_cur");location.reload()}
+let mode="up", users=JSON.parse(localStorage.getItem('users')||'[]'), posts=JSON.parse(localStorage.getItem('posts')||'[]'), cur=JSON.parse(localStorage.getItem('blended_cur')||'null'), curChat=null, msgs=JSON.parse(localStorage.getItem('blended_msgs')||'[]'), myAvatar="https://i.pravatar.cc/100"
+
+document.getElementById('file').addEventListener('change',e=>{
+  let r=new FileReader(); r.onload=()=>{myAvatar=r.result; document.getElementById('prev').src=myAvatar}; r.readAsDataURL(e.target.files[0])
+})
+
+function toggle(){if(mode=="up"){mode="in";document.getElementById('t').innerText="Connexion";document.getElementById('n').style.display='none';document.getElementById('tog').innerText="Créer un compte"}else{mode="up";document.getElementById('t').innerText="Créer compte";document.getElementById('n').style.display='block';document.getElementById('tog').innerText="J'ai déjà un compte"}}
+
+function signup(){let n=document.getElementById('n').value,e=document.getElementById('e').value,p=document.getElementById('p').value;if(!n||!e||!p)return alert('Remplis tout');users.push({n,e,p,av:myAvatar});localStorage.setItem('users',JSON.stringify(users));localStorage.setItem('blended_cur',JSON.stringify({n,e,av:myAvatar}));showApp()}
+function login(){let e=document.getElementById('e').value,p=document.getElementById('p').value;let u=users.find(u=>u.e==e&&u.p==p);if(!u)return alert('Email ou pass faux');localStorage.setItem('blended_cur',JSON.stringify(u));showApp()}
+function showApp(){document.getElementById('auth').style.display='none';document.getElementById('app').style.display='block';let c=JSON.parse(localStorage.getItem('blended_cur'));document.getElementById('myName').innerText=c.n;document.getElementById('myAv').src=c.av||myAvatar;render()}
+
+function render(){let h="";posts.slice().reverse().forEach((post,iReal)=>{
+  let i=posts.length-1-posts.slice().reverse().indexOf(post)
+  h+=`<div class="post"><div style="display:flex;gap:8px;align-items:center"><img src="${post.av}" class="avatar"><b onclick="chatWith('${post.uid}')" style="color:#00e676">${post.uid}</b></div><div style="margin-top:8px">${post.txt}</div>${post.img?`<img src="${post.img}">`:''}<div class="actions"><span onclick="like(${posts.indexOf(post)})">❤️ ${post.likes||0}</span><span onclick="commenter(${posts.indexOf(post)})">💬 ${post.comments?.length||0}</span><span onclick="chatWith('${post.uid}')">📩 IB</span></div></div>`
+});document.getElementById('feed').innerHTML=h}
+
+function publier(){let t=document.getElementById('txt');if(!t.value.trim())return;let cur=JSON.parse(localStorage.getItem('blended_cur'));savePost(t.value,'');t.value=''}
+function savePost(txt,img){let cur=JSON.parse(localStorage.getItem('blended_cur'));posts.push({uid:cur.n,txt,img,av:cur.av,likes:0,comments:[]});localStorage.setItem('posts',JSON.stringify(posts));render()}
+function like(i){posts[i].likes=(posts[i].likes||0)+1;localStorage.setItem('posts',JSON.stringify(posts));render()}
+function commenter(i){let t=prompt("Ton commentaire:");if(!t)return;posts[i].comments=posts[i].comments||[];posts[i].comments.push(t);localStorage.setItem('posts',JSON.stringify(posts));render()}
+
+// --- ICI LE SYSTEME IB QUE TU VOULAIS ---
+function chatWith(name){
+  let cur=JSON.parse(localStorage.getItem('blended_cur'))
+  if(name===cur.n) return alert("C'est toi même!")
+  curChat=name;
+  document.getElementById('chat').style.display='flex';
+  document.getElementById('chatTitle').innerText='IB avec '+name;
+  renderChat();
+}
+function sendMsg(){
+  let t=document.getElementById('chatInput');if(!t.value.trim()||!curChat)return;
+  let cur=JSON.parse(localStorage.getItem('blended_cur'));
+  msgs.push({from:cur.n,to:curChat,txt:t.value,time:Date.now()});
+  localStorage.setItem('blended_msgs',JSON.stringify(msgs));
+  t.value='';renderChat();
+}
+function renderChat(){
+  let cur=JSON.parse(localStorage.getItem('blended_cur'));
+  let f=msgs.filter(m=>(m.from===cur.n&&m.to===curChat)||(m.from===curChat&&m.to===cur.n));
+  let h="";f.forEach(m=>{
+    let me=m.from===cur.n;
+    h+=`<div style="margin:6px 0;padding:10px 14px;border-radius:18px;max-width:75%;${me?'margin-left:auto;background:#00e676;color:#000':'background:#222'}">${m.txt}</div>`
+  });
+  document.getElementById('chatMsgs').innerHTML=h;
+  document.getElementById('chatMsgs').scrollTop=99999;
+}
+function logout(){localStorage.removeItem('blended_cur');location.reload()}
 if(cur)showApp();
+document.getElementById('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')sendMsg()})
 </script>
 </body></html>
