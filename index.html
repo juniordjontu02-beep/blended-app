@@ -1,29 +1,56 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BLENDED</title>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BLENDED</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>body{margin:0;font-family:sans-serif;background:#000;color:#fff}header{padding:12px;border-bottom:1px solid #222;display:flex;justify-content:space-between}button{background:#fff;color:#000;border:0;padding:8px 14px;border-radius:20px;font-weight:bold} .post{border-bottom:1px solid #222;padding:12px} .post img{width:100%;border-radius:12px;margin-top:8px} .like{font-size:24px;cursor:pointer}</style>
-</head><body>
-<header><b>BLENDED</b><button onclick="newPost()">+ Post</button></header>
-<div id="feed"></div>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:sans-serif}
+header{display:flex;justify-content:space-between;padding:15px;background:#111;position:sticky;top:0}
+.post{border:1px solid #222;margin:10px;border-radius:10px;overflow:hidden}
+.post img{width:100%}
+.post-info{padding:10px}
+button{padding:8px 15px;border-radius:20px;border:none;font-weight:bold;cursor:pointer}
+#loginBox{padding:20px;text-align:center;margin-top:50px}
+input{width:90%;padding:12px;margin:5px;border-radius:10px;border:none}
+</style>
+</head>
+<body>
+<header><b>BLENDED</b><button onclick="addPost()">+ Post</button></header>
+
+<div id="loginBox">
+<h2>BLENDED ❤️</h2><br>
+<input id="name" placeholder="Ton nom"><br>
+<input id="email" placeholder="Email"><br>
+<input id="pass" type="password" placeholder="Mot de passe"><br><br>
+<button onclick="signup()" style="background:white;color:black;width:90%">Créer compte</button><br><br>
+<button onclick="login()" style="background:#222;color:white;width:90%">Login</button>
+<p id="msg"></p>
+</div>
+
+<div id="feed" style="display:none"></div>
+
 <script>
-const supa = supabase.createClient('https://TON_URL.supabase.co','TA_CLE_ANON');
-async function load(){
-  let {data} = await supa.from('posts').select('*').order('created_at',{ascending:false});
-  document.getElementById('feed').innerHTML = data.map(p=>`
-    <div class="post"><b>${p.username}</b><br>${p.caption}<br><img src="${p.image}"><br>
-    <span class="like" onclick="like('${p.id}',${p.likes})">${p.likes>0?'❤️':'🤍'} ${p.likes}</span>
-    <span style="float:right;cursor:pointer" onclick="msg('${p.username}')">💬 IB</span>
-    </div>`).join('');
+// ⚠️ REMPLACE ICI PAR TON URL ET CLE SUPABASE
+const SUPA_URL = "https://TON_PROJET.supabase.co";
+const SUPA_KEY = "TON_ANON_KEY";
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+let currentUser = JSON.parse(localStorage.getItem('blended_cur')||'null');
+if(currentUser){ showFeed(); }
+
+async function signup(){
+ let name=document.getElementById('name').value;
+ let email=document.getElementById('email').value;
+ let password=document.getElementById('pass').value;
+ if(!name||!email||!password) return alert('Remplis tout');
+ let {error} = await supa.from('users').insert({name,email,password,avatar:'https://i.pravatar.cc/100'});
+ if(error) document.getElementById('msg').innerText=error.message;
+ else { alert('Compte créé! Clique Login maintenant'); }
 }
-async function like(id,l){await supa.from('posts').update({likes:l+1}).eq('id',id); load();}
-async function newPost(){
-  let img=prompt('Lien image:'); let cap=prompt('Caption:'); if(!img) return;
-  await supa.from('posts').insert({username:'Moi',avatar:'',image:img,caption:cap,likes:0}); load();
-}
-async function msg(user){
-  let t=prompt('Message à '+user+' :'); if(!t) return;
-  await supa.from('messages').insert({sender:'Moi',receiver:user,message:t});
-  alert('Envoyé à '+user);
-}
-load();
-</script></body></html>
+async function login(){
+ let email=document.getElementById('email').value;
+ let password=document.getElementById('pass').value;
+ let {data} = await supa.from('users').select('*').eq
