@@ -1,25 +1,17 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>IB</title>
-<style>*{box-sizing:border-box;margin:0;font-family:Arial}body{background:#000;color:#fff;display:flex;flex-direction:column;height:100vh}.header{padding:12px;background:#111;border-bottom:1px solid #222;display:flex;gap:12px;align-items:center}.chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}.msg{background:#222;padding:10px 14px;border-radius:18px;max-width:78%;word-break:break-word}.me{background:#005c4b;margin-left:auto}.input{padding:10px;background:#111;display:flex;gap:8px}input{flex:1;padding:13px;border-radius:22px;border:none;background:#222;color:#fff}button{background:#00e676;border:none;padding:12px 20px;border-radius:22px;font-weight:bold;cursor:pointer}</style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</head>
-<body>
-<div class="header"><a href="index.html" style="color:#fff;text-decoration:none;font-size:20px">←</a><b id="title"></b></div>
-<div class="chat" id="box"></div>
-<div class="input"><input id="inp" placeholder="Écris un message..."><button onclick="send()">▶</button></div>
-<script>
-const supa = supabase.createClient('https://zdfxuhjobcbfzymejkcm.supabase.co','sb_publishable_KPfVjYwPXE12BZKkjYDkAQ_QRjDEZRy');
-let to=new URLSearchParams(location.search).get('user');let cur=JSON.parse(localStorage.getItem('blended_cur'));if(!cur)location.href='inscription.html';document.getElementById('title').innerText=to;
-async function load(){
-  let {data}=await supa.from('ib_messages').select().or(`and(from_n.eq.${cur.n},to_n.eq.${to}),and(from_n.eq.${to},to_n.eq.${cur.n})`).order('created_at',{ascending:true});
-  let h='';data.forEach(m=>{h+=`<div class="msg ${m.from_n===cur.n?'me':''}"><small style="opacity:0.5;font-size:10px;display:block">${m.from_n}</small>${m.txt}</div>`});
-  box.innerHTML=h;box.scrollTop=box.scrollHeight;
-}
-async function send(){let txt=inp.value.trim();if(!txt) return;await supa.from('ib_messages').insert({from_n:cur.n,to_n:to,txt});inp.value='';load()}
-load();setInterval(load,2000);inp.addEventListener('keydown',e=>{if(e.key==='Enter')send()});
-</script>
+<html lang="fr">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connexion - BLENDED</title>
+<script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-white min-h-screen flex items-center justify-center p-4">
+<div class="w-full max-w-sm">
+  <a href="index.html" class="text-gray-400">← Retour</a>
+  <h2 class="text-3xl font-bold mt-4 mb-6">Se connecter</h2>
+  <form class="space-y-4" action="chat.html">
+    <input type="email" placeholder="Email" class="w-full p-4 bg-gray-100 rounded-xl" required>
+    <input type="password" placeholder="Mot de passe" class="w-full p-4 bg-gray-100 rounded-xl" required>
+    <button type="submit" class="w-full bg-black text-white py-4 rounded-full font-bold">Entrer dans le Chat IB</button>
+  </form>
+</div>
 </body>
 </html>
