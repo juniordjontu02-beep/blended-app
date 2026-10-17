@@ -1,42 +1,104 @@
-<!-- BLENDED LIVE -->
-<div id="blended-live" style="position:fixed;top:10px;left:10px;display:flex;gap:6px;z-index:99999;background:rgba(0,0,0,0.7);padding:6px 10px;border-radius:20px;"></div>
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blended - Live Scroll</title>
+<script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  body{background:#0a0a0a;color:white}
+  .no-scrollbar::-webkit-scrollbar{display:none}
+</style>
+</head>
+<body class="flex justify-center">
+
+<!-- HEADER LIVE -->
+<div id="live-bar" class="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur p-3 flex items-center justify-between border-b border-white/10">
+  <h1 class="font-black text-xl">BLENDED</h1>
+  <div id="live-avatars" class="flex items-center gap-2">
+    <span id="live-count" class="text-xs text-green-400">● 0 LIVE</span>
+  </div>
+</div>
+
+<!-- FEED -->
+<div id="feed" class="w-full max-w-[420px] mt-[60px] pb-20">
+  <!-- Les posts arrivent ici -->
+</div>
+
+<!-- INPUT PSEUDO AU DEBUT -->
+<div id="welcome" class="fixed inset-0 bg-black z-[100] flex flex-col items-center justify-center p-6 text-center">
+  <h1 class="text-5xl font-black mb-2">BLENDED</h1>
+  <p class="text-white/60 mb-8">Le scroll où tu vois qui scroll avec toi</p>
+  <input id="pseudo-input" placeholder="Ton pseudo" class="w-full max-w-xs bg-white/10 border border-white/20 rounded-full px-6 py-3 text-center outline-none focus:border-green-400">
+  <button onclick="enterApp()" class="mt-4 bg-white text-black font-bold rounded-full px-8 py-3 w-full max-w-xs">ENTRER 🔥</button>
+</div>
+
 <script>
-  const SUPABASE_URL = "https://zdfxuhjobcbfzymjkcm.supabase.co";
-  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpkZnh1aGpvYmNiZnp5bWVqa2NtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1MDgxMTIsImV4cCI6MjEwNjA4NDExMn0.hskZtCKc1BQMxCc_dZfq7b4Uzf5xqqnfRe462h0Ru8Y";
-  const supa = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL = "https://zdfxuhjobcbfzymejkcm.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpkZnh1aGpvYmNiZnp5bWVqa2NtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1MDgxMTIsImV4cCI6MjEwNjA4NDExMn0.hskZtCKc1BQMxCc_dZfq7b4Uzf5xqqnfRe462h0Ru8Y";
+const supa = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let myId = null;
 
-  async function startBlended() {
-    // 1. Je m'inscris
-    let pseudo = localStorage.getItem('blended_pseudo') || "User_"+Math.floor(Math.random()*999);
-    localStorage.setItem('blended_pseudo', pseudo);
-    
-    const { data: moi } = await supa.from('profiles').insert({
-      pseudo: pseudo,
-      photo: `https://i.pravatar.cc/100?u=${pseudo}`,
-      en_ligne: true
-    }).select().single();
+// FAUX POSTS POUR LE SCROLL (après tu mettras tes vraies vidéos)
+const fakePosts = [
+  {pseudo:"Sofia", img:"https://i.pravatar.cc/400?img=1", text:"Qui est encore debout à cette heure? 😅"},
+  {pseudo:"Junior", img:"https://i.pravatar.cc/400?img=8", text:"Blended c'est enfin en live les gars"},
+  {pseudo:"Maya", img:"https://i.pravatar.cc/400?img=5", text:"J'aime voir qui mate en même temps"},
+  {pseudo:"Léo", img:"https://i.pravatar.cc/400?img=12", text:"Premier test du scroll live 🔥"},
+  {pseudo:"Ana", img:"https://i.pravatar.cc/400?img=9", text:"C'est trop addictif"},
+];
 
-    // 2. Fonction pour afficher tout le monde
-    async function refreshLive() {
-      const { data } = await supa.from('profiles').select('*').eq('en_ligne', true).order('derniere_vue', {ascending:false}).limit(10);
-      document.getElementById('blended-live').innerHTML = 
-        `<span style="color:white;font-size:12px;margin-right:4px">${data.length} en live ●</span>` +
-        data.map(p => `<img src="${p.photo}" title="${p.pseudo}" style="width:32px;height:32px;border-radius:50%;border:2px solid #00ff88">`).join('');
-    }
+function renderFeed(){
+  const feed = document.getElementById('feed');
+  feed.innerHTML = fakePosts.map(p => `
+    <div class="border-b border-white/10 p-4">
+      <div class="flex gap-3 items-center mb-3">
+        <img src="https://i.pravatar.cc/100?u=${p.pseudo}" class="w-10 h-10 rounded-full">
+        <b>${p.pseudo}</b> <span class="text-xs text-white/40">• maintenant</span>
+      </div>
+      <img src="${p.img}" class="w-full rounded-2xl mb-3">
+      <p>${p.text}</p>
+    </div>
+  `).join('') + `<div class="p-10 text-center text-white/30">Tu es à jour • ${new Date().toLocaleTimeString()}</div>`;
+}
 
-    refreshLive();
+async function enterApp(){
+  let pseudo = document.getElementById('pseudo-input').value || "User_"+Math.floor(Math.random()*99);
+  localStorage.setItem('blended_pseudo', pseudo);
+  document.getElementById('welcome').style.display='none';
+  renderFeed();
 
-    // 3. Temps réel - quand quelqu'un arrive/part
-    supa.channel('profiles-live')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, refreshLive)
-      .subscribe();
+  // Je m'ajoute dans Supabase
+  const { data } = await supa.from('profiles').insert({
+    pseudo: pseudo,
+    photo: `https://i.pravatar.cc/100?u=${pseudo}`,
+    en_ligne: true,
+    derniere_vue: new Date()
+  }).select().single();
+  myId = data.id;
 
-    // 4. Hors ligne quand tu quittes
-    window.addEventListener('beforeunload', () => {
-      supa.from('profiles').update({ en_ligne: false }).eq('id', moi.id);
-    });
-  }
-  startBlended();
+  refreshLive();
+  // Ecoute live
+  supa.channel('profiles').on('postgres_changes',{event:'*',schema:'public',table:'profiles'},refreshLive).subscribe();
+  
+  // heartbeat toutes les 10s
+  setInterval(()=> supa.from('profiles').update({derniere_vue: new Date()}).eq('id', myId), 10000);
+}
+
+async function refreshLive(){
+  const { data } = await supa.from('profiles').select('*').eq('en_ligne', true).order('derniere_vue',{ascending:false}).limit(15);
+  if(!data) return;
+  document.getElementById('live-count').innerText = `● ${data.length} LIVE`;
+  document.getElementById('live-avatars').innerHTML = 
+    `<span id="live-count" class="text-xs text-green-400 mr-2">● ${data.length} LIVE</span>` +
+    data.map(p => `<img src="${p.photo}" title="${p.pseudo}" class="w-8 h-8 rounded-full border-2 border-green-400 -ml-2 first:ml-0">`).join('');
+}
+
+// Si déjà entré avant
+if(localStorage.getItem('blended_pseudo')){
+  document.getElementById('pseudo-input').value = localStorage.getItem('blended_pseudo');
+}
 </script>
+</body>
+</html>
