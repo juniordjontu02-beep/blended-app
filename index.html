@@ -1,41 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BLENDED</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-body{margin:0;background:#000;color:#fff;font-family:Arial;text-align:center}
-.top{padding:15px;background:#111;font-weight:900;font-size:20px;position:sticky;top:0}
-.card{padding:15px;border-bottom:1px solid #222;text-align:left;max-width:420px;margin:0 auto}
-.card img{width:100%;border-radius:15px;margin-top:10px}
-.btn{background:#fff;color:#000;padding:12px 20px;border-radius:30px;font-weight:bold;border:0;width:200px;margin-top:20px}
-input{padding:12px;border-radius:30px;border:1px solid #333;background:#111;color:#fff;text-align:center;width:200px}
+body{margin:0;background:#000;color:#fff;font-family:Arial}
+.top{padding:12px 15px;background:#000;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;border-bottom:1px solid #222;z-index:10}
+.top img{height:36px;border-radius:8px;background:#fff;padding:2px}
+.feed{max-width:420px;margin:0 auto}
+.card{background:#111;margin:10px;border-radius:16px;padding:12px;border:1px solid #222}
+.card img.main{width:100%;border-radius:12px;margin-top:8px}
+#gate{text-align:center;margin-top:70px;padding:20px}
+input{padding:13px 20px;border-radius:25px;border:1px solid #333;background:#111;color:#fff;text-align:center;width:80%;max-width:260px}
+button{padding:13px 30px;border-radius:25px;background:#fff;color:#000;font-weight:bold;border:0;margin-top:15px;width:80%;max-width:280px}
 </style>
 </head>
 <body>
-<div class="top">BLENDED <span id="live" style="float:right;color:#00ff88;font-size:12px">● 1 LIVE</span></div>
 
-<div id="gate" style="margin-top:100px">
-<h1 style="font-size:40px">BLENDED</h1>
-<p style="opacity:.6">Le scroll live</p>
-<input id="pseudo" placeholder="Ton pseudo"><br>
-<button class="btn" onclick="enter()">ENTRER</button>
+<div class="top">
+  <img src="logo.png" alt="B">
+  <span id="live" style="color:#00ff88;font-size:12px;font-weight:bold">● CONNEXION...</span>
 </div>
 
-<div id="feed" style="display:none"></div>
+<div id="gate">
+  <img src="logo.png" style="height:80px;border-radius:20px;background:#fff;padding:8px;margin-bottom:15px">
+  <h1 style="margin:5px;font-size:32px;letter-spacing:3px">BLENDED</h1>
+  <p style="opacity:.5;margin-bottom:25px">Vois qui scroll avec toi en temps réel</p>
+  <input id="pseudo" placeholder="Ton pseudo"><br>
+  <button onclick="enter()">ENTRER 🔥</button>
+  <p id="err" style="font-size:11px;color:#ff4444;margin-top:10px"></p>
+</div>
+
+<div id="main" style="display:none" class="feed"></div>
+<div id="avatars" style="display:flex;gap:8px;padding:10px 15px;overflow:auto"></div>
 
 <script>
-function enter(){
-  let p = document.getElementById('pseudo').value || "Junior";
-  document.getElementById('gate').style.display='none';
-  document.getElementById('feed').style.display='block';
-  document.getElementById('feed').innerHTML = `
-    <div class="card"><b>${p}</b> • maintenant<br><br>Je suis en live sur Blended 🔥<br><img src="https://i.pravatar.cc/400?img=12"></div>
-    <div class="card"><b>Sofia</b> • il y a 2min<br><br>Qui est encore debout? 👀<br><img src="https://i.pravatar.cc/400?img=5"></div>
-    <div class="card"><b>Léo</b> • il y a 5min<br><br>Premier test ça marche!<br><img src="https://i.pravatar.cc/400?img=8"></div>
-  `;
-  document.getElementById('live').innerText = "● 1 LIVE ("+p+")";
+const supa = supabase.createClient(
+ "https://zdfxuhjobcbfzymejkcm.supabase.co",
+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpkZnh1aGpvYmNiZnp5bWVqa2NtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1MDgxMTIsImV4cCI6MjEwNjA4NDExMn0.hskZtCKc1BQMxCc_dZfq7b4Uzf5xqqnfRe462h0Ru8Y"
+);
+let myId=null;
+
+async function enter(){
+ let p=document.getElementById('pseudo').value.trim()||"User"+Math.floor(Math.random()*90);
+ document.getElementById('gate').style.display='none';
+ document.getElementById('main').style.display='block';
+ document.getElementById('main').innerHTML=`
+   <div class="card"><div style="display:flex;gap:10px;align-items:center"><img src="logo.png" style="width:32px;height:32px;border-radius:8px;background:#fff;padding:2px"><b>${p}</b><span style="opacity:.5;font-size:12px">• maintenant</span></div><p>Je suis en LIVE sur Blended 🔥</p><img class="main" src="https://i.pravatar.cc/400?img=12"></div>
+   <div class="card"><div style="display:flex;gap:10px;align-items:center"><img src="https://i.pravatar.cc/100?u=Sofia" style="width:32px;height:32px;border-radius:50%"><b>Sofia</b><span style="opacity:.5;font-size:12px">• 2m</span></div><p>Qui scroll encore? 👀</p><img class="main" src="https://i.pravatar.cc/400?img=5"></div>
+ `;
+ try{
+  const {data,error}=await supa.from('profiles').insert({pseudo:p,photo:`https://i.pravatar.cc/100?u=${p}`,en_ligne:true,derniere_vue:new Date()}).select().single();
+  if(error) throw error;
+  myId=data.id;
+  loadLive();
+  supa.channel('profiles-live').on('postgres_changes',{event:'*',schema:'public',table:'profiles'},loadLive).subscribe();
+  setInterval(()=>{if(myId) supa.from('profiles').update({derniere_vue:new Date()}).eq('id',myId)},10000);
+ }catch(e){document.getElementById('err').innerText=e.message; document.getElementById('live').innerText=e.message}
+}
+
+async function loadLive(){
+ const {data}=await supa.from('profiles').select('*').eq('en_ligne',true).order('derniere_vue',{ascending:false}).limit(12);
+ if(!data) return;
+ document.getElementById('live').innerText=`● ${data.length} LIVE`;
+ document.getElementById('avatars').innerHTML=data.map(u=>`<div style="text-align:center"><img src="${u.photo}" style="width:40px;height:40px;border-radius:50%;border:2px solid #00ff88"><div style="font-size:10px;margin-top:2px;opacity:.7">${u.pseudo}</div></div>`).join('');
 }
 </script>
 </body>
