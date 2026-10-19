@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inscription - BLENDED</title>
-<script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-white min-h-screen flex items-center justify-center p-4">
-<div class="w-full max-w-sm">
-  <a href="index.html" class="text-gray-400">← Retour</a>
-  <h2 class="text-3xl font-bold mt-4 mb-6">Créer compte</h2>
-  <form class="space-y-4" action="chat.html">
-    <input type="text" placeholder="Nom complet" class="w-full p-4 bg-gray-100 rounded-xl" required>
-    <input type="email" placeholder="Email" class="w-full p-4 bg-gray-100 rounded-xl" required>
-    <input type="password" placeholder="Mot de passe" class="w-full p-4 bg-gray-100 rounded-xl" required>
-    <button type="submit" class="w-full bg-black text-white py-4 rounded-full font-bold">S'inscrire et aller au Chat</button>
-  </form>
-  <p class="text-center mt-4"><a href="ib.html" class="text-purple-600 font-bold">Déjà un compte? Se connecter</a></p>
-</div>
-</body>
-</html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLENDED - Inscription</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
+body{background:#0a0a0a;color:white;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#111;border:1px solid #222;border-radius:20px;padding:30px;width:100%;max-width:360px}
+.logo{text-align:center;margin-bottom:25px}
+.logo h1{font-size:28px;letter-spacing:2px}
+.logo p{color:#888;font-size:13px;margin-top:5px}
+input,select{width:100%;background:#1a1a1a;border:1px solid #2a2a2a;padding:14px 16px;border-radius:12px;color:white;margin-bottom:12px;outline:none}
+input:focus{border-color:white}
+.btn{width:100%;background:white;color:black;border:none;padding:15px;border-radius:12px;font-weight:700;font-size:15px;margin-top:10px}
+.small{color:#666;font-size:11px;text-align:center;margin-top:15px;line-height:1.4}
+a{color:white}
+</style>
+</head>
+<body>
+<div class="card">
+<div class="logo"><h1>BLENDED</h1><p>Rencontres anonymes • Ouest</p></div>
+<input type="text" placeholder="Pseudo anonyme">
+<input type="number" placeholder="Âge">
+<select>
