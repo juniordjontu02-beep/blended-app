@@ -3,23 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BLENDED - Parle sans te montrer</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<title>BLENDED</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiQkxFTkRFRCIsInNob3J0X25hbWUiOiJCTEVOREVEIiwic3RhcnRfdXJsIjoiaW5kZXguaHRtbCIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwYTBhMGEiLCJ0aGVtZV9jb2xvciI6IiMwYTBhMGEiLCJpY29ucyI6W3sic3JjIjoiaHR0cHM6Ly9jZG4taWNvbnMtcG5nLmZsYXRpY29uLmNvbS81MTIvMjExMS8yMTExNDYzLnBuZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9wbmcifV19">
+<meta name="theme-color" content="#0a0a0a">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
+body{background:#0a0a0a;color:#fff;min-height:100vh;padding-bottom:80px}
+.top{padding:18px;display:flex;justify-content:space-between;border-bottom:1px solid #1a1a1a}
+.logo{font-weight:900;letter-spacing:3px}
+.online{color:#00ff88;font-size:12px}
+.hero{padding:40px 20px;text-align:center}
+.hero h1{font-size:42px;font-weight:900;line-height:.9}
+.hero p{color:#888;margin-top:12px;font-size:13px}
+.btn{display:block;background:#fff;color:#000;text-align:center;padding:18px;border-radius:14px;font-weight:800;text-decoration:none;margin:20px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #222;display:flex;justify-content:space-around;padding:12px 0}
+.nav a{color:#666;text-decoration:none;font-size:11px;text-align:center}.nav a.active{color:#fff}
+</style>
 </head>
-<body class="bg-black text-white min-h-screen">
-<div class="max-w-sm mx-auto p-6">
-  <div class="flex justify-between items-center mt-4">
-    <h1 class="text-2xl font-black">B.</h1>
-    <span class="bg-white text-black text-xs px-3 py-1 rounded-full font-bold">PRO</span>
-  </div>
-  
-  <h2 class="text-5xl font-black mt-16 leading-[0.9]">Parle<br>sans te<br>montrer.</h2>
-  <p class="text-gray-400 mt-4">Bafoussam • Douala • Yaoundé • Partout</p>
-  
-  <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400" class="w-full h-64 object-cover rounded-[30px] mt-8">
-  
-  <a href="chat.html" class="block w-full bg-white text-black py-5 rounded-full font-black text-center mt-8 text-lg">ENTRER DANS BLENDED →</a>
-  <p class="text-center text-xs text-gray-500 mt-4">Messages qui s'effacent en 24h • Anonyme</p>
+<body>
+<div class="top"><div class="logo">BLENDED</div><div class="online">● 1243 en ligne</div></div>
+<div class="hero"><h1>RENCONTRES<br>ANONYMES</h1><p>Ouest Cameroun • Sans photo, sans numéro</p></div>
+<a class="btn" href="chat.html">COMMENCER →</a>
+<div class="nav">
+<a class="active">🏠<br>Accueil</a>
+<a href="chat.html">💬<br>Chat</a>
+<a href="ib.html">✉️<br>IB</a>
+<a href="inscription.html">👤<br>Profil</a>
 </div>
 </body>
 </html>
