@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Connexion - BLENDED</title>
-<script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-white min-h-screen flex items-center justify-center p-4">
-<div class="w-full max-w-sm">
-  <a href="index.html" class="text-gray-400">← Retour</a>
-  <h2 class="text-3xl font-bold mt-4 mb-6">Se connecter</h2>
-  <form class="space-y-4" action="chat.html">
-    <input type="email" placeholder="Email" class="w-full p-4 bg-gray-100 rounded-xl" required>
-    <input type="password" placeholder="Mot de passe" class="w-full p-4 bg-gray-100 rounded-xl" required>
-    <button type="submit" class="w-full bg-black text-white py-4 rounded-full font-bold">Entrer dans le Chat IB</button>
-  </form>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLENDED - IB</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
+body{background:#0a0a0a;color:#fff;height:100vh;display:flex;flex-direction:column}
+.top{background:#111;padding:15px;border-bottom:1px solid #222;display:flex;align-items:center;gap:12px}
+.top a{color:#fff;text-decoration:none;font-size:22px}
+.list{flex:1;overflow-y:auto}
+.row{display:flex;gap:12px;padding:16px;border-bottom:1px solid #151515}
+.ava{width:48px;height:48px;background:#222;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.n{font-weight:700;font-size:14px}.m{color:#777;font-size:13px;margin-top:3px}
+.tm{margin-left:auto;color:#555;font-size:11px}
+</style>
+</head>
+<body>
+<div class="top"><a href="index.html">←</a><b>Messages Privés</b></div>
+<div class="list">
+<div class="row"><div class="ava">👩</div><div><div class="n">Sophie, 22 • Bafoussam</div><div class="m">Moi aussi, on s'écrit en IB?</div></div><div class="tm">now</div></div>
+<div class="row"><div class="ava">👨</div><div><div class="n">Marc, 25 • Dschang</div><div class="m">Tu es connectée?</div></div><div class="tm">5m</div></div>
+<div class="row"><div class="ava">👩</div><div><div class="n">Aïcha, 23 • Foumban</div><div class="m">Salut !</div></div><div class="tm">12m</div></div>
 </div>
 </body>
 </html>
