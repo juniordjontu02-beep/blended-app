@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BLENDED - IB</title>
+<title>Chat IB - BLENDED</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
 body{background:#0a0a0a;color:white;height:100vh;display:flex;flex-direction:column}
-.header{background:#111;border-bottom:1px solid #222;padding:15px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;right:0;z-index:10}
-.chat{flex:1;overflow-y:auto;padding:80px 15px 90px;display:flex;flex-direction:column;gap:12px}
-.msg{max-width:75%;padding:12px 16px;border-radius:18px;font-size:14px;animation:pop .2s}
+.header{background:#111;border-bottom:1px solid #222;padding:15px;display:flex;justify-content:space-between;align-items:center}
+.chat{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:75%;padding:12px 16px;border-radius:18px;font-size:14px}
 .msg.other{background:#1e1e1e;align-self:flex-start;border-bottom-left-radius:4px}
 .msg.me{background:white;color:black;align-self:flex-end;border-bottom-right-radius:4px;font-weight:500}
 .input-area{background:#111;border-top:1px solid #222;padding:12px;display:flex;gap:10px;position:fixed;bottom:0;left:0;right:0}
 .input-area input{flex:1;background:#1e1e1e;border:none;padding:14px 18px;border-radius:25px;color:white;outline:none}
-.input-area button{background:white;color:black;border:none;width:45px;height:45px;border-radius:50%;font-weight:bold}
-@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.input-area button{background:#25D366;color:white;border:none;width:45px;height:45px;border-radius:50%;font-weight:bold;font-size:20px}
+.wa-info{background:#1a1a1a;border:1px solid #25D366;border-radius:12px;padding:12px;margin:10px;text-align:center;font-size:12px;color:#25D366}
 </style>
 </head>
 <body>
@@ -23,29 +23,38 @@ body{background:#0a0a0a;color:white;height:100vh;display:flex;flex-direction:col
 <div><b>Chat Anonyme</b></div>
 <div style="color:#00ff88;font-size:12px">● 1 243 en ligne • Bafoussam</div>
 </div>
+
 <div class="chat" id="chatBox">
 <div class="msg other">Salut ça va? Tu es de Bafoussam?</div>
 <div class="msg me">Oui et toi?</div>
 <div class="msg other">Moi aussi, on s'écrit en IB?</div>
+<div class="wa-info">💬 Tape ton message en bas et ça part direct sur WhatsApp pour parler en vrai!</div>
 </div>
+
 <div class="input-area">
 <input type="text" id="msgInput" placeholder="Écris en IB...">
-<button onclick="send()">↑</button>
+<button onclick="sendWA()">↑</button>
 </div>
+
 <script>
-function send(){
+function sendWA(){
 let input=document.getElementById('msgInput');
+let text=input.value.trim();
+if(text=='')return;
+// Message qui va sur WhatsApp
+let message = "Salut! Vu sur BLENDED (Bafoussam): " + text;
+let url = "https://wa.me/?text=" + encodeURIComponent(message);
+window.open(url, "_blank");
+// Affiche aussi dans le chat pour le style
 let box=document.getElementById('chatBox');
-if(input.value.trim()=='')return;
 let div=document.createElement('div');
 div.className='msg me';
-div.textContent=input.value;
+div.textContent=text + " (envoyé sur WA ✅)";
 box.appendChild(div);
 input.value='';
 box.scrollTop=box.scrollHeight;
-setTimeout(()=>{let r=document.createElement('div');r.className='msg other';r.textContent='Vu 👀';box.appendChild(r);box.scrollTop=box.scrollHeight;},1000);
 }
-document.getElementById('msgInput').addEventListener('keypress',function(e){if(e.key==='Enter')send();});
+document.getElementById('msgInput').addEventListener('keypress',function(e){if(e.key==='Enter')sendWA();});
 </script>
 </body>
 </html>
