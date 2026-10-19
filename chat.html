@@ -3,35 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BLENDED - Chat Anonyme</title>
+<title>BLENDED - IB</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
 body{background:#0a0a0a;color:white;height:100vh;display:flex;flex-direction:column}
-.header{background:#111;border-bottom:1px solid #222;padding:15px;display:flex;justify-content:space-between;align-items:center}
-.header h2{font-size:16px}
-.online{color:#00ff88;font-size:12px}
-.chat{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px}
-.msg{max-width:75%;padding:12px 16px;border-radius:18px;font-size:14px;line-height:1.4}
+.header{background:#111;border-bottom:1px solid #222;padding:15px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;right:0;z-index:10}
+.chat{flex:1;overflow-y:auto;padding:80px 15px 90px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:75%;padding:12px 16px;border-radius:18px;font-size:14px;animation:pop .2s}
 .msg.other{background:#1e1e1e;align-self:flex-start;border-bottom-left-radius:4px}
 .msg.me{background:white;color:black;align-self:flex-end;border-bottom-right-radius:4px;font-weight:500}
-.input-area{background:#111;border-top:1px solid #222;padding:12px;display:flex;gap:10px}
+.input-area{background:#111;border-top:1px solid #222;padding:12px;display:flex;gap:10px;position:fixed;bottom:0;left:0;right:0}
 .input-area input{flex:1;background:#1e1e1e;border:none;padding:14px 18px;border-radius:25px;color:white;outline:none}
-.input-area button{background:white;color:black;border:none;width:45px;height:45px;border-radius:50%;font-size:18px;font-weight:bold}
+.input-area button{background:white;color:black;border:none;width:45px;height:45px;border-radius:50%;font-weight:bold}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
 </style>
 </head>
 <body>
 <div class="header">
-<h2>Chat Anonyme</h2>
-<div class="online">● 1 243 en ligne • Bafoussam</div>
+<div><b>Chat Anonyme</b></div>
+<div style="color:#00ff88;font-size:12px">● 1 243 en ligne • Bafoussam</div>
 </div>
-<div class="chat">
+<div class="chat" id="chatBox">
 <div class="msg other">Salut ça va? Tu es de Bafoussam?</div>
 <div class="msg me">Oui et toi?</div>
 <div class="msg other">Moi aussi, on s'écrit en IB?</div>
 </div>
 <div class="input-area">
-<input type="text" placeholder="Écris un message...">
-<button>↑</button>
+<input type="text" id="msgInput" placeholder="Écris en IB...">
+<button onclick="send()">↑</button>
 </div>
+<script>
+function send(){
+let input=document.getElementById('msgInput');
+let box=document.getElementById('chatBox');
+if(input.value.trim()=='')return;
+let div=document.createElement('div');
+div.className='msg me';
+div.textContent=input.value;
+box.appendChild(div);
+input.value='';
+box.scrollTop=box.scrollHeight;
+setTimeout(()=>{let r=document.createElement('div');r.className='msg other';r.textContent='Vu 👀';box.appendChild(r);box.scrollTop=box.scrollHeight;},1000);
+}
+document.getElementById('msgInput').addEventListener('keypress',function(e){if(e.key==='Enter')send();});
+</script>
 </body>
 </html>
