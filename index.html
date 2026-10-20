@@ -14,24 +14,24 @@ body{background:#000;min-height:100vh;display:flex;align-items:center;justify-co
 .role{margin-top:12px;font-weight:900;font-size:14px}
 .actions{margin-top:16px;display:flex;gap:12px;justify-content:center}
 .btn{width:60px;height:60px;border-radius:50%;border:none;font-size:24px;font-weight:900;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,.1)}
-.btn-no{background:#fff;color:#ff4458;border:1px solid #ff4458}
-.btn-yes{background:#00ff88;color:#000}
-.like-label,.nope-label{position:absolute;top:30px;padding:10px 20px;border-radius:10px;font-weight:900;font-size:22px;border:4px solid;opacity:0;transform:rotate(-10deg)}
-.like-label{left:20px;color:#00ff88;border-color:#00ff88}.nope-label{right:20px;color:#ff4458;border-color:#ff4458;transform:rotate(10deg)}
+.btn-no{background:#fff;color:#ff4458;border:2px solid #ff4458}.btn-yes{background:#00ff88;color:#000}
+.like-label,.nope-label,.join-label{position:absolute;top:30px;padding:10px 20px;border-radius:10px;font-weight:900;font-size:22px;border:4px solid;opacity:0;z-index:10}
+.like-label{left:20px;color:#00ff88;border-color:#00ff88;transform:rotate(-15deg)}.nope-label{right:20px;color:#ff4458;border-color:#ff4458;transform:rotate(15deg)}
+.join-card{background:linear-gradient(135deg,#000 0%,#222 100%);color:white;height:680px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center}
+.join-card .big-b{font-size:120px;font-weight:900;margin-bottom:20px}.join-card h2{font-size:28px;margin-bottom:10px}.join-card p{color:#aaa;margin-bottom:20px}
+.join-btn{background:#00ff88;color:#000;padding:18px 40px;border-radius:30px;border:none;font-weight:900;font-size:18px}
 </style></head><body>
 <div class="stack" id="stack"></div>
 <script>
 const profiles=[
 {name:"Djontu Junior",city:"Bafoussam, Cameroun",quote:"Rien n'est impossible et rien ne s'obtient facilement",role:"18 ans • Fondateur de BLENDED",img:"https://i.ibb.co/v4cDp8kh/received-29285732557780191.jpg"},
-{name:"Amina",city:"Douala, Cameroun",quote:"Ambitieuse et passionnée",role:"19 ans • Étudiante",img:"https://i.pravatar.cc/400?img=5"},
-{name:"Kevin",city:"Yaoundé, Cameroun",quote:"Entrepreneur dans l'âme",role:"20 ans • Developer",img:"https://i.pravatar.cc/400?img=12"},
-{name:"Sandra",city:"Bafoussam, Cameroun",quote:"Rêveuse mais déterminée",role:"18 ans • Designer",img:"https://i.pravatar.cc/400?img=9"}
+{name:"Amina",city:"Douala",quote:"Ambitieuse et passionnée",role:"19 ans",img:"https://i.pravatar.cc/400?img=5"},
+{name:"Kevin",city:"Yaoundé",quote:"Entrepreneur dans l'âme",role:"20 ans",img:"https://i.pravatar.cc/400?img=12"},
 ];
 let current=0;
 function render(){
 const stack=document.getElementById('stack');
-stack.innerHTML='';
-if(current>=profiles.length){stack.innerHTML='<div style="color:white;text-align:center;margin-top:200px"><h2>Plus de profils! 🔥</h2><p style="margin-top:10px">Invite tes amis via inscription.html</p><a href="inscription.html" style="color:#00ff88">+ Ajouter un profil</a></div>';return;}
+if(current<profiles.length){
 const p=profiles[current];
 stack.innerHTML=`
 <div class="card" id="card">
@@ -42,24 +42,37 @@ stack.innerHTML=`
 <div class="actions"><button class="btn btn-no" onclick="swipe(-1)">✕</button><button class="btn btn-yes" onclick="swipe(1)">♥</button></div></div>
 </div>`;
 addDrag();
+}else{
+// CARTE INSCRIPTION - SWIPE POUR S'INSCRIRE
+stack.innerHTML=`
+<div class="card join-card" id="card">
+<div class="like-label" id="likeLabel" style="border-color:#00ff88;color:#00ff88">JOIN</div>
+<div class="big-b">B</div>
+<h2>Rejoins BLENDED</h2>
+<p>Swipe à droite pour créer ta carte et rencontrer des gens de Bafoussam!</p>
+<button class="join-btn" onclick="location.href='inscription.html'">S'INSCRIRE →</button>
+<p style="margin-top:20px;font-size:12px;color:#666">Glisse la carte à droite pour t'inscrire</p>
+</div>`;
+addDrag(true);
+}
 }
 function swipe(dir){
 const card=document.getElementById('card');
-card.style.transform=`translateX(${dir*500}px) rotate(${dir*30}deg)`;
+card.style.transform=`translateX(${dir*600}px) rotate(${dir*30}deg)`;
 card.style.opacity='0';
 setTimeout(()=>{
-if(dir===1){location.href='chat.html';}
+if(dir===1 && current>=profiles.length){location.href='inscription.html';return;}
+if(dir===1 && current<profiles.length){location.href='chat.html';return;}
 current++;render();
 },300);
 }
-function addDrag(){
+function addDrag(isJoin=false){
 const card=document.getElementById('card');let startX=0,currentX=0,isDragging=false;
-card.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;isDragging=true;card.style.transition='none'});
-card.addEventListener('touchmove',e=>{if(!isDragging)return;currentX=e.touches[0].clientX-startX;card.style.transform=`translateX(${currentX}px) rotate(${currentX/10}deg)`;document.getElementById('likeLabel').style.opacity=currentX>50?currentX/100:0;document.getElementById('nopeLabel').style.opacity=currentX<-50?-currentX/100:0;});
-card.addEventListener('touchend',()=>{isDragging=false;card.style.transition='transform .3s ease';if(currentX>100)swipe(1);else if(currentX<-100)swipe(-1);else{card.style.transform='translateX(0) rotate(0)';document.getElementById('likeLabel').style.opacity=0;document.getElementById('nopeLabel').style.opacity=0;}});
-card.addEventListener('mousedown',e=>{startX=e.clientX;isDragging=true;card.style.transition='none'});
-window.addEventListener('mousemove',e=>{if(!isDragging)return;currentX=e.clientX-startX;card.style.transform=`translateX(${currentX}px) rotate(${currentX/10}deg)`;document.getElementById('likeLabel').style.opacity=currentX>50?currentX/100:0;document.getElementById('nopeLabel').style.opacity=currentX<-50?-currentX/100:0;});
-window.addEventListener('mouseup',()=>{if(!isDragging)return;isDragging=false;card.style.transition='transform .3s ease';if(currentX>100)swipe(1);else if(currentX<-100)swipe(-1);else{card.style.transform='translateX(0) rotate(0)';document.getElementById('likeLabel').style.opacity=0;document.getElementById('nopeLabel').style.opacity=0;}});
+const onStart=x=>{startX=x;isDragging=true;card.style.transition='none'};
+const onMove=x=>{if(!isDragging)return;currentX=x-startX;card.style.transform=`translateX(${currentX}px) rotate(${currentX/10}deg)`;const label=document.getElementById('likeLabel');if(label){label.style.opacity=Math.abs(currentX)>50?Math.abs(currentX)/100:0;}const nope=document.getElementById('nopeLabel');if(nope){nope.style.opacity=currentX<-50?-currentX/100:0;}}; 
+const onEnd=()=>{if(!isDragging)return;isDragging=false;card.style.transition='transform .3s ease';if(currentX>120)swipe(1);else if(currentX<-120)swipe(-1);else{card.style.transform='translateX(0) rotate(0)';document.querySelectorAll('.like-label,.nope-label').forEach(l=>l.style.opacity=0);}};
+card.addEventListener('touchstart',e=>onStart(e.touches[0].clientX));window.addEventListener('touchmove',e=>{if(isDragging)onMove(e.touches[0].clientX)});window.addEventListener('touchend',onEnd);
+card.addEventListener('mousedown',e=>onStart(e.clientX));window.addEventListener('mousemove',e=>{if(isDragging)onMove(e.clientX)});window.addEventListener('mouseup',onEnd);
 }
 render();
 </script></body></html>
