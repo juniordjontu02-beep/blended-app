@@ -1,57 +1,64 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IB - BLENDED</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
-body{background:#0a0a0a;color:white;min-height:100vh;padding-bottom:80px}
-.header{padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #222;background:#111;position:sticky;top:0}
-.logo-icon{width:32px;height:32px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center}
-.list{padding:10px}
-.item{background:#111;border:1px solid #222;border-radius:16px;padding:16px;display:flex;gap:12px;align-items:center;margin-bottom:10px;text-decoration:none;color:white}
-.avatar{width:48px;height:48px;background:#222;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900}
-.info{flex:1}
-.info b{font-size:14px}
-.info p{font-size:13px;color:#888;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
-.time{font-size:11px;color:#555}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #222;display:flex;justify-content:space-around;padding:12px 0}
-.nav a{color:#666;text-decoration:none;font-size:11px;text-align:center}.nav a.active{color:#fff}
-</style>
-</head>
-<body>
-<div class="header">
-<div class="logo-icon"><svg width="22" height="22" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="white"/><path d="M22 15 L55 15 Q75 15 75 35 Q75 50 55 50 Q75 50 78 70 Q78 88 55 88 L22 88 Z" fill="black"/></svg></div>
-<b>Messages IB</b>
-</div>
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Inscription - BLENDED</title><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#000;color:#fff;font-family:Arial;padding:20px;display:flex;flex-direction:column;min-height:100vh}.logo{width:64px;height:64px;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:36px;border-radius:20px;margin:20px auto}.title{font-size:32px;font-weight:900;text-align:center;margin-bottom:6px}.sub{text-align:center;color:#888;margin-bottom:24px}.form{display:flex;flex-direction:column;gap:14px;max-width:400px;width:100%;margin:0 auto}.input{background:#111;border:1px solid #222;padding:16px;border-radius:16px;color:#fff;font-size:16px;outline:none;width:100%}.input:focus{border-color:#00ff88}.btn{background:#00ff88;color:#000;padding:18px;border-radius:28px;border:none;font-weight:900;font-size:17px;margin-top:10px}.btn:disabled{opacity:0.5}.link{text-align:center;margin-top:16px;color:#888}.link a{color:#00ff88;text-decoration:none;font-weight:700}.ok{background:#00ff88;color:#000;padding:12px;border-radius:12px;text-align:center;display:none;font-weight:700}.err{background:#ff4444;color:#fff;padding:12px;border-radius:12px;text-align:center;display:none}</style></head><body>
+<div class="logo">B</div>
+<div class="title">Rejoins BLENDED</div>
+<div class="sub">L'app #1 de Bafoussam • 18 ans • Djontu Junior</div>
 
-<div class="list" id="list">
-<!-- Rempli par JS -->
-</div>
+<div class="form">
+<div id="ok" class="ok">✅ Compte créé! Redirection...</div>
+<div id="err" class="err"></div>
 
-<div class="nav">
-<a href="index.html">🏠<br>Accueil</a>
-<a href="chat.html">💬<br>Chat</a>
-<a class="active">✉️<br>IB</a>
-<a href="inscription.html">👤<br>Profil</a>
+<input id="name" class="input" placeholder="Ton prénom (ex: Junior)">
+<input id="age" class="input" type="number" placeholder="Âge (ex: 18)">
+<input id="city" class="input" placeholder="Ville (ex: Bafoussam)">
+<input id="bio" class="input" placeholder="Ta devise (ex: Rien n'est impossible)">
+<input id="phone" class="input" placeholder="WhatsApp (ex: 6XXXXXXXX)">
+<input id="pass" class="input" type="password" placeholder="Mot de passe">
+
+<button id="btn" class="btn" onclick="inscrire()">Créer mon compte 🔥</button>
+
+<div class="link">Déjà un compte? <a href="index.html">Se connecter</a></div>
+<div class="link" style="margin-top:20px;font-size:12px">En t'inscrivant, tu acceptes que BLENDED est fait à Bafoussam avec ❤️</div>
 </div>
 
 <script>
-let msgs = JSON.parse(localStorage.getItem('blended_msgs') || '[]');
-let last = msgs.length ? msgs[msgs.length-1].text : "Aucun message...";
-document.getElementById('list').innerHTML = `
-<a class="item" href="chat.html">
-<div class="avatar">B</div>
-<div class="info"><b>Anonyme • Bafoussam</b><p>${last}</p></div>
-<div class="time">maint.</div>
-</a>
-<a class="item" href="chat.html" style="opacity:.5">
-<div class="avatar">A</div>
-<div class="info"><b>Anonyme • Dschang</b><p>Salut ça va?</p></div>
-<div class="time">2h</div>
-</a>
-`;
-</script>
-</body>
-</html>
+const DB='https://blended-b75d3-default-rtdb.firebaseio.com';
+async function inscrire(){
+let name=document.getElementById('name').value.trim();
+let age=document.getElementById('age').value.trim();
+let city=document.getElementById('city').value.trim();
+let bio=document.getElementById('bio').value.trim();
+let phone=document.getElementById('phone').value.trim();
+let pass=document.getElementById('pass').value.trim();
+let ok=document.getElementById('ok');
+let err=document.getElementById('err');
+let btn=document.getElementById('btn');
+
+err.style.display='none';
+ok.style.display='none';
+
+if(!name||!age||!city||!pass){err.innerText='Remplis tout BOSS!';err.style.display='block';return}
+if(parseInt(age)<16){err.innerText='Tu dois avoir 16 ans minimum';err.style.display='block';return}
+
+btn.disabled=true; btn.innerText='Création...';
+
+try{
+let id=name.toLowerCase().replace(/[^a-z0-9]/g,'_')+'_'+Date.now();
+let user={name,age:parseInt(age),city,bio:bio||"Rien n'est impossible et rien ne s'obtient facilement",phone,pass,created:Date.now(),creator:'Djontu Junior'};
+
+let res=await fetch(`${DB}/users/${id}.json`,{method:'PUT',body:JSON.stringify(user)});
+if(!res.ok) throw new Error('Firebase bloqué');
+
+localStorage.setItem('blended_user',JSON.stringify({id,...user}));
+
+ok.style.display='block';
+ok.innerText=`✅ Bienvenue ${name}! Compte créé à Bafoussam!`;
+
+setTimeout(()=>{location.href='ib.html'},1500);
+
+}catch(e){
+err.innerText='Erreur Firebase: Vérifie que les règles sont en true ( .read:true .write:true ) - '+e.message;
+err.style.display='block';
+btn.disabled=false; btn.innerText='Créer mon compte 🔥';
+}
+}
+</script></body></html>
