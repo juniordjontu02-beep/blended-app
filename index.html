@@ -2,35 +2,44 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>BLENDED</title>
+<!-- IPHONE FIX -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="BLENDED">
+<link rel="apple-touch-icon" href="https://i.pravatar.cc/512?img=8">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial;background:#f5f5f5;padding-bottom:70px}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,Arial;background:#f5f5f5;padding-bottom:70px}
 .header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:white;box-shadow:0 2px 10px rgba(0,0,0,0.08);position:sticky;top:0;z-index:100}
 .logo{width:65px;height:65px;background:#000;border-radius:18px;display:flex;align-items:center;justify-content:center}
 .logo span{font-size:50px;font-weight:900;color:white;font-family:Arial Black}
-.app-name{font-size:22px;font-weight:900;flex:1;text-align:center}
-.stories{display:flex;gap:12px;overflow-x:auto;padding:12px 16px;background:white;border-bottom:1px solid #eee}
+.app-name{font-size:22px;font-weight:900;flex:1;text-align:center;letter-spacing:1px}
+.stories{display:flex;gap:12px;overflow-x:auto;padding:12px 16px;background:white;border-bottom:1px solid #eee;-webkit-overflow-scrolling:touch}
 .stories::-webkit-scrollbar{display:none}
 .story{text-align:center;min-width:62px;cursor:pointer}
 .story-ring{width:60px;height:60px;border-radius:50%;padding:3px;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)}
 .story-ring img,.story-ring video{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid white;background:#000}
-.story p{font-size:11px;margin-top:4px;font-weight:700}
+.story p{font-size:11px;margin-top:4px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62px}
 #story-viewer{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:9999}
 #story-viewer video{width:100%;height:100%;object-fit:contain}
-.top-bar{position:absolute;top:0;left:0;right:0;padding:12px 16px;display:flex;align-items:center;gap:10px;background:linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);z-index:5}
+.top-bar{position:absolute;top:0;left:0;right:0;padding:14px 16px;display:flex;align-items:center;gap:10px;background:linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);z-index:5}
 .top-bar img{width:36px;height:36px;border-radius:50%;border:1px solid white}
-.top-bar .real-name{color:white;font-weight:800;font-size:14px}
-.top-bar .time{color:rgba(255,255,255,0.7);font-size:11px;margin-left:6px}
-.progress{position:absolute;top:6px;left:8px;right:8px;height:2px;background:rgba(255,255,255,0.3);border-radius:2px;display:flex;gap:4px}
-.progress-fill{height:100%;background:white;width:0%}
-.close{position:absolute;top:18px;right:16px;color:white;font-size:24px;cursor:pointer;z-index:10}
+.real-name{color:white;font-weight:800;font-size:15px}
+.time{color:rgba(255,255,255,0.7);font-size:12px}
+.progress{position:absolute;top:6px;left:8px;right:8px;height:3px;background:rgba(255,255,255,0.3);border-radius:2px;z-index:6}
+.progress-fill{height:100%;background:white;width:0%;border-radius:2px}
+.close{position:absolute;top:18px;right:16px;color:white;font-size:26px;cursor:pointer;z-index:10;width:30px;height:30px;text-align:center}
 .card{margin:12px 16px;background:white;border-radius:20px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
-.card-img{width:100%;height:380px;object-fit:cover}
+.card-img{width:100%;height:380px;object-fit:cover;background:#eee}
 .card-info{padding:14px}
-.tabs{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:8px 0 12px;border-top:1px solid #eee}
-.tab{font-size:11px;text-align:center;font-weight:600;color:#888}
+.card-info h3{font-size:17px;font-weight:800}
+.card-info p{font-size:13px;color:#666;margin-top:3px}
+.tabs{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:8px 0 calc(12px + env(safe-area-inset-bottom));border-top:1px solid #eee}
+.tab{font-size:11px;text-align:center;font-weight:600;color:#888;cursor:pointer}
 .tab.active{color:#000}
 .tab span{font-size:22px;display:block}
 </style>
@@ -43,43 +52,22 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:70px}
   <div style="font-size:24px;width:40px;text-align:center">❤️</div>
 </div>
 
-<!-- STORIES AVEC VRAIS NOMS -->
 <div class="stories">
-  <div class="story" onclick="openStory(0)">
-    <div class="story-ring"><img src="https://i.pravatar.cc/150?img=8"></div>
-    <p>Junior Djontu</p>
-  </div>
-  <div class="story" onclick="openStory(1)">
-    <div class="story-ring"><img src="https://i.pravatar.cc/150?img=5"></div>
-    <p>Marie Ngassa</p>
-  </div>
-  <div class="story" onclick="openStory(2)">
-    <div class="story-ring"><video src="https://www.w3schools.com/html/mov_bbb.mp4" muted></video></div>
-    <p>Paul Tchinda</p>
-  </div>
-  <div class="story" onclick="openStory(3)">
-    <div class="story-ring"><img src="https://i.pravatar.cc/150?img=32"></div>
-    <p>Brenda Fotsing</p>
-  </div>
+  <div class="story" onclick="openStory(0)"><div class="story-ring"><img src="https://i.pravatar.cc/150?img=8"></div><p>Junior Djontu</p></div>
+  <div class="story" onclick="openStory(1)"><div class="story-ring"><img src="https://i.pravatar.cc/150?img=5"></div><p>Marie Ngassa</p></div>
+  <div class="story" onclick="openStory(2)"><div class="story-ring"><img src="https://i.pravatar.cc/150?img=12"></div><p>Paul Tchinda</p></div>
+  <div class="story" onclick="openStory(3)"><div class="story-ring"><img src="https://i.pravatar.cc/150?img=32"></div><p>Brenda Fotsing</p></div>
 </div>
 
-<!-- PROFILS -->
 <div id="discover">
-  <div class="card">
-    <img class="card-img" src="https://i.pravatar.cc/400?img=8">
-    <div class="card-info"><h3>Junior Djontu, 18 ans</h3><p>📍 Bafoussam - Vrai nom: Djontu Junior</p></div>
-  </div>
+  <div class="card"><img class="card-img" src="https://i.pravatar.cc/400?img=8"><div class="card-info"><h3>Junior Djontu, 18 ans</h3><p>📍 Bafoussam • Vrai nom: Djontu Junior</p></div></div>
 </div>
 
-<!-- VIEWER VIDEO AVEC NOM RÉEL EN HAUT -->
 <div id="story-viewer">
   <div class="progress"><div class="progress-fill" id="progress"></div></div>
-  <div class="top-bar">
-    <img id="viewer-avatar" src="">
-    <div><span class="real-name" id="viewer-name">Nom Réel</span><span class="time"> • 2h</span></div>
-  </div>
+  <div class="top-bar"><img id="viewer-avatar" src=""><div><span class="real-name" id="viewer-name"></span><span class="time"> • 2h</span></div></div>
   <span class="close" onclick="closeStory()">✕</span>
-  <video id="sv" autoplay playsinline onclick="nextStory()"></video>
+  <video id="sv" playsinline muted webkit-playsinline></video>
 </div>
 
 <div class="tabs">
@@ -89,32 +77,28 @@ body{font-family:Arial;background:#f5f5f5;padding-bottom:70px}
 </div>
 
 <script>
-// ICI TU METS LES VRAIS NOMS ET VRAIES VIDÉOS
-const storiesData = [
-  { name: "Junior Djontu", realName: "Djontu Junior", avatar: "https://i.pravatar.cc/150?img=8", video: "https://www.w3schools.com/html/mov_bbb.mp4" },
-  { name: "Marie Ngassa", realName: "Ngassa Marie", avatar: "https://i.pravatar.cc/150?img=5", video: "https://www.w3schools.com/html/mov_bbb.mp4" },
-  { name: "Paul Tchinda", realName: "Tchinda Paul", avatar: "https://i.pravatar.cc/150?img=12", video: "https://www.w3schools.com/html/movie.mp4" },
-  { name: "Brenda Fotsing", realName: "Fotsing Brenda", avatar: "https://i.pravatar.cc/150?img=32", video: "https://www.w3schools.com/html/mov_bbb.mp4" }
+const storiesData=[
+  {realName:"Djontu Junior",avatar:"https://i.pravatar.cc/150?img=8",video:"https://www.w3schools.com/html/mov_bbb.mp4"},
+  {realName:"Ngassa Marie",avatar:"https://i.pravatar.cc/150?img=5",video:"https://www.w3schools.com/html/mov_bbb.mp4"},
+  {realName:"Tchinda Paul",avatar:"https://i.pravatar.cc/150?img=12",video:"https://www.w3schools.com/html/movie.mp4"},
+  {realName:"Fotsing Brenda",avatar:"https://i.pravatar.cc/150?img=32",video:"https://www.w3schools.com/html/mov_bbb.mp4"}
 ];
-
 let cur=0,timer;
 function openStory(i){
   cur=i;
-  const data=storiesData[cur];
-  document.getElementById('viewer-name').innerText=data.realName;
-  document.getElementById('viewer-avatar').src=data.avatar;
+  const d=storiesData[cur];
+  document.getElementById('viewer-name').innerText=d.realName;
+  document.getElementById('viewer-avatar').src=d.avatar;
   document.getElementById('story-viewer').style.display='block';
-  play();
-}
-function play(){
   const v=document.getElementById('sv');
-  v.src=storiesData[cur].video;
-  v.play();
+  v.src=d.video; v.muted=true; v.playsInline=true;
+  v.play().catch(()=>{});
   let w=0; clearInterval(timer);
-  timer=setInterval(()=>{ w+=0.8; document.getElementById('progress').style.width=w+'%'; if(w>=100) nextStory(); },30);
+  timer=setInterval(()=>{w+=0.8; document.getElementById('progress').style.width=w+'%'; if(w>=100) nextStory();},30);
 }
-function nextStory(){ cur++; if(cur>=storiesData.length){ closeStory(); } else { document.getElementById('progress').style.width='0%'; openStory(cur); } }
-function closeStory(){ document.getElementById('story-viewer').style.display='none'; document.getElementById('sv').pause(); clearInterval(timer); document.getElementById('progress').style.width='0%'; }
+function nextStory(){cur++; if(cur>=storiesData.length){closeStory();}else{document.getElementById('progress').style.width='0%';openStory(cur);}}
+function closeStory(){document.getElementById('story-viewer').style.display='none';const v=document.getElementById('sv');v.pause();v.src='';clearInterval(timer);document.getElementById('progress').style.width='0%';}
+document.getElementById('sv').addEventListener('ended',nextStory);
 </script>
 </body>
 </html>
