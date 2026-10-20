@@ -1,14 +1,19 @@
 {
-  "name": "BLENDED - Bafoussam",
+  "name": "BLENDED - Bafoussam Dating",
   "short_name": "BLENDED",
-  "description": "L'app #1 de Bafoussam par Djontu Junior",
-  "start_url": "/blended-app/index.html",
+  "description": "App de rencontre #1 à Bafoussam - Trouve l'amour près de toi",
+  "start_url": "/blended-app/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#00ff88",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
   "icons": [
     {
-      "src": "https://via.placeholder.com/512/FFFFFF/000000?text=B",
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
