@@ -1,20 +1,120 @@
-<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BLENDED - Bafoussam</title><style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}body{background:#f8f8f8}.header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:white;box-shadow:0 2px 10px rgba(0,0,0,0.1);position:sticky;top:0;z-index:100}.logo{width:85px !important;height:85px !important;font-size:68px !important;font-weight:900 !important;background:#000 !important;color:#fff !important;border-radius:24px !important;display:flex !important;align-items:center !important;justify-content:center !important;box-shadow:0 6px 25px rgba(0,0,0,0.3) !important;transform:scale(1.05)} .card-wrap{display:flex;justify-content:center;padding:20px}.card{width:95%;max-width:380px;background:white;border-radius:25px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.15)}.actions{display:flex;justify-content:center;gap:20px;padding:20px}.btn{width:60px;height:60px;border-radius:50%;border:none;font-size:28px;cursor:pointer}.nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:12px;border-top:1px solid #eee}.nav a{color:#999;text-decoration:none;font-weight:600}.nav a.active{color:#000}#match{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;z-index:1000}.match-emoji{font-size:80px;text-align:center;color:white}</style></head><body>
-<div class="header"><div class="logo">B</div><div style="font-weight:900;font-size:22px;">BLENDED</div><div>❤️</div></div>
-<div class="card-wrap"><div class="card" id="card"></div></div>
-<div class="actions"><button class="btn" onclick="swipe('nope')">❌</button><button class="btn" style="background:#000;color:white;" onclick="swipe('like')">❤️</button></div>
-<div class="nav"><a href="index.html" class="active">Découvrir</a><a href="chat.html">Messages</a><a href="ib.html">Profil</a></div>
-<div id="match"><div class="match-emoji">💘<br><div style="font-size:22px;margin-top:10px;">It's a Match!</div><button onclick="goChat()" style="margin-top:20px;padding:12px 30px;border-radius:30px;border:none;background:white;color:black;font-weight:bold;">CHAT</button><br><button onclick="closeMatch()" style="margin-top:15px;background:none;border:none;color:white;">Continuer</button></div></div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLENDED</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial;background:#f5f5f5;padding-bottom:70px}
+.header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:white;box-shadow:0 2px 10px rgba(0,0,0,0.08);position:sticky;top:0;z-index:100}
+.logo{width:65px;height:65px;background:#000;border-radius:18px;display:flex;align-items:center;justify-content:center}
+.logo span{font-size:50px;font-weight:900;color:white;font-family:Arial Black}
+.app-name{font-size:22px;font-weight:900;flex:1;text-align:center}
+.stories{display:flex;gap:12px;overflow-x:auto;padding:12px 16px;background:white;border-bottom:1px solid #eee}
+.stories::-webkit-scrollbar{display:none}
+.story{text-align:center;min-width:62px;cursor:pointer}
+.story-ring{width:60px;height:60px;border-radius:50%;padding:3px;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)}
+.story-ring img,.story-ring video{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid white;background:#000}
+.story p{font-size:11px;margin-top:4px;font-weight:700}
+#story-viewer{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:9999}
+#story-viewer video{width:100%;height:100%;object-fit:contain}
+.top-bar{position:absolute;top:0;left:0;right:0;padding:12px 16px;display:flex;align-items:center;gap:10px;background:linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);z-index:5}
+.top-bar img{width:36px;height:36px;border-radius:50%;border:1px solid white}
+.top-bar .real-name{color:white;font-weight:800;font-size:14px}
+.top-bar .time{color:rgba(255,255,255,0.7);font-size:11px;margin-left:6px}
+.progress{position:absolute;top:6px;left:8px;right:8px;height:2px;background:rgba(255,255,255,0.3);border-radius:2px;display:flex;gap:4px}
+.progress-fill{height:100%;background:white;width:0%}
+.close{position:absolute;top:18px;right:16px;color:white;font-size:24px;cursor:pointer;z-index:10}
+.card{margin:12px 16px;background:white;border-radius:20px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.card-img{width:100%;height:380px;object-fit:cover}
+.card-info{padding:14px}
+.tabs{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:8px 0 12px;border-top:1px solid #eee}
+.tab{font-size:11px;text-align:center;font-weight:600;color:#888}
+.tab.active{color:#000}
+.tab span{font-size:22px;display:block}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo"><span>B</span></div>
+  <div class="app-name">BLENDED</div>
+  <div style="font-size:24px;width:40px;text-align:center">❤️</div>
+</div>
+
+<!-- STORIES AVEC VRAIS NOMS -->
+<div class="stories">
+  <div class="story" onclick="openStory(0)">
+    <div class="story-ring"><img src="https://i.pravatar.cc/150?img=8"></div>
+    <p>Junior Djontu</p>
+  </div>
+  <div class="story" onclick="openStory(1)">
+    <div class="story-ring"><img src="https://i.pravatar.cc/150?img=5"></div>
+    <p>Marie Ngassa</p>
+  </div>
+  <div class="story" onclick="openStory(2)">
+    <div class="story-ring"><video src="https://www.w3schools.com/html/mov_bbb.mp4" muted></video></div>
+    <p>Paul Tchinda</p>
+  </div>
+  <div class="story" onclick="openStory(3)">
+    <div class="story-ring"><img src="https://i.pravatar.cc/150?img=32"></div>
+    <p>Brenda Fotsing</p>
+  </div>
+</div>
+
+<!-- PROFILS -->
+<div id="discover">
+  <div class="card">
+    <img class="card-img" src="https://i.pravatar.cc/400?img=8">
+    <div class="card-info"><h3>Junior Djontu, 18 ans</h3><p>📍 Bafoussam - Vrai nom: Djontu Junior</p></div>
+  </div>
+</div>
+
+<!-- VIEWER VIDEO AVEC NOM RÉEL EN HAUT -->
+<div id="story-viewer">
+  <div class="progress"><div class="progress-fill" id="progress"></div></div>
+  <div class="top-bar">
+    <img id="viewer-avatar" src="">
+    <div><span class="real-name" id="viewer-name">Nom Réel</span><span class="time"> • 2h</span></div>
+  </div>
+  <span class="close" onclick="closeStory()">✕</span>
+  <video id="sv" autoplay playsinline onclick="nextStory()"></video>
+</div>
+
+<div class="tabs">
+  <div class="tab active"><span>🔍</span>Découvrir</div>
+  <div class="tab"><span>💬</span>Messages</div>
+  <div class="tab"><span>👤</span>Profil</div>
+</div>
+
 <script>
-const DB='https://blended-b75d3-default-rtdb.firebaseio.com';
-let users=[],index=0,currentMatch=null;
-async function loadUsers(){try{let r=await fetch(DB+'/users.json');let d=await r.json();users=Object.values(d||{});showUser(0)}catch(e){}}
-function showUser(i){if(i>=users.length){document.getElementById('card').innerHTML='<div style="padding:40px;text-align:center;">Plus de profils à Bafoussam 😢</div>';return}let u=users[i];document.getElementById('card').innerHTML='<img src="'+(u.photo||'https://via.placeholder.com/400')+'" style="width:100%;height:450px;object-fit:cover;"><div style="padding:15px;"><b>'+(u.name||'User')+'</b>, '+(u.age||'22')+'<br>'+(u.bio||'Bafoussam')+'</div>';}
-async function swipe(type){let card=document.getElementById('card');card.style.transform=type=='like'?'translateX(400px) rotate(20deg)':'translateX(-400px) rotate(-20deg)';setTimeout(()=>{index++;showUser(index);card.style.transform='none'},300);if(type=='like')saveLike(users[index]?.id||index,'like')}
-async function saveLike(to,action){try{await fetch(DB+'/likes.json',{method:'POST',body:JSON.stringify({to,action,time:Date.now()})})}catch(e){}}
-async function checkMatch(otherUser){try{}catch(e){}}
-function showMatch(user){currentMatch=user;document.getElementById('match').style.display='flex'}
-function closeMatch(){document.getElementById('match').style.display='none'}
-function goChat(){closeMatch();location.href='chat.html'}
-let startX=0;let c=document.getElementById('card');c.addEventListener('touchstart',e=>startX=e.touches[0].clientX);c.addEventListener('touchend',e=>{let diff=e.changedTouches[0].clientX-startX;if(diff>80)swipe('like');if(diff<-80)swipe('nope')});
-loadUsers();
-</script></body></html>
+// ICI TU METS LES VRAIS NOMS ET VRAIES VIDÉOS
+const storiesData = [
+  { name: "Junior Djontu", realName: "Djontu Junior", avatar: "https://i.pravatar.cc/150?img=8", video: "https://www.w3schools.com/html/mov_bbb.mp4" },
+  { name: "Marie Ngassa", realName: "Ngassa Marie", avatar: "https://i.pravatar.cc/150?img=5", video: "https://www.w3schools.com/html/mov_bbb.mp4" },
+  { name: "Paul Tchinda", realName: "Tchinda Paul", avatar: "https://i.pravatar.cc/150?img=12", video: "https://www.w3schools.com/html/movie.mp4" },
+  { name: "Brenda Fotsing", realName: "Fotsing Brenda", avatar: "https://i.pravatar.cc/150?img=32", video: "https://www.w3schools.com/html/mov_bbb.mp4" }
+];
+
+let cur=0,timer;
+function openStory(i){
+  cur=i;
+  const data=storiesData[cur];
+  document.getElementById('viewer-name').innerText=data.realName;
+  document.getElementById('viewer-avatar').src=data.avatar;
+  document.getElementById('story-viewer').style.display='block';
+  play();
+}
+function play(){
+  const v=document.getElementById('sv');
+  v.src=storiesData[cur].video;
+  v.play();
+  let w=0; clearInterval(timer);
+  timer=setInterval(()=>{ w+=0.8; document.getElementById('progress').style.width=w+'%'; if(w>=100) nextStory(); },30);
+}
+function nextStory(){ cur++; if(cur>=storiesData.length){ closeStory(); } else { document.getElementById('progress').style.width='0%'; openStory(cur); } }
+function closeStory(){ document.getElementById('story-viewer').style.display='none'; document.getElementById('sv').pause(); clearInterval(timer); document.getElementById('progress').style.width='0%'; }
+</script>
+</body>
+</html>
