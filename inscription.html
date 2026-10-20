@@ -1,38 +1,57 @@
 <!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Inscription - BLENDED</title>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IB - BLENDED</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Arial}
-.box{background:#fff;width:100%;max-width:400px;border-radius:32px;padding:28px}
-.b-logo{text-align:center;font-size:60px;font-weight:900;margin-bottom:10px}
-h1{text-align:center;font-size:24px}.sub{text-align:center;color:#777;font-size:14px;margin:8px 0 20px}
-input,textarea{width:100%;padding:15px;margin-top:6px;margin-bottom:14px;border:1px solid #eee;border-radius:12px;font-size:16px;background:#f9f9f9}
-label{font-weight:800;font-size:12px}
-.btn{width:100%;padding:18px;border:none;border-radius:30px;background:#00ff88;font-weight:900;font-size:18px;margin-top:10px}
-</style></head><body>
-<div class="box">
-<div class="b-logo">B</div>
-<h1>Rejoins BLENDED</h1>
-<p class="sub">Crée ta carte</p>
-<label>NOM</label><input id="name" placeholder="Djontu Junior">
-<label>VILLE</label><input id="city" placeholder="Bafoussam">
-<label>AGE</label><input id="age" type="number" placeholder="18">
-<label>PHRASE</label><textarea id="quote" placeholder="Ta phrase..."></textarea>
-<button class="btn" onclick="go()">S'INSCRIRE →</button>
-<p style="text-align:center;margin-top:12px;font-size:12px"><a href="index.html" style="color:#000;font-weight:700">Retour au swipe</a></p>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
+body{background:#0a0a0a;color:white;min-height:100vh;padding-bottom:80px}
+.header{padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #222;background:#111;position:sticky;top:0}
+.logo-icon{width:32px;height:32px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.list{padding:10px}
+.item{background:#111;border:1px solid #222;border-radius:16px;padding:16px;display:flex;gap:12px;align-items:center;margin-bottom:10px;text-decoration:none;color:white}
+.avatar{width:48px;height:48px;background:#222;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900}
+.info{flex:1}
+.info b{font-size:14px}
+.info p{font-size:13px;color:#888;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.time{font-size:11px;color:#555}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #222;display:flex;justify-content:space-around;padding:12px 0}
+.nav a{color:#666;text-decoration:none;font-size:11px;text-align:center}.nav a.active{color:#fff}
+</style>
+</head>
+<body>
+<div class="header">
+<div class="logo-icon"><svg width="22" height="22" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="white"/><path d="M22 15 L55 15 Q75 15 75 35 Q75 50 55 50 Q75 50 78 70 Q78 88 55 88 L22 88 Z" fill="black"/></svg></div>
+<b>Messages IB</b>
 </div>
+
+<div class="list" id="list">
+<!-- Rempli par JS -->
+</div>
+
+<div class="nav">
+<a href="index.html">🏠<br>Accueil</a>
+<a href="chat.html">💬<br>Chat</a>
+<a class="active">✉️<br>IB</a>
+<a href="inscription.html">👤<br>Profil</a>
+</div>
+
 <script>
-function go(){
-let n=document.getElementById('name').value;
-let c=document.getElementById('city').value;
-let a=document.getElementById('age').value;
-let q=document.getElementById('quote').value;
-if(!n||!c||!a||!q){alert('Remplis tout!');return;}
-let p={name:n,city:c,age:a,quote:q};
-localStorage.setItem('myProfile',JSON.stringify(p));
-alert('Inscription réussie BOSS! 🔥');
-location.href='index.html';
-}
+let msgs = JSON.parse(localStorage.getItem('blended_msgs') || '[]');
+let last = msgs.length ? msgs[msgs.length-1].text : "Aucun message...";
+document.getElementById('list').innerHTML = `
+<a class="item" href="chat.html">
+<div class="avatar">B</div>
+<div class="info"><b>Anonyme • Bafoussam</b><p>${last}</p></div>
+<div class="time">maint.</div>
+</a>
+<a class="item" href="chat.html" style="opacity:.5">
+<div class="avatar">A</div>
+<div class="info"><b>Anonyme • Dschang</b><p>Salut ça va?</p></div>
+<div class="time">2h</div>
+</a>
+`;
 </script>
-</body></html>
+</body>
+</html>
