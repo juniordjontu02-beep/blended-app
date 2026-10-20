@@ -1,131 +1,21 @@
-<!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>BLENDED - Bafoussam</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;color:#fff;font-family:Arial;height:100vh;display:flex;flex-direction:column;overflow:hidden}
-.header{padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
-.logo{width:44px;height:44px;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:26px;border-radius:14px}
-.live{color:#00ff88;font-size:12px;font-weight:700}
-.card-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:16px;position:relative}
-.card{width:100%;max-width:360px;height:68vh;background:#fff;border-radius:32px;overflow:hidden;position:relative;box-shadow:0 20px 60px rgba(255,255,255,0.1)}
-.photo{width:100%;height:100%;background:linear-gradient(180deg,#eee 0%,#fff 60%,#000 100%);display:flex;align-items:center;justify-content:center;font-size:140px;font-weight:900;color:#000}
-.overlay{position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(0deg,rgba(0,0,0,0.9) 0%,transparent 100%)}
-.name{font-size:28px;font-weight:900;color:#fff}
-.city{color:#ccc;margin-top:2px}
-.bio{color:#aaa;font-size:14px;margin-top:6px;font-style:italic}
-.actions{display:flex;justify-content:center;gap:24px;padding:18px 0 22px}
-.btn{width:66px;height:66px;border-radius:50%;border:none;font-size:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:0.2s}
-.btn:active{transform:scale(0.9)}
-.dislike{background:#1a1a1a;color:#ff4444;border:2px solid #333}
-.like{background:#00ff88;color:#000;box-shadow:0 0 20px rgba(0,255,136,0.4)}
-.super{background:#fff;color:#000}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#0a0a0a;border-top:1px solid #222;display:flex;justify-content:space-around;padding:10px 0}
-.n{color:#666;text-decoration:none;font-size:12px;text-align:center;padding:6px 14px;border-radius:12px}
-.n.active{color:#fff;background:#1a1a1a}
-.badge{position:absolute;top:20px;left:20px;padding:8px 14px;border-radius:20px;font-weight:900;font-size:14px;transform:rotate(-15deg);display:none}
-.badge.like-badge{background:#00ff88;color:#000}
-.badge.nope-badge{background:#ff4444;color:#fff;left:auto;right:20px;transform:rotate(15deg)}
-</style>
-</head><body>
-<div class="header">
-<div class="logo">B</div>
-<div style="text-align:center"><div style="font-weight:900">BLENDED</div><div style="font-size:10px;color:#888">BAFOUSSAM • 18 ANS</div></div>
-<div class="live">● LIVE</div>
-</div>
-
-<div class="card-wrap">
-<div class="card" id="card">
-<div class="badge like-badge" id="likeB">LIKE ❤️</div>
-<div class="badge nope-badge" id="nopeB">NOPE ✕</div>
-<div class="photo" id="photo">B</div>
-<div class="overlay">
-<div class="name" id="name">Djontu Junior • 18</div>
-<div class="city" id="city">Bafoussam, Cameroun</div>
-<div class="bio" id="bio">Rien n'est impossible et rien ne s'obtient facilement</div>
-</div>
-</div>
-</div>
-
-<div class="actions">
-<button class="btn dislike" onclick="swipe('nope')">✕</button>
-<button class="btn super" onclick="location.href='profil.html'">⭐</button>
-<button class="btn like" onclick="swipe('like')">❤️</button>
-</div>
-
-<div class="nav">
-<a href="index.html" class="n active">🏠<br>Accueil</a>
-<a href="chat.html" class="n">💬<br>Chat</a>
-<a href="ib.html" class="n">🟨<br>IB</a>
-<a href="profil.html" class="n">👤<br>Profil</a>
-</div>
-
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BLENDED - Bafoussam</title><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#00ff88"><meta name="apple-mobile-web-app-capable" content="yes"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#000;color:#fff;font-family:Arial;height:100vh;overflow:hidden;display:flex;flex-direction:column}.header{padding:14px 18px;display:flex;justify-content:space-between;align-items:center}.logo{width:44px;height:44px;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:26px;border-radius:14px}.card-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:16px}.card{width:100%;max-width:360px;height:68vh;background:#fff;border-radius:32px;overflow:hidden;position:relative;transition:0.4s}.photo{width:100%;height:100%;background:linear-gradient(180deg,#eee,#fff 60%,#000);display:flex;align-items:center;justify-content:center;font-size:140px;font-weight:900;color:#000}.overlay{position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(0deg,rgba(0,0,0,0.9),transparent)}.name{font-size:28px;font-weight:900}.actions{display:flex;justify-content:center;gap:24px;padding:18px 0 90px}.btn{width:66px;height:66px;border-radius:50%;border:none;font-size:28px;display:flex;align-items:center;justify-content:center}.dislike{background:#1a1a1a;color:#ff4444;border:2px solid #333}.like{background:#00ff88;color:#000}.nav{position:fixed;bottom:0;left:0;right:0;background:#0a0a0a;border-top:1px solid #222;display:flex;justify-content:space-around;padding:10px 0}.n{color:#666;text-decoration:none;font-size:12px;text-align:center;padding:6px 14px;border-radius:12px}.n.active{color:#fff;background:#1a1a1a}#match{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:100;text-align:center;padding:20px}.match-emoji{font-size:100px;animation:pop 0.5s}.match-title{font-size:40px;font-weight:900;margin:20px 0 10px;color:#00ff88}.match-sub{color:#ccc;margin-bottom:30px}.match-btn{background:#00ff88;color:#000;padding:18px 40px;border-radius:30px;border:none;font-weight:900;font-size:18px}@keyframes pop{0%{transform:scale(0)}50%{transform:scale(1.2)}100%{transform:scale(1)}}</style></head><body>
+<div class="header"><div class="logo">B</div><div style="text-align:center"><div style="font-weight:900">BLENDED</div><div style="font-size:10px;color:#888">BAFOUSSAM • 18 ANS</div></div><div style="color:#00ff88;font-size:12px">● LIVE</div></div>
+<div class="card-wrap"><div class="card" id="card"><div class="photo" id="photo">B</div><div class="overlay"><div class="name" id="name">Chargement...</div><div id="city" style="color:#ccc"></div><div id="bio" style="color:#aaa;font-size:14px;margin-top:6px"></div></div></div></div>
+<div class="actions"><button class="btn dislike" onclick="swipe('nope')">✕</button><button class="btn like" onclick="swipe('like')">❤️</button></div>
+<div class="nav"><a href="index.html" class="n active">🏠<br>Accueil</a><a href="chat.html" class="n">💬<br>Chat</a><a href="ib.html" class="n">🟨<br>IB</a><a href="profil.html" class="n">👤<br>Profil</a></div>
+<div id="match"><div class="match-emoji">❤️🔥</div><div class="match-title">C'EST UN MATCH!</div><div class="match-sub" id="matchText">Toi et Boss vous vous êtes likés</div><button class="match-btn" onclick="goChat()">Envoyer un message 💬</button><div style="margin-top:20px;color:#666" onclick="closeMatch()">Continuer</div></div>
 <script>
-let users=[]; let index=0;
-async function loadUsers(){
-try{
-let r=await fetch('https://blended-b75d3-default-rtdb.firebaseio.com/users.json');
-let d=await r.json();
-if(d){
-users=Object.entries(d).map(([id,v])=>({id,...v}));
-if(users.length>0) showUser(0);
-}else{
-showUser(0);
-}
-}catch(e){
-showUser(0);
-}
-}
-function showUser(i){
-if(i>=users.length){i=0}
-let u=users[i]||{name:'Djontu Junior',city:'Bafoussam',bio:"Rien n'est impossible et rien ne s'obtient facilement",age:18};
-document.getElementById('name').innerText=(u.name||'Djontu Junior')+' • '+(u.age||18);
-document.getElementById('city').innerText=(u.city||'Bafoussam')+', Cameroun';
-document.getElementById('bio').innerText=u.bio||u.quote||"Rien n'est impossible...";
-document.getElementById('photo').innerText=(u.name||'B')[0].toUpperCase();
-index=i;
-}
-function swipe(type){
-let likeB=document.getElementById('likeB');
-let nopeB=document.getElementById('nopeB');
-let card=document.getElementById('card');
-if(type==='like'){
-likeB.style.display='block';
-card.style.transform='translateX(120%) rotate(20deg)';
-card.style.transition='0.4s';
-saveLike('like');
-}else{
-nopeB.style.display='block';
-card.style.transform='translateX(-120%) rotate(-20deg)';
-card.style.transition='0.4s';
-}
-setTimeout(()=>{
-likeB.style.display='none';
-nopeB.style.display='none';
-card.style.transition='none';
-card.style.transform='translateX(0) rotate(0)';
-showUser(index+1);
-},400);
-}
-async function saveLike(action){
-try{
-let u=users[index];
-if(!u)return;
-await fetch('https://blended-b75d3-default-rtdb.firebaseio.com/likes.json',{
-method:'POST',
-body:JSON.stringify({from:'Djontu Junior',to:u.id||u.name,action,time:Date.now()})
-});
-}catch(e){}
-}
-// Swipe avec doigt
-let startX=0;
-let card=document.getElementById('card');
-card.addEventListener('touchstart',e=>{startX=e.touches[0].clientX},{passive:true});
-card.addEventListener('touchend',e=>{
-let diff=e.changedTouches[0].clientX-startX;
-if(diff>80) swipe('like');
-if(diff<-80) swipe('nope');
-},{passive:true});
-loadUsers();
+const DB='https://blended-b75d3-default-rtdb.firebaseio.com';
+let users=[],index=0,currentMatch=null;
+async function loadUsers(){try{let r=await fetch(DB+'/users.json');let d=await r.json();if(d){users=Object.entries(d).map(([id,v])=>({id,...v})).filter(u=>u.name);if(users.length>0)showUser(0)}}catch(e){} if(users.length===0){users=[{id:'boss',name:'Boss',city:'Bafoussam',bio:"Rien n'est impossible",age:18},{id:'djontu_junior',name:'Djontu Junior',city:'Bafoussam',bio:'Rien ne s\'obtient facilement',age:18}];showUser(0)}}
+function showUser(i){if(i>=users.length){i=0}let u=users[i];document.getElementById('name').innerText=(u.name||'User')+' • '+(u.age||18);document.getElementById('city').innerText=(u.city||'Bafoussam');document.getElementById('bio').innerText=u.bio||'';document.getElementById('photo').innerText=(u.name||'B')[0].toUpperCase();index=i}
+async function swipe(type){let card=document.getElementById('card');let u=users[index];if(type==='like'){card.style.transform='translateX(120%) rotate(20deg)';await saveLike(u,'like');checkMatch(u)}else{card.style.transform='translateX(-120%) rotate(-20deg)';}setTimeout(()=>{card.style.transform='none';showUser(index+1)},350)}
+async function saveLike(to,action){try{let me=JSON.parse(localStorage.getItem('blended_user')||'{}');await fetch(DB+'/likes.json',{method:'POST',body:JSON.stringify({from:me.id||'djontu_junior',fromName:me.name||'Djontu Junior',to:to.id,toName:to.name,action,time:Date.now()})});await fetch(DB+`/user_likes/${to.id}/${me.id||'djontu_junior'}.json`,{method:'PUT',body:JSON.stringify({action,time:Date.now()})})}catch(e){}}
+async function checkMatch(otherUser){try{let me=JSON.parse(localStorage.getItem('blended_user')||'{}');let myId=me.id||'djontu_junior';let r=await fetch(DB+`/user_likes/${myId}/${otherUser.id}.json`);let d=await r.json();if(d&&d.action==='like'){showMatch(otherUser)}}catch(e){} if(otherUser.id==='boss'){showMatch(otherUser)}}
+function showMatch(user){currentMatch=user;document.getElementById('matchText').innerText=`Toi et ${user.name} vous vous êtes likés à Bafoussam!`;document.getElementById('match').style.display='flex';try{fetch(DB+'/matches.json',{method:'POST',body:JSON.stringify({users:[JSON.parse(localStorage.getItem('blended_user')||'{}').id||'djontu_junior',user.id],names:[JSON.parse(localStorage.getItem('blended_user')||'{}').name||'Junior',user.name],time:Date.now()})})}catch(e){}}
+function closeMatch(){document.getElementById('match').style.display='none'}
+function goChat(){closeMatch();location.href='chat.html'}
+let startX=0;let c=document.getElementById('card');c.addEventListener('touchstart',e=>{startX=e.touches[0].clientX},{passive:true});c.addEventListener('touchend',e=>{let diff=e.changedTouches[0].clientX-startX;if(diff>80)swipe('like');if(diff<-80)swipe('nope')},{passive:true});loadUsers();
 </script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}</script>
 </body></html>
