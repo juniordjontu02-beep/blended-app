@@ -1,37 +1,131 @@
 <!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BLENDED</title>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>BLENDED - Bafoussam</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:15px;font-family:Arial}
-.card{background:#fff;width:100%;max-width:390px;border-radius:36px;overflow:hidden}
-.photo-wrap{padding:18px}
-.photo-box{background:#fff;width:100%;height:460px;border-radius:28px;display:flex;align-items:center;justify-content:center;border:1px solid #f0f0f0}
-.b-logo{font-size:280px;font-weight:900;line-height:1;color:#000;font-family:serif;letter-spacing:-15px}
-.b-logo span{display:block;transform:translateX(20px)}
-.info{padding:22px}
-.name-row{display:flex;justify-content:space-between;align-items:center}
-.name{font-size:29px;font-weight:900}.badge{background:#000;color:#00ff88;padding:7px 14px;border-radius:20px;font-size:13px;font-weight:900}
-.city{color:#777;font-size:15px;margin-bottom:16px}
-.quote{background:#f6f6f7;padding:16px;border-radius:16px;color:#333;font-style:italic;font-size:16px}
-.role{margin-top:16px;font-weight:900}
-.actions{margin-top:20px;display:flex;gap:14px}
-.btn{flex:1;padding:18px;border:none;border-radius:28px;font-weight:900;font-size:17px}
-.btn-no{background:#f0f0f2}.btn-yes{background:#00ff88}
-</style></head><body>
-<div class="card">
-<div class="photo-wrap"><div class="photo-box">
-<div class="b-logo">B</div>
-</div></div>
-<div class="info">
-<div class="name-row"><div class="name">Djontu Junior</div><div class="badge">● LIVE</div></div>
-<div class="city">Bafoussam, Cameroun</div>
-<div class="quote">Rien n'est impossible et rien ne s'obtient facilement</div>
-<div class="role">18 ans • Fondateur de BLENDED</div>
+body{background:#000;color:#fff;font-family:Arial;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.header{padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
+.logo{width:44px;height:44px;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:26px;border-radius:14px}
+.live{color:#00ff88;font-size:12px;font-weight:700}
+.card-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:16px;position:relative}
+.card{width:100%;max-width:360px;height:68vh;background:#fff;border-radius:32px;overflow:hidden;position:relative;box-shadow:0 20px 60px rgba(255,255,255,0.1)}
+.photo{width:100%;height:100%;background:linear-gradient(180deg,#eee 0%,#fff 60%,#000 100%);display:flex;align-items:center;justify-content:center;font-size:140px;font-weight:900;color:#000}
+.overlay{position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(0deg,rgba(0,0,0,0.9) 0%,transparent 100%)}
+.name{font-size:28px;font-weight:900;color:#fff}
+.city{color:#ccc;margin-top:2px}
+.bio{color:#aaa;font-size:14px;margin-top:6px;font-style:italic}
+.actions{display:flex;justify-content:center;gap:24px;padding:18px 0 22px}
+.btn{width:66px;height:66px;border-radius:50%;border:none;font-size:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:0.2s}
+.btn:active{transform:scale(0.9)}
+.dislike{background:#1a1a1a;color:#ff4444;border:2px solid #333}
+.like{background:#00ff88;color:#000;box-shadow:0 0 20px rgba(0,255,136,0.4)}
+.super{background:#fff;color:#000}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#0a0a0a;border-top:1px solid #222;display:flex;justify-content:space-around;padding:10px 0}
+.n{color:#666;text-decoration:none;font-size:12px;text-align:center;padding:6px 14px;border-radius:12px}
+.n.active{color:#fff;background:#1a1a1a}
+.badge{position:absolute;top:20px;left:20px;padding:8px 14px;border-radius:20px;font-weight:900;font-size:14px;transform:rotate(-15deg);display:none}
+.badge.like-badge{background:#00ff88;color:#000}
+.badge.nope-badge{background:#ff4444;color:#fff;left:auto;right:20px;transform:rotate(15deg)}
+</style>
+</head><body>
+<div class="header">
+<div class="logo">B</div>
+<div style="text-align:center"><div style="font-weight:900">BLENDED</div><div style="font-size:10px;color:#888">BAFOUSSAM • 18 ANS</div></div>
+<div class="live">● LIVE</div>
+</div>
+
+<div class="card-wrap">
+<div class="card" id="card">
+<div class="badge like-badge" id="likeB">LIKE ❤️</div>
+<div class="badge nope-badge" id="nopeB">NOPE ✕</div>
+<div class="photo" id="photo">B</div>
+<div class="overlay">
+<div class="name" id="name">Djontu Junior • 18</div>
+<div class="city" id="city">Bafoussam, Cameroun</div>
+<div class="bio" id="bio">Rien n'est impossible et rien ne s'obtient facilement</div>
+</div>
+</div>
+</div>
+
 <div class="actions">
-<button class="btn btn-no" onclick="location.href='inscription.html'">✕</button>
-<button class="btn btn-yes" onclick="location.href='chat.html'">♥ LIKE</button>
+<button class="btn dislike" onclick="swipe('nope')">✕</button>
+<button class="btn super" onclick="location.href='profil.html'">⭐</button>
+<button class="btn like" onclick="swipe('like')">❤️</button>
 </div>
+
+<div class="nav">
+<a href="index.html" class="n active">🏠<br>Accueil</a>
+<a href="chat.html" class="n">💬<br>Chat</a>
+<a href="ib.html" class="n">🟨<br>IB</a>
+<a href="profil.html" class="n">👤<br>Profil</a>
 </div>
-</div>
+
+<script>
+let users=[]; let index=0;
+async function loadUsers(){
+try{
+let r=await fetch('https://blended-b75d3-default-rtdb.firebaseio.com/users.json');
+let d=await r.json();
+if(d){
+users=Object.entries(d).map(([id,v])=>({id,...v}));
+if(users.length>0) showUser(0);
+}else{
+showUser(0);
+}
+}catch(e){
+showUser(0);
+}
+}
+function showUser(i){
+if(i>=users.length){i=0}
+let u=users[i]||{name:'Djontu Junior',city:'Bafoussam',bio:"Rien n'est impossible et rien ne s'obtient facilement",age:18};
+document.getElementById('name').innerText=(u.name||'Djontu Junior')+' • '+(u.age||18);
+document.getElementById('city').innerText=(u.city||'Bafoussam')+', Cameroun';
+document.getElementById('bio').innerText=u.bio||u.quote||"Rien n'est impossible...";
+document.getElementById('photo').innerText=(u.name||'B')[0].toUpperCase();
+index=i;
+}
+function swipe(type){
+let likeB=document.getElementById('likeB');
+let nopeB=document.getElementById('nopeB');
+let card=document.getElementById('card');
+if(type==='like'){
+likeB.style.display='block';
+card.style.transform='translateX(120%) rotate(20deg)';
+card.style.transition='0.4s';
+saveLike('like');
+}else{
+nopeB.style.display='block';
+card.style.transform='translateX(-120%) rotate(-20deg)';
+card.style.transition='0.4s';
+}
+setTimeout(()=>{
+likeB.style.display='none';
+nopeB.style.display='none';
+card.style.transition='none';
+card.style.transform='translateX(0) rotate(0)';
+showUser(index+1);
+},400);
+}
+async function saveLike(action){
+try{
+let u=users[index];
+if(!u)return;
+await fetch('https://blended-b75d3-default-rtdb.firebaseio.com/likes.json',{
+method:'POST',
+body:JSON.stringify({from:'Djontu Junior',to:u.id||u.name,action,time:Date.now()})
+});
+}catch(e){}
+}
+// Swipe avec doigt
+let startX=0;
+let card=document.getElementById('card');
+card.addEventListener('touchstart',e=>{startX=e.touches[0].clientX},{passive:true});
+card.addEventListener('touchend',e=>{
+let diff=e.changedTouches[0].clientX-startX;
+if(diff>80) swipe('like');
+if(diff<-80) swipe('nope');
+},{passive:true});
+loadUsers();
+</script>
 </body></html>
