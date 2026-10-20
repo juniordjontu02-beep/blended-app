@@ -1,25 +1,41 @@
-<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Inscription - BLENDED</title><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#000;color:#fff;font-family:Arial;padding:20px;display:flex;flex-direction:column;min-height:100vh}.logo{width:64px;height:64px;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:36px;border-radius:20px;margin:20px auto}.title{font-size:32px;font-weight:900;text-align:center;margin-bottom:6px}.sub{text-align:center;color:#888;margin-bottom:24px}.form{display:flex;flex-direction:column;gap:14px;max-width:400px;width:100%;margin:0 auto}.input{background:#111;border:1px solid #222;padding:16px;border-radius:16px;color:#fff;font-size:16px;outline:none;width:100%}.input:focus{border-color:#00ff88}.btn{background:#00ff88;color:#000;padding:18px;border-radius:28px;border:none;font-weight:900;font-size:17px;margin-top:10px}.btn:disabled{opacity:0.5}.link{text-align:center;margin-top:16px;color:#888}.link a{color:#00ff88;text-decoration:none;font-weight:700}.ok{background:#00ff88;color:#000;padding:12px;border-radius:12px;text-align:center;display:none;font-weight:700}.err{background:#ff4444;color:#fff;padding:12px;border-radius:12px;text-align:center;display:none}</style></head><body>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inscription - BLENDED</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:Arial;padding:20px;min-height:100vh}
+.logo{width:64px;height:64px;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:36px;border-radius:20px;margin:20px auto}
+.title{font-size:28px;font-weight:900;text-align:center}
+.sub{text-align:center;color:#888;margin:8px 0 24px}
+.form{display:flex;flex-direction:column;gap:14px;max-width:400px;margin:0 auto}
+.input{background:#111;border:1px solid #333;padding:16px;border-radius:14px;color:#fff;font-size:16px;width:100%}
+.input:focus{border-color:#00ff88;outline:none}
+.btn{background:#00ff88;color:#000;padding:18px;border-radius:28px;border:none;font-weight:900;font-size:17px}
+.ok{background:#00ff88;color:#000;padding:12px;border-radius:12px;text-align:center;display:none;font-weight:700}
+.err{background:#ff4444;color:#fff;padding:12px;border-radius:12px;text-align:center;display:none}
+.link{text-align:center;margin-top:14px;color:#888}
+.link a{color:#00ff88;text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
 <div class="logo">B</div>
 <div class="title">Rejoins BLENDED</div>
-<div class="sub">L'app #1 de Bafoussam • 18 ans • Djontu Junior</div>
-
+<div class="sub">L'app #1 de Bafoussam • Djontu Junior</div>
 <div class="form">
-<div id="ok" class="ok">✅ Compte créé! Redirection...</div>
+<div id="ok" class="ok">Compte créé!</div>
 <div id="err" class="err"></div>
-
-<input id="name" class="input" placeholder="Ton prénom (ex: Junior)">
-<input id="age" class="input" type="number" placeholder="Âge (ex: 18)">
-<input id="city" class="input" placeholder="Ville (ex: Bafoussam)">
-<input id="bio" class="input" placeholder="Ta devise (ex: Rien n'est impossible)">
-<input id="phone" class="input" placeholder="WhatsApp (ex: 6XXXXXXXX)">
+<input id="name" class="input" placeholder="Ton prénom">
+<input id="age" class="input" type="number" placeholder="Âge">
+<input id="city" class="input" placeholder="Ville (Bafoussam)">
+<input id="bio" class="input" placeholder="Ta devise">
+<input id="phone" class="input" placeholder="WhatsApp 6XXXXXXXX">
 <input id="pass" class="input" type="password" placeholder="Mot de passe">
-
 <button id="btn" class="btn" onclick="inscrire()">Créer mon compte 🔥</button>
-
 <div class="link">Déjà un compte? <a href="index.html">Se connecter</a></div>
-<div class="link" style="margin-top:20px;font-size:12px">En t'inscrivant, tu acceptes que BLENDED est fait à Bafoussam avec ❤️</div>
 </div>
-
 <script>
 const DB='https://blended-b75d3-default-rtdb.firebaseio.com';
 async function inscrire(){
@@ -32,33 +48,20 @@ let pass=document.getElementById('pass').value.trim();
 let ok=document.getElementById('ok');
 let err=document.getElementById('err');
 let btn=document.getElementById('btn');
-
-err.style.display='none';
-ok.style.display='none';
-
+err.style.display='none'; ok.style.display='none';
 if(!name||!age||!city||!pass){err.innerText='Remplis tout BOSS!';err.style.display='block';return}
-if(parseInt(age)<16){err.innerText='Tu dois avoir 16 ans minimum';err.style.display='block';return}
-
+if(parseInt(age)<16){err.innerText='16 ans minimum';err.style.display='block';return}
 btn.disabled=true; btn.innerText='Création...';
-
 try{
 let id=name.toLowerCase().replace(/[^a-z0-9]/g,'_')+'_'+Date.now();
-let user={name,age:parseInt(age),city,bio:bio||"Rien n'est impossible et rien ne s'obtient facilement",phone,pass,created:Date.now(),creator:'Djontu Junior'};
-
-let res=await fetch(`${DB}/users/${id}.json`,{method:'PUT',body:JSON.stringify(user)});
-if(!res.ok) throw new Error('Firebase bloqué');
-
+let user={name,age:parseInt(age),city,bio:bio||"Rien n'est impossible",phone,pass,created:Date.now()};
+let r=await fetch(`${DB}/users/${id}.json`,{method:'PUT',body:JSON.stringify(user)});
+if(!r.ok) throw new Error('Regles Firebase pas en true');
 localStorage.setItem('blended_user',JSON.stringify({id,...user}));
-
-ok.style.display='block';
-ok.innerText=`✅ Bienvenue ${name}! Compte créé à Bafoussam!`;
-
+ok.innerText='Bienvenue '+name+'!'; ok.style.display='block';
 setTimeout(()=>{location.href='ib.html'},1500);
-
-}catch(e){
-err.innerText='Erreur Firebase: Vérifie que les règles sont en true ( .read:true .write:true ) - '+e.message;
-err.style.display='block';
-btn.disabled=false; btn.innerText='Créer mon compte 🔥';
+}catch(e){err.innerText='Erreur: '+e.message;err.style.display='block';btn.disabled=false;btn.innerText='Créer mon compte 🔥';}
 }
-}
-</script></body></html>
+</script>
+</body>
+</html>
