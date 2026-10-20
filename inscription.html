@@ -1,80 +1,38 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BLENDED - Inscription</title>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inscription - BLENDED</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Arial;color:#fff}
-.box{background:#fff;width:100%;max-width:420px;border-radius:32px;padding:30px;color:#000}
-.logo{text-align:center;margin-bottom:20px}
-.logo-b{width:70px;height:70px;background:#000;color:#fff;border-radius:18px;display:inline-flex;align-items:center;justify-content:center;font-size:40px;font-weight:900}
-h1{text-align:center;font-size:26px;margin:15px 0 5px}
-.sub{text-align:center;color:#777;font-size:14px;margin-bottom:25px}
-label{font-weight:800;font-size:13px;margin:14px 0 6px;display:block;letter-spacing:.5px}
-input,textarea{width:100%;padding:16px;border:1px solid #e5e5e5;border-radius:14px;font-size:16px;background:#f9f9f9;outline:none}
-input:focus,textarea:focus{border-color:#00ff88;background:#fff}
-.btn{width:100%;margin-top:22px;padding:18px;border:none;border-radius:30px;background:#00ff88;color:#000;font-weight:900;font-size:18px;cursor:pointer;box-shadow:0 8px 24px rgba(0,255,136,.4)}
-.btn:active{transform:scale(.97)}
-.note{text-align:center;margin-top:16px;font-size:12px;color:#999}
-.note a{color:#000;font-weight:800;text-decoration:none}
-.swipe-hint{text-align:center;margin-top:15px;font-size:13px;color:#00ff88;font-weight:700}
-</style>
-</head>
-<body>
+body{background:#000;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Arial}
+.box{background:#fff;width:100%;max-width:400px;border-radius:32px;padding:28px}
+.b-logo{text-align:center;font-size:60px;font-weight:900;margin-bottom:10px}
+h1{text-align:center;font-size:24px}.sub{text-align:center;color:#777;font-size:14px;margin:8px 0 20px}
+input,textarea{width:100%;padding:15px;margin-top:6px;margin-bottom:14px;border:1px solid #eee;border-radius:12px;font-size:16px;background:#f9f9f9}
+label{font-weight:800;font-size:12px}
+.btn{width:100%;padding:18px;border:none;border-radius:30px;background:#00ff88;font-weight:900;font-size:18px;margin-top:10px}
+</style></head><body>
 <div class="box">
-<div class="logo"><div class="logo-b">B</div></div>
+<div class="b-logo">B</div>
 <h1>Rejoins BLENDED</h1>
-<p class="sub">Crée ta carte en 30 secondes</p>
-
-<label>NOM</label>
-<input id="name" placeholder="Ex: Djontu Junior">
-
-<label>VILLE</label>
-<input id="city" placeholder="Ex: Bafoussam">
-
-<label>ÂGE</label>
-<input id="age" type="number" placeholder="18">
-
-<label>TA PHRASE</label>
-<textarea id="quote" rows="3" placeholder="Ex: Rien n'est impossible..."></textarea>
-
-<label>PHOTO (lien ou laisse vide = logo B)</label>
-<input id="photo" placeholder="https://... ou vide">
-
-<button class="btn" onclick="inscrire()">SWIPE POUR S'INSCRIRE →</button>
-
-<p class="swipe-hint">↑ Ton profil apparaîtra dans le swipe!</p>
-<p class="note">Déjà inscrit? <a href="index.html">Swipe les profils</a></p>
+<p class="sub">Crée ta carte</p>
+<label>NOM</label><input id="name" placeholder="Djontu Junior">
+<label>VILLE</label><input id="city" placeholder="Bafoussam">
+<label>AGE</label><input id="age" type="number" placeholder="18">
+<label>PHRASE</label><textarea id="quote" placeholder="Ta phrase..."></textarea>
+<button class="btn" onclick="go()">S'INSCRIRE →</button>
+<p style="text-align:center;margin-top:12px;font-size:12px"><a href="index.html" style="color:#000;font-weight:700">Retour au swipe</a></p>
 </div>
-
 <script>
-// CONFIG FIREBASE - REMPLACE PAR LE TIEN SI TU AS
-const firebaseConfig = {
-  apiKey: "AIzaSyDummy",
-  authDomain: "blended-app.firebaseapp.com",
-  projectId: "blended-app"
-};
-
-async function inscrire(){
-const name=document.getElementById('name').value.trim();
-const city=document.getElementById('city').value.trim();
-const age=document.getElementById('age').value.trim();
-const quote=document.getElementById('quote').value.trim();
-let photo=document.getElementById('photo').value.trim();
-if(!photo) photo="https://i.ibb.co/v4cDp8kh/received-29285732557780191.jpg";
-if(!name||!city||!age||!quote){alert("Remplis tout BOSS!");return;}
-const profil={name,city:`${city}, Cameroun`,role:`${age} ans`,quote,img:photo,date:Date.now()};
-
-// Sauvegarde locale pour que ça marche même sans Firebase
-let profils=JSON.parse(localStorage.getItem('blended_profiles')||'[]');
-profils.push(profil);
-localStorage.setItem('blended_profiles',JSON.stringify(profils));
-
-alert("Bienvenue dans BLENDED B! 🔥 Ta carte est créée!");
+function go(){
+let n=document.getElementById('name').value;
+let c=document.getElementById('city').value;
+let a=document.getElementById('age').value;
+let q=document.getElementById('quote').value;
+if(!n||!c||!a||!q){alert('Remplis tout!');return;}
+let p={name:n,city:c,age:a,quote:q};
+localStorage.setItem('myProfile',JSON.stringify(p));
+alert('Inscription réussie BOSS! 🔥');
 location.href='index.html';
 }
 </script>
-</body>
-</html>
+</body></html>
