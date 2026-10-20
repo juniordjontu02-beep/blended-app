@@ -1,57 +1,89 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>IB - BLENDED</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
-body{background:#0a0a0a;color:white;min-height:100vh;padding-bottom:80px}
-.header{padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #222;background:#111;position:sticky;top:0}
-.logo-icon{width:32px;height:32px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center}
-.list{padding:10px}
-.item{background:#111;border:1px solid #222;border-radius:16px;padding:16px;display:flex;gap:12px;align-items:center;margin-bottom:10px;text-decoration:none;color:white}
-.avatar{width:48px;height:48px;background:#222;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900}
-.info{flex:1}
-.info b{font-size:14px}
-.info p{font-size:13px;color:#888;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
-.time{font-size:11px;color:#555}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #222;display:flex;justify-content:space-around;padding:12px 0}
-.nav a{color:#666;text-decoration:none;font-size:11px;text-align:center}.nav a.active{color:#fff}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:#000;color:#fff;font-family:Arial;min-height:100vh;padding-bottom:80px}
+.header{background:#000;padding:16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #222;position:sticky;top:0;z-index:10}
+.logo{width:42px;height:42px;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:24px;border-radius:12px}
+.chat-list{padding:12px;display:flex;flex-direction:column;gap:10px}
+.chat-link{text-decoration:none;display:block}
+.chat-item{background:#111;border-radius:20px;padding:14px;display:flex;gap:12px;align-items:center;border:1px solid #222:active{transform:scale(0.97);background:#222}}
+.chat-item:active{background:#222;transform:scale(0.98)}
+.avatar{width:54px;height:54px;background:#fff;color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;flex-shrink:0}
+.name{font-weight:900;font-size:16px;color:#fff}
+.city{color:#aaa;font-size:13px}
+.last{color:#777;font-size:14px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.time{margin-left:auto;color:#555;font-size:12px}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#0a0a0a;border-top:1px solid #222;display:flex;justify-content:space-around;padding:10px 0;z-index:20}
+.nav-item{text-align:center;color:#666;font-size:12px;text-decoration:none;padding:6px 12px;border-radius:12px}
+.nav-item.active{color:#fff;background:#1a1a1a}
 </style>
-</head>
-<body>
+</head><body>
 <div class="header">
-<div class="logo-icon"><svg width="22" height="22" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="white"/><path d="M22 15 L55 15 Q75 15 75 35 Q75 50 55 50 Q75 50 78 70 Q78 88 55 88 L22 88 Z" fill="black"/></svg></div>
-<b>Messages IB</b>
+<div class="logo">B</div>
+<h2>Messages IB</h2>
+<span style="margin-left:auto;color:#00ff88;font-size:12px;font-weight:700">● LIVE</span>
 </div>
 
-<div class="list" id="list">
-<!-- Rempli par JS -->
+<div class="chat-list" id="list">
+<p style="text-align:center;padding:30px;color:#666">Chargement...</p>
 </div>
 
-<div class="nav">
-<a href="index.html">🏠<br>Accueil</a>
-<a href="chat.html">💬<br>Chat</a>
-<a class="active">✉️<br>IB</a>
-<a href="inscription.html">👤<br>Profil</a>
+<div class="bottom-nav">
+<a href="index.html" class="nav-item">🏠<br>Accueil</a>
+<a href="chat.html" class="nav-item">💬<br>Chat</a>
+<a href="ib.html" class="nav-item active">🟨<br>IB</a>
+<a href="profil.html" class="nav-item">👤<br>Profil</a>
 </div>
 
 <script>
-let msgs = JSON.parse(localStorage.getItem('blended_msgs') || '[]');
-let last = msgs.length ? msgs[msgs.length-1].text : "Aucun message...";
-document.getElementById('list').innerHTML = `
-<a class="item" href="chat.html">
-<div class="avatar">B</div>
-<div class="info"><b>Anonyme • Bafoussam</b><p>${last}</p></div>
-<div class="time">maint.</div>
-</a>
-<a class="item" href="chat.html" style="opacity:.5">
-<div class="avatar">A</div>
-<div class="info"><b>Anonyme • Dschang</b><p>Salut ça va?</p></div>
-<div class="time">2h</div>
-</a>
-`;
+async function load(){
+try{
+let usersRes=await fetch('https://blended-b75d3-default-rtdb.firebaseio.com/users.json');
+let chatsRes=await fetch('https://blended-b75d3-default-rtdb.firebaseio.com/chats/blended_global.json');
+let usersData=await usersRes.json();
+let chatsData=await chatsRes.json();
+
+let users=usersData?Object.entries(usersData).map(([id,val])=>({id,...val})):[];
+let chats=chatsData?Object.values(chatsData):[];
+
+let list=document.getElementById('list');
+list.innerHTML='';
+
+if(users.length===0){
+list.innerHTML='<p style="text-align:center;padding:30px;color:#666">Aucun user encore.<br><a href="inscription.html" style="color:#00ff88">Créer un profil</a></p>';
+return;
+}
+
+users.forEach((u,i)=>{
+let lastMsg=chats[i]?.message||chats[i]?.text||'Touche pour chatter →';
+let name=(u.name||u.nom||u.id||'Junior').toString();
+let city=(u.city||u.ville||'Bafoussam').toString();
+let letter=name[0].toUpperCase();
+let time=i===0?'maint.':'2h';
+
+// VRAI LIEN <a> qui marche au toucher, pas div onclick
+list.innerHTML+=`
+<a href="chat.html?user=${encodeURIComponent(u.id)}&name=${encodeURIComponent(name)}" class="chat-link">
+<div class="chat-item">
+<div class="avatar">${letter}</div>
+<div style="flex:1;overflow:hidden">
+<div class="name">${name} • ${city}</div>
+<div class="last">${lastMsg}</div>
+</div>
+<div class="time">${time}</div>
+</div>
+</a>`;
+});
+
+}catch(e){
+document.getElementById('list').innerHTML=`<p style="text-align:center;padding:20px;color:red">Erreur: ${e.message}<br><br>Vérifie les Règles Firebase en true</p>`;
+}
+}
+load();
+
+// Force le rechargement au toucher si besoin
+document.addEventListener('touchstart', function(){}, {passive:true});
 </script>
-</body>
-</html>
+</body></html>
