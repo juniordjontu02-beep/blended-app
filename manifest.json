@@ -1,0 +1,16 @@
+{
+  "name": "BLENDED - Bafoussam",
+  "short_name": "BLENDED",
+  "description": "L'app #1 de Bafoussam par Djontu Junior",
+  "start_url": "/blended-app/index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00ff88",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/512/FFFFFF/000000?text=B",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
