@@ -1,40 +1,67 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#000000">
-<title>BLENDED</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLENDED - Réseau Social Camerounais</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{background:#000;color:#fff;font-family:system-ui;display:flex;flex-direction:column;min-height:100dvh}
-.container{flex:1;display:flex;flex-direction:column;align-items:center;padding:30px 20px;gap:16px;max-width:400px;margin:0 auto;width:100%}
-.logo{width:68px;height:68px;background:#fff;border-radius:20px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:32px}
-.h1{font-size:28px;font-weight:900}.sub{color:#888;font-size:14px;margin-top:-10px;margin-bottom:10px}
-.input{width:100%;padding:18px 20px;border-radius:18px;border:1px solid #1e1e1e;background:#111;color:#fff;outline:none}
-.btn{width:100%;padding:18px;border-radius:30px;border:none;background:#00ff88;color:#000;font-weight:900;font-size:17px;margin-top:12px}
-.link{color:#888;text-align:center;margin-top:12px}.link a{color:#00ff88;font-weight:700;text-decoration:none}
-.green{height:12px;background:#00ff88}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#0a0a0a;color:#fff}
+.header{display:flex;justify-content:space-between;align-items:center;padding:15px;border-bottom:1px solid #222;position:sticky;top:0;background:#0a0a0a;z-index:10}
+.logo{font-weight:900;font-size:22px;letter-spacing:1px}
+.logo span{background:linear-gradient(90deg,#8a5cf5,#ff6b9d);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stories{display:flex;gap:12px;overflow-x:auto;padding:15px;border-bottom:1px solid #222}
+.story{text-align:center;min-width:65px}
+.story img{width:60px;height:60px;border-radius:50%;border:3px solid transparent;background:linear-gradient(#0a0a0a,#0a0a0a) padding-box, linear-gradient(45deg,#f59e0b,#ec4899,#8b5cf6) border-box}
+.post{border-bottom:1px solid #222;padding:15px}
+.post-head{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.post-head img{width:40px;height:40px;border-radius:50%}
+.post-img{width:100%;border-radius:15px;margin:10px 0;max-height:400px;object-fit:cover}
+.actions{display:flex;gap:20px;font-size:22px;margin:10px 0}
+.input-box{position:fixed;bottom:0;left:0;right:0;background:#111;padding:10px;display:flex;gap:10px;border-top:1px solid #222}
+.input-box input{flex:1;background:#222;border:none;padding:12px 15px;border-radius:25px;color:#fff;outline:none}
+.input-box button{background:linear-gradient(90deg,#8a5cf5,#ff6b9d);border:none;padding:10px 20px;border-radius:25px;color:#fff;font-weight:700}
 </style>
 </head>
 <body>
-<div class="container">
-<div class="logo">B</div><div class="h1">Rejoins BLENDED</div><div class="sub">L'app #1 de Bafoussam • Djontu Junior</div>
-<input id="prenom" class="input" placeholder="Ton prénom">
-<input id="age" class="input" type="number" placeholder="Âge">
-<input id="ville" class="input" placeholder="Ville (Bafoussam)" value="Bafoussam">
-<input id="devise" class="input" placeholder="Ta devise">
-<input id="whatsapp" class="input" placeholder="WhatsApp 6XXXXXXX">
-<input id="password" class="input" type="password" placeholder="Mot de passe">
-<button class="btn" id="createBtn">Créer mon compte 🔥</button>
-<div class="link">Déjà un compte? <a href="chat.html">Se connecter</a></div>
+<div class="header">
+  <div class="logo"><span>B</span> BLENDED</div>
+  <div>🔔 ✈️</div>
 </div>
-<div class="green"></div>
+
+<div class="stories">
+  <div class="story"><img src="https://i.pravatar.cc/100?img=12"><p style="font-size:11px;margin-top:5px">Ton story</p></div>
+  <div class="story"><img src="https://i.pravatar.cc/100?img=5"><p style="font-size:11px">MIRA</p></div>
+  <div class="story"><img src="https://i.pravatar.cc/100?img=15"><p style="font-size:11px">Junior</p></div>
+  <div class="story"><img src="https://i.pravatar.cc/100?img=20"><p style="font-size:11px">Nadia</p></div>
+  <div class="story"><img src="https://i.pravatar.cc/100?img=30"><p style="font-size:11px">Cedric</p></div>
+</div>
+
+<div id="feed">
+  <div class="post">
+    <div class="post-head"><img src="https://i.pravatar.cc/100?img=9"><div><b>aicha__cm</b><br><small style="color:#888">Douala • il y a 12 min</small></div></div>
+    <img class="post-img" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600">
+    <div class="actions"><span onclick="this.innerText=this.innerText=='🤍'?'❤️':'🤍'">🤍</span> 💬 ✈️</div>
+    <b>1,248 likes</b><p style="margin-top:5px"><b>aicha__cm</b> Sunset vibes at Market 🌴🔥 #237vibes #BlendedCommunity</p>
+  </div>
+</div>
+
+<div class="input-box">
+  <input id="postInput" placeholder="Quoi de neuf à Bafoussam ?">
+  <button onclick="post()">Poster</button>
+</div>
+
 <script>
-document.getElementById('createBtn').onclick=()=>{
-const u={prenom:prenom.value,age:age.value,ville:ville.value,devise:devise.value,whatsapp:whatsapp.value,password:password.value};
-if(!u.prenom||!u.whatsapp){alert("Prénom et WhatsApp obligatoires");return;}
-localStorage.setItem('blended_user',JSON.stringify(u));location.href='chat.html?v=final';
-};
-const s=JSON.parse(localStorage.getItem('blended_user')||'null');if(s){prenom.value=s.prenom||'';age.value=s.age||'';ville.value=s.ville||'';devise.value=s.devise||'';whatsapp.value=s.whatsapp||'';}
+function post(){
+  let txt=document.getElementById('postInput').value;
+  if(!txt) return;
+  let feed=document.getElementById('feed');
+  let div=document.createElement('div');
+  div.className='post';
+  div.innerHTML=`<div class="post-head"><img src="https://i.pravatar.cc/100?img=12"><div><b>toi</b><br><small style="color:#888">Bafoussam • à l'instant</small></div></div><p style="padding:10px 0">${txt}</p><div class="actions"><span>🤍</span> 💬 ✈️</div><b>0 likes</b>`;
+  feed.prepend(div);
+  document.getElementById('postInput').value='';
+}
 </script>
 </body>
 </html>
