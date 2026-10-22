@@ -1,97 +1,92 @@
 <!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
 <title>Profil - BLENDED</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;color:#fff;font-family:Arial;min-height:100vh;padding-bottom:80px}
-.header{padding:20px;display:flex;justify-content:space-between;align-items:center}
-.logo{width:45px;height:45px;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:26px;border-radius:14px}
-.card{margin:15px;background:#111;border-radius:32px;overflow:hidden;border:1px solid #222}
-.photo{width:100%;height:420px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:140px;font-weight:900;color:#000}
-.info{padding:20px}
-.name{font-size:28px;font-weight:900}
-.city{color:#888;margin:4px 0 14px}
-.quote{background:#1a1a1a;padding:16px;border-radius:16px;color:#ccc;font-style:italic}
-.stats{display:flex;gap:10px;margin-top:18px}
-.stat{flex:1;background:#1a1a1a;padding:14px;border-radius:16px;text-align:center}
-.stat b{display:block;font-size:22px}
-.stat span{color:#888;font-size:12px}
-.actions{padding:20px;display:flex;flex-direction:column;gap:12px}
-.btn{padding:18px;border-radius:28px;border:none;font-weight:900;font-size:16px;cursor:pointer}
+body{background:#000;color:#fff;font-family:-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;height:100vh;height:100dvh}
+.header{height:70px;background:#000;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+.left{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;background:#fff;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:24px}
+.title{font-size:20px;font-weight:800}
+.live{color:#00ff88;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;background:#00ff88;border-radius:50%}
+.content{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;align-items:center;gap:18px;padding-top:30px}
+.avatar{width:90px;height:90px;background:#fff;border-radius:24px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:40px}
+.name{font-size:24px;font-weight:800}
+.sub{color:#777;font-size:14px;margin-top:-12px}
+.card{width:100%;background:#111;border:1px solid #1e1e1e;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;margin-top:10px}
+.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1a1a1a}
+.row:last-child{border:none}
+.label{color:#777;font-size:13px}
+.value{font-weight:600;font-size:14px}
+.btn{width:100%;padding:16px;border-radius:30px;border:none;font-weight:800;font-size:16px;margin-top:8px}
 .btn-green{background:#00ff88;color:#000}
-.btn-white{background:#fff;color:#000}
-.btn-dark{background:#222;color:#fff}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#0a0a0a;border-top:1px solid #222;display:flex;justify-content:space-around;padding:10px 0}
-.nav-item{text-align:center;color:#666;font-size:12px;text-decoration:none}
-.nav-item.active{color:#fff}
+.btn-dark{background:#1e1e1e;color:#fff;border:1px solid #2a2a2a}
+.navbar{height:70px;background:#0f0f0f;border-top:1px solid #1e1e1e;display:flex;justify-content:space-around;align-items:center;padding:0 10px}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;color:#777;font-size:12px;text-decoration:none;padding:8px 18px;border-radius:16px}
+.nav-item.active{background:#1e1e1e;color:#fff}
+.green-bar{height:10px;background:#00ff88}
 </style>
-</head><body>
+</head>
+<body>
 <div class="header">
-<div class="logo">B</div>
-<h3>Mon Profil</h3>
-<span style="color:#00ff88;font-size:12px;font-weight:700">● LIVE</span>
+  <div class="left">
+    <div class="logo">B</div>
+    <div class="title">Profil</div>
+  </div>
+  <div class="live"><span class="dot"></span>LIVE</div>
 </div>
 
-<div class="card">
-<div class="photo" id="avatar">B</div>
-<div class="info">
-<div class="name" id="name">Djontu Junior</div>
-<div class="city" id="city">Bafoussam, Cameroun</div>
-<div class="quote" id="quote">Rien n'est impossible et rien ne s'obtient facilement</div>
-<div class="stats">
-<div class="stat"><b id="likes">2</b><span>Likes</span></div>
-<div class="stat"><b>18</b><span>Ans</span></div>
-<div class="stat"><b style="color:#00ff88">LIVE</b><span>Statut</span></div>
-</div>
-</div>
+<div class="content" id="content">
+  <div class="avatar" id="avatar">B</div>
+  <div class="name" id="pname">Chargement...</div>
+  <div class="sub" id="pcity">Bafoussam</div>
+
+  <div class="card" id="card">
+    <div class="row"><span class="label">Prénom</span><span class="value" id="v_prenom">-</span></div>
+    <div class="row"><span class="label">Âge</span><span class="value" id="v_age">-</span></div>
+    <div class="row"><span class="label">Ville</span><span class="value" id="v_ville">Bafoussam</span></div>
+    <div class="row"><span class="label">Devise</span><span class="value" id="v_devise">-</span></div>
+    <div class="row"><span class="label">WhatsApp</span><span class="value" id="v_whatsapp">-</span></div>
+  </div>
+
+  <button class="btn btn-green" onclick="editProfil()">Modifier mon profil ✏️</button>
+  <button class="btn btn-dark" onclick="logout()">Se déconnecter</button>
 </div>
 
-<div class="actions">
-<button class="btn btn-green" onclick="shareWA()">📲 Partager sur WhatsApp</button>
-<button class="btn btn-white" onclick="copyLink()">🔗 Copier le lien de BLENDED</button>
-<button class="btn btn-dark" onclick="location.href='inscription.html'">✏️ Modifier mon profil</button>
+<div class="navbar">
+  <a class="nav-item" href="index.html">🏠<br>Accueil</a>
+  <a class="nav-item" href="chat.html">💬<br>Chat</a>
+  <a class="nav-item" href="chat.html">🟨<br>IB</a>
+  <a class="nav-item active" href="profil.html">👤<br>Profil</a>
 </div>
-
-<div class="bottom-nav">
-<a href="index.html" class="nav-item">🏠<br>Accueil</a>
-<a href="chat.html" class="nav-item">💬<br>Chat</a>
-<a href="ib.html" class="nav-item">🟨<br>IB</a>
-<a href="profil.html" class="nav-item active">👤<br>Profil</a>
-</div>
+<div class="green-bar"></div>
 
 <script>
-// Charge ton vrai profil depuis Firebase
-async function load(){
-try{
-let res=await fetch('https://blended-b75d3-default-rtdb.firebaseio.com/users.json');
-let data=await res.json();
-if(data){
-let users=Object.values(data);
-let u=users.find(x=> (x.name||'').toLowerCase().includes('junior')) || users[0];
-if(u){
-document.getElementById('name').innerText=u.name||'Djontu Junior';
-document.getElementById('city').innerText=(u.city||'Bafoussam')+', Cameroun';
-document.getElementById('quote').innerText=u.quote||'Rien n\'est impossible et rien ne s\'obtient facilement';
-document.getElementById('avatar').innerText=(u.name||'B')[0].toUpperCase();
+function loadProfil(){
+  const data = JSON.parse(localStorage.getItem('blended_user') || 'null');
+  if(!data){
+    document.getElementById('pname').innerText = "Pas connecté";
+    document.getElementById('card').innerHTML = "<p style='text-align:center;color:#777;padding:20px'>Crée ton compte d'abord dans la page d'accueil</p>";
+    return;
+  }
+  const initial = (data.prenom || "B")[0].toUpperCase();
+  document.getElementById('avatar').innerText = initial;
+  document.getElementById('pname').innerText = data.prenom || "Utilisateur";
+  document.getElementById('pcity').innerText = data.ville || "Bafoussam";
+  document.getElementById('v_prenom').innerText = data.prenom || "-";
+  document.getElementById('v_age').innerText = data.age || "-";
+  document.getElementById('v_ville').innerText = data.ville || "Bafoussam";
+  document.getElementById('v_devise').innerText = data.devise || "-";
+  document.getElementById('v_whatsapp').innerText = data.whatsapp || "-";
 }
-let chatsRes=await fetch('https://blended-b75d3-default-rtdb.firebaseio.com/chats/blended_global.json');
-let chats=await chatsRes.json();
-if(chats) document.getElementById('likes').innerText=Object.keys(chats).length;
-}
-}catch(e){}
-}
-
-function shareWA(){
-let text=`🔥 Découvre BLENDED - L'app de Bafoussam créée par Djontu Junior, 18 ans!\n\nRien n'est impossible et rien ne s'obtient facilement\n\n👉 Rejoins-nous: https://juniordjontu02-beep.github.io/blended-app/`;
-let url=`https://wa.me/?text=${encodeURIComponent(text)}`;
-window.open(url,'_blank');
-}
-
-function copyLink(){
-let link='https://juniordjontu02-beep.github.io/blended-app/';
-navigator.clipboard.writeText(link).then(()=>alert('✅ Lien copié! Envoie-le sur WhatsApp!'));
-}
-
-load();
+function editProfil(){ window.location.href="index.html"; }
+function logout(){ localStorage.removeItem('blended_user'); alert("Déconnecté"); location.reload(); }
+loadProfil();
 </script>
-</body></html>
+</body>
+</html>
