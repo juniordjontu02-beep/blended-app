@@ -2,103 +2,82 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>BLENDED</title>
-<!-- IPHONE FIX -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="BLENDED">
-<link rel="apple-touch-icon" href="https://i.pravatar.cc/512?img=8">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#000000">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#00ff88">
+<title>BLENDED - Rejoins</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,Arial;background:#f5f5f5;padding-bottom:70px}
-.header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:white;box-shadow:0 2px 10px rgba(0,0,0,0.08);position:sticky;top:0;z-index:100}
-.logo{width:65px;height:65px;background:#000;border-radius:18px;display:flex;align-items:center;justify-content:center}
-.logo span{font-size:50px;font-weight:900;color:white;font-family:Arial Black}
-.app-name{font-size:22px;font-weight:900;flex:1;text-align:center;letter-spacing:1px}
-.stories{display:flex;gap:12px;overflow-x:auto;padding:12px 16px;background:white;border-bottom:1px solid #eee;-webkit-overflow-scrolling:touch}
-.stories::-webkit-scrollbar{display:none}
-.story{text-align:center;min-width:62px;cursor:pointer}
-.story-ring{width:60px;height:60px;border-radius:50%;padding:3px;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)}
-.story-ring img,.story-ring video{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid white;background:#000}
-.story p{font-size:11px;margin-top:4px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62px}
-#story-viewer{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:9999}
-#story-viewer video{width:100%;height:100%;object-fit:contain}
-.top-bar{position:absolute;top:0;left:0;right:0;padding:14px 16px;display:flex;align-items:center;gap:10px;background:linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);z-index:5}
-.top-bar img{width:36px;height:36px;border-radius:50%;border:1px solid white}
-.real-name{color:white;font-weight:800;font-size:15px}
-.time{color:rgba(255,255,255,0.7);font-size:12px}
-.progress{position:absolute;top:6px;left:8px;right:8px;height:3px;background:rgba(255,255,255,0.3);border-radius:2px;z-index:6}
-.progress-fill{height:100%;background:white;width:0%;border-radius:2px}
-.close{position:absolute;top:18px;right:16px;color:white;font-size:26px;cursor:pointer;z-index:10;width:30px;height:30px;text-align:center}
-.card{margin:12px 16px;background:white;border-radius:20px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
-.card-img{width:100%;height:380px;object-fit:cover;background:#eee}
-.card-info{padding:14px}
-.card-info h3{font-size:17px;font-weight:800}
-.card-info p{font-size:13px;color:#666;margin-top:3px}
-.tabs{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:8px 0 calc(12px + env(safe-area-inset-bottom));border-top:1px solid #eee}
-.tab{font-size:11px;text-align:center;font-weight:600;color:#888;cursor:pointer}
-.tab.active{color:#000}
-.tab span{font-size:22px;display:block}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+.top-green{height:50px;background:#00ff88;display:flex;align-items:center;justify-content:space-between;padding:0 16px;color:#000;font-weight:600;display:none}
+.container{flex:1;display:flex;flex-direction:column;align-items:center;padding:30px 20px 20px;gap:16px;max-width:400px;margin:0 auto;width:100%}
+.logo{width:68px;height:68px;background:#fff;border-radius:20px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:32px;margin-top:10px}
+.h1{font-size:28px;font-weight:900;text-align:center;letter-spacing:-0.5px}
+.sub{color:#888;font-size:14px;text-align:center;margin-top:-10px;margin-bottom:10px}
+.input{width:100%;padding:18px 20px;border-radius:18px;border:1px solid #1e1e1e;background:#111;color:#fff;font-size:15px;outline:none}
+.input:focus{border-color:#333;background:#161616}
+.input::placeholder{color:#555}
+.btn{width:100%;padding:18px;border-radius:30px;border:none;background:#00ff88;color:#000;font-weight:900;font-size:17px;margin-top:12px}
+.link-wrap{margin-top:18px;font-size:14px;color:#888;text-align:center}
+.link-green{color:#00ff88;font-weight:700;text-decoration:none}
+.bottom-green{height:12px;background:#00ff88;flex-shrink:0;margin-top:auto}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="logo"><span>B</span></div>
-  <div class="app-name">BLENDED</div>
-  <div style="font-size:24px;width:40px;text-align:center">❤️</div>
+<div class="container">
+  <div class="logo">B</div>
+  <div class="h1">Rejoins BLENDED</div>
+  <div class="sub">L'app #1 de Bafoussam • Djontu Junior</div>
+
+  <input id="prenom" class="input" placeholder="Ton prénom">
+  <input id="age" class="input" type="number" placeholder="Âge">
+  <input id="ville" class="input" placeholder="Ville (Bafoussam)" value="Bafoussam">
+  <input id="devise" class="input" placeholder="Ta devise">
+  <input id="whatsapp" class="input" type="tel" placeholder="WhatsApp 6XXXXXXX">
+  <input id="password" class="input" type="password" placeholder="Mot de passe">
+
+  <button class="btn" id="createBtn">Créer mon compte 🔥</button>
+
+  <div class="link-wrap">
+    Déjà un compte? <a class="link-green" href="chat.html">Se connecter</a>
+  </div>
 </div>
 
-<div class="stories">
-  <div class="story" onclick="openStory(0)"><div class="story-ring"><img src="https://i.pravatar.cc/150?img=8"></div><p>Junior Djontu</p></div>
-  <div class="story" onclick="openStory(1)"><div class="story-ring"><img src="https://i.pravatar.cc/150?img=5"></div><p>Marie Ngassa</p></div>
-  <div class="story" onclick="openStory(2)"><div class="story-ring"><img src="https://i.pravatar.cc/150?img=12"></div><p>Paul Tchinda</p></div>
-  <div class="story" onclick="openStory(3)"><div class="story-ring"><img src="https://i.pravatar.cc/150?img=32"></div><p>Brenda Fotsing</p></div>
-</div>
-
-<div id="discover">
-  <div class="card"><img class="card-img" src="https://i.pravatar.cc/400?img=8"><div class="card-info"><h3>Junior Djontu, 18 ans</h3><p>📍 Bafoussam • Vrai nom: Djontu Junior</p></div></div>
-</div>
-
-<div id="story-viewer">
-  <div class="progress"><div class="progress-fill" id="progress"></div></div>
-  <div class="top-bar"><img id="viewer-avatar" src=""><div><span class="real-name" id="viewer-name"></span><span class="time"> • 2h</span></div></div>
-  <span class="close" onclick="closeStory()">✕</span>
-  <video id="sv" playsinline muted webkit-playsinline></video>
-</div>
-
-<div class="tabs">
-  <div class="tab active"><span>🔍</span>Découvrir</div>
-  <div class="tab"><span>💬</span>Messages</div>
-  <div class="tab"><span>👤</span>Profil</div>
-</div>
+<div class="bottom-green"></div>
 
 <script>
-const storiesData=[
-  {realName:"Djontu Junior",avatar:"https://i.pravatar.cc/150?img=8",video:"https://www.w3schools.com/html/mov_bbb.mp4"},
-  {realName:"Ngassa Marie",avatar:"https://i.pravatar.cc/150?img=5",video:"https://www.w3schools.com/html/mov_bbb.mp4"},
-  {realName:"Tchinda Paul",avatar:"https://i.pravatar.cc/150?img=12",video:"https://www.w3schools.com/html/movie.mp4"},
-  {realName:"Fotsing Brenda",avatar:"https://i.pravatar.cc/150?img=32",video:"https://www.w3schools.com/html/mov_bbb.mp4"}
-];
-let cur=0,timer;
-function openStory(i){
-  cur=i;
-  const d=storiesData[cur];
-  document.getElementById('viewer-name').innerText=d.realName;
-  document.getElementById('viewer-avatar').src=d.avatar;
-  document.getElementById('story-viewer').style.display='block';
-  const v=document.getElementById('sv');
-  v.src=d.video; v.muted=true; v.playsInline=true;
-  v.play().catch(()=>{});
-  let w=0; clearInterval(timer);
-  timer=setInterval(()=>{w+=0.8; document.getElementById('progress').style.width=w+'%'; if(w>=100) nextStory();},30);
-}
-function nextStory(){cur++; if(cur>=storiesData.length){closeStory();}else{document.getElementById('progress').style.width='0%';openStory(cur);}}
-function closeStory(){document.getElementById('story-viewer').style.display='none';const v=document.getElementById('sv');v.pause();v.src='';clearInterval(timer);document.getElementById('progress').style.width='0%';}
-document.getElementById('sv').addEventListener('ended',nextStory);
+document.getElementById('createBtn').addEventListener('click', () => {
+  const prenom = document.getElementById('prenom').value.trim();
+  const age = document.getElementById('age').value.trim();
+  const ville = document.getElementById('ville').value.trim();
+  const devise = document.getElementById('devise').value.trim();
+  const whatsapp = document.getElementById('whatsapp').value.trim();
+  const password = document.getElementById('password').value.trim();
+
+  if(!prenom || !whatsapp){
+    alert("Mets au moins ton prénom et WhatsApp");
+    return;
+  }
+
+  const user = { prenom, age, ville, devise, whatsapp, password, date: Date.now() };
+  localStorage.setItem('blended_user', JSON.stringify(user));
+
+  // Optionnel: envoyer aussi sur Firebase si tu veux
+  // fetch("https://blended-app-7c5b8-default-rtdb.firebaseio.com/users.json", {method:"POST", body:JSON.stringify(user)});
+
+  alert("Bienvenue " + prenom + " !");
+  window.location.href = "chat.html?v=profil";
+});
+
+ // Si déjà connecté, remplir
+ const saved = JSON.parse(localStorage.getItem('blended_user')||'null');
+ if(saved){
+   document.getElementById('prenom').value = saved.prenom||'';
+   document.getElementById('age').value = saved.age||'';
+   document.getElementById('ville').value = saved.ville||'Bafoussam';
+   document.getElementById('devise').value = saved.devise||'';
+   document.getElementById('whatsapp').value = saved.whatsapp||'';
+ }
 </script>
 </body>
 </html>
