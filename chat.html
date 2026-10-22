@@ -3,84 +3,69 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BLENDED Chat - IA</title>
+<title>BLENDED AI V2</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#000;color:#fff;font-family:system-ui;display:flex;flex-direction:column;height:100vh}
-.header{padding:15px;background:#111;display:flex;align-items:center;gap:10px;border-bottom:1px solid #222}
-.back{width:40px;height:40px;border-radius:50%;border:none;background:#222;color:#fff;font-size:20px}
+.header{padding:15px;background:#111;display:flex;gap:10px;border-bottom:1px solid #222}
 .messages{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:10px}
-.msg{max-width:75%;padding:12px 16px;border-radius:18px;font-size:14px}
-.me{align-self:flex-end;background:#00ff88;color:#000;border-bottom-right-radius:4px}
-.other{align-self:flex-start;background:#222;color:#fff;border-bottom-left-radius:4px}
-.bot{align-self:flex-start;background:#00aaff;color:#fff;border:1px solid #00ff88}
+.msg{max-width:80%;padding:12px 16px;border-radius:18px;font-size:14px;white-space:pre-wrap;line-height:1.4}
+.me{align-self:flex-end;background:#00ff88;color:#000}
+.bot{align-self:flex-start;background:#0a192f;color:#00ff88;border:1px solid #00ff88}
 .input-area{padding:12px;background:#111;display:flex;gap:10px}
-.input-area input{flex:1;padding:14px 18px;border-radius:25px;border:none;background:#222;color:#fff;outline:none}
-.send{width:50px;height:50px;border-radius:50%;border:none;background:#00ff88;color:#000;font-size:20px}
-.time{font-size:10px;opacity:.6;margin-top:4px}
-.name{font-size:11px;opacity:.7;margin-bottom:2px;font-weight:bold}
+.input-area input{flex:1;padding:14px;border-radius:25px;border:none;background:#222;color:#fff}
+.send{width:50px;height:50px;border-radius:50%;border:none;background:#00ff88;font-weight:bold}
 </style>
 </head>
 <body>
-<div class="header">
-<button class="back" onclick="history.back()">←</button>
-<b>BLENDED AI - Global</b>
-</div>
+<div class="header"><b>BLENDED AI V2 - Répond à tout 🔥</b></div>
 <div class="messages" id="msgs"></div>
 <div class="input-area">
-<input id="input" placeholder="Parle avec BLENDED...">
+<input id="input" placeholder="Pose n'importe quelle question...">
 <button class="send" id="sendBtn">↑</button>
 </div>
-
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import {getDatabase, ref, push, onChildAdded} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
-const firebaseConfig = {
-  databaseURL: "https://blended-app-7c5b8-default-rtdb.firebaseio.com"
-};
-
+const GROQ_KEY = "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";
+const firebaseConfig = { databaseURL: "https://blended-app-7c5b8-default-rtdb.firebaseio.com" };
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const chatRef = ref(db, 'chats/blended_global');
-
 const msgsDiv = document.getElementById('msgs');
 const input = document.getElementById('input');
-const sendBtn = document.getElementById('sendBtn');
-const myName = "Djontu Junior";
+const myName = "Gouverneur";
 
-onChildAdded(chatRef, (snap)=>{
-  const d = snap.val();
-  const isMe = d.name === myName;
-  const isBot = d.name.includes("BLENDED");
-  const div = document.createElement('div');
-  div.className = 'msg ' + (isBot ? 'bot' : (isMe ? 'me' : 'other'));
-  div.innerHTML = `<div class="name">${d.name}</div><div>${d.text}</div><div class="time">${new Date(d.time).toLocaleTimeString()}</div>`;
+onChildAdded(chatRef, (s)=>{
+  const d=s.val();
+  const isBot=d.name.includes("BLENDED");
+  const div=document.createElement('div');
+  div.className='msg '+(isBot?'bot':'me');
+  div.innerText=d.name+": "+d.text;
   msgsDiv.appendChild(div);
-  msgsDiv.scrollTop = msgsDiv.scrollHeight;
+  msgsDiv.scrollTop=msgsDiv.scrollHeight;
 });
 
-function getBotReply(text){
-  const t = text.toLowerCase();
-  if(t.includes("salut") || t.includes("bonjour") || t.includes("yo")) return "Yo Gouverneur ! C'est BLENDED 🤖 Ton IA made in Bafoussam. Tu veux coder quoi aujourd'hui ?";
-  if(t.includes("aide")) return "Je suis là ! Je peux : 1. Corriger ton code 2. Créer ton logo B 3. T'aider à vendre l'accès à 500 FCFA.";
-  if(t.includes("code") || t.includes("bug")) return "Envoie ton code, je débug direct. Tu utilises Firebase + Vercel, c'est la bonne stack.";
-  if(t.includes("ia") || t.includes("créer")) return "Pour créer une IA comme moi : Frontend (ton chat.html) + Backend (Firebase) + Cerveau (ce code). Tu l'as déjà !";
-  return `J'ai reçu : "${text}". Je suis BLENDED, l'IA de Bafoussam créée par ${myName}.`;
+async function askGroq(q){
+  const r=await fetch("https://api.groq.com/openai/v1/chat/completions",{
+    method:"POST",
+    headers:{"Authorization":"Bearer "+GROQ_KEY,"Content-Type":"application/json"},
+    body:JSON.stringify({model:"llama-3.1-8b-instant",messages:[{role:"system",content:"Tu es BLENDED, IA créée par Djontu Junior à Bafoussam. Tu es jeune, camerounais, tu tutoies, tu réponds court en français."},{role:"user",content:q}],max_tokens:500})
+  });
+  const data=await r.json();
+  return data.choices[0].message.content;
 }
 
-function sendMsg(){
-  const text = input.value.trim();
-  if(!text) return;
-  push(chatRef, { name: myName, text: text, time: Date.now() });
-  input.value = '';
-  setTimeout(()=>{
-    push(chatRef, { name: "BLENDED AI 🤖", text: getBotReply(text), time: Date.now() });
-  }, 800);
+async function sendMsg(){
+  const text=input.value.trim(); if(!text) return;
+  push(chatRef,{name:myName,text:text,time:Date.now()});
+  input.value='';
+  const ans=await askGroq(text);
+  push(chatRef,{name:"BLENDED AI 🤖",text:ans,time:Date.now()});
 }
-
-input.addEventListener('keydown', e=>{ if(e.key==='Enter') sendMsg(); });
-sendBtn.addEventListener('click', sendMsg);
+input.addEventListener('keydown',e=>{if(e.key==='Enter')sendMsg()});
+document.getElementById('sendBtn').addEventListener('click',sendMsg);
 </script>
 </body>
 </html>
