@@ -1,83 +1,40 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#00ff88">
-<title>BLENDED - Rejoins</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<title>BLENDED</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;color:#fff;font-family:-apple-system,system-ui,sans-serif;display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
-.top-green{height:50px;background:#00ff88;display:flex;align-items:center;justify-content:space-between;padding:0 16px;color:#000;font-weight:600;display:none}
-.container{flex:1;display:flex;flex-direction:column;align-items:center;padding:30px 20px 20px;gap:16px;max-width:400px;margin:0 auto;width:100%}
-.logo{width:68px;height:68px;background:#fff;border-radius:20px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:32px;margin-top:10px}
-.h1{font-size:28px;font-weight:900;text-align:center;letter-spacing:-0.5px}
-.sub{color:#888;font-size:14px;text-align:center;margin-top:-10px;margin-bottom:10px}
-.input{width:100%;padding:18px 20px;border-radius:18px;border:1px solid #1e1e1e;background:#111;color:#fff;font-size:15px;outline:none}
-.input:focus{border-color:#333;background:#161616}
-.input::placeholder{color:#555}
+*{margin:0;padding:0;box-sizing:border-box}body{background:#000;color:#fff;font-family:system-ui;display:flex;flex-direction:column;min-height:100dvh}
+.container{flex:1;display:flex;flex-direction:column;align-items:center;padding:30px 20px;gap:16px;max-width:400px;margin:0 auto;width:100%}
+.logo{width:68px;height:68px;background:#fff;border-radius:20px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:32px}
+.h1{font-size:28px;font-weight:900}.sub{color:#888;font-size:14px;margin-top:-10px;margin-bottom:10px}
+.input{width:100%;padding:18px 20px;border-radius:18px;border:1px solid #1e1e1e;background:#111;color:#fff;outline:none}
 .btn{width:100%;padding:18px;border-radius:30px;border:none;background:#00ff88;color:#000;font-weight:900;font-size:17px;margin-top:12px}
-.link-wrap{margin-top:18px;font-size:14px;color:#888;text-align:center}
-.link-green{color:#00ff88;font-weight:700;text-decoration:none}
-.bottom-green{height:12px;background:#00ff88;flex-shrink:0;margin-top:auto}
+.link{color:#888;text-align:center;margin-top:12px}.link a{color:#00ff88;font-weight:700;text-decoration:none}
+.green{height:12px;background:#00ff88}
 </style>
 </head>
 <body>
-
 <div class="container">
-  <div class="logo">B</div>
-  <div class="h1">Rejoins BLENDED</div>
-  <div class="sub">L'app #1 de Bafoussam • Djontu Junior</div>
-
-  <input id="prenom" class="input" placeholder="Ton prénom">
-  <input id="age" class="input" type="number" placeholder="Âge">
-  <input id="ville" class="input" placeholder="Ville (Bafoussam)" value="Bafoussam">
-  <input id="devise" class="input" placeholder="Ta devise">
-  <input id="whatsapp" class="input" type="tel" placeholder="WhatsApp 6XXXXXXX">
-  <input id="password" class="input" type="password" placeholder="Mot de passe">
-
-  <button class="btn" id="createBtn">Créer mon compte 🔥</button>
-
-  <div class="link-wrap">
-    Déjà un compte? <a class="link-green" href="chat.html">Se connecter</a>
-  </div>
+<div class="logo">B</div><div class="h1">Rejoins BLENDED</div><div class="sub">L'app #1 de Bafoussam • Djontu Junior</div>
+<input id="prenom" class="input" placeholder="Ton prénom">
+<input id="age" class="input" type="number" placeholder="Âge">
+<input id="ville" class="input" placeholder="Ville (Bafoussam)" value="Bafoussam">
+<input id="devise" class="input" placeholder="Ta devise">
+<input id="whatsapp" class="input" placeholder="WhatsApp 6XXXXXXX">
+<input id="password" class="input" type="password" placeholder="Mot de passe">
+<button class="btn" id="createBtn">Créer mon compte 🔥</button>
+<div class="link">Déjà un compte? <a href="chat.html">Se connecter</a></div>
 </div>
-
-<div class="bottom-green"></div>
-
+<div class="green"></div>
 <script>
-document.getElementById('createBtn').addEventListener('click', () => {
-  const prenom = document.getElementById('prenom').value.trim();
-  const age = document.getElementById('age').value.trim();
-  const ville = document.getElementById('ville').value.trim();
-  const devise = document.getElementById('devise').value.trim();
-  const whatsapp = document.getElementById('whatsapp').value.trim();
-  const password = document.getElementById('password').value.trim();
-
-  if(!prenom || !whatsapp){
-    alert("Mets au moins ton prénom et WhatsApp");
-    return;
-  }
-
-  const user = { prenom, age, ville, devise, whatsapp, password, date: Date.now() };
-  localStorage.setItem('blended_user', JSON.stringify(user));
-
-  // Optionnel: envoyer aussi sur Firebase si tu veux
-  // fetch("https://blended-app-7c5b8-default-rtdb.firebaseio.com/users.json", {method:"POST", body:JSON.stringify(user)});
-
-  alert("Bienvenue " + prenom + " !");
-  window.location.href = "chat.html?v=profil";
-});
-
- // Si déjà connecté, remplir
- const saved = JSON.parse(localStorage.getItem('blended_user')||'null');
- if(saved){
-   document.getElementById('prenom').value = saved.prenom||'';
-   document.getElementById('age').value = saved.age||'';
-   document.getElementById('ville').value = saved.ville||'Bafoussam';
-   document.getElementById('devise').value = saved.devise||'';
-   document.getElementById('whatsapp').value = saved.whatsapp||'';
- }
+document.getElementById('createBtn').onclick=()=>{
+const u={prenom:prenom.value,age:age.value,ville:ville.value,devise:devise.value,whatsapp:whatsapp.value,password:password.value};
+if(!u.prenom||!u.whatsapp){alert("Prénom et WhatsApp obligatoires");return;}
+localStorage.setItem('blended_user',JSON.stringify(u));location.href='chat.html?v=final';
+};
+const s=JSON.parse(localStorage.getItem('blended_user')||'null');if(s){prenom.value=s.prenom||'';age.value=s.age||'';ville.value=s.ville||'';devise.value=s.devise||'';whatsapp.value=s.whatsapp||'';}
 </script>
 </body>
 </html>
