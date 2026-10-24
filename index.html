@@ -3,280 +3,130 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blended Social</title>
+<title>Blended Social - Photo Video Voice</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
-body{background:#000;color:#fff;max-width:430px;margin:0 auto;min-height:100vh;position:relative}
+body{background:#000;color:#fff;max-width:430px;margin:0 auto;min-height:100vh}
 .hidden{display:none!important}
 .header{position:sticky;top:0;background:#000;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;z-index:10}
 .logo{font-weight:900;font-size:22px;color:#16a34a}
-.logo span{color:#fff}
-.stories{display:flex;gap:12px;padding:15px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid #111}
+.stories{display:flex;gap:12px;padding:15px;overflow-x:auto;border-bottom:1px solid #111}
 .story{flex:0 0 66px;text-align:center;cursor:pointer}
-.story-ring{width:66px;height:66px;border-radius:50%;padding:3px;background:linear-gradient(45deg,#16a34a,#22c55e);margin-bottom:5px}
-.story-ring img,.story-ring div{width:100%;height:100%;border-radius:50%;background:#111;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:24px;border:2px solid #000}
-.story-add .story-ring{background:#222}
-.story p{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.story-ring{width:66px;height:66px;border-radius:50%;padding:3px;background:linear-gradient(45deg,#16a34a,#22c55e)}
+.story-ring div{width:100%;height:100%;border-radius:50%;background:#111;display:flex;align-items:center;justify-content:center;font-size:24px;border:2px solid #000}
+.story p{font-size:11px}
 .post{border-bottom:1px solid #111;padding-bottom:10px}
 .post-head{display:flex;align-items:center;gap:10px;padding:12px 15px}
 .avatar{width:36px;height:36px;border-radius:50%;background:#16a34a;display:flex;align-items:center;justify-content:center;font-weight:700}
-.post-img{width:100%;aspect-ratio:1;background:#111;display:flex;align-items:center;justify-content:center;font-size:50px}
+.post-media{width:100%;max-height:500px;object-fit:cover;background:#111}
 .post-actions{display:flex;gap:15px;padding:12px 15px;font-size:22px}
-.post-actions span{cursor:pointer}
 .post-desc{padding:0 15px 10px;font-size:14px}
-.post-desc b{margin-right:6px}
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#000;border-top:1px solid #222;display:flex;justify-content:space-around;padding:12px 0;z-index:20}
 .bottom-nav span{font-size:24px;cursor:pointer;opacity:0.6}
 .bottom-nav span.active{opacity:1}
 .auth-screen{padding:40px 25px;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
-.auth-screen h1{text-align:center;font-size:36px;font-weight:900;margin-bottom:30px}
-.auth-screen h1 b{color:#16a34a}
 .input{width:100%;padding:16px;background:#111;border:1px solid #222;border-radius:12px;color:#fff;margin-bottom:12px;font-size:16px}
-.btn-primary{width:100%;padding:16px;background:#16a34a;border:none;border-radius:12px;color:#fff;font-weight:800;font-size:16px;cursor:pointer;margin-top:10px}
+.btn-primary{width:100%;padding:16px;background:#16a34a;border:none;border-radius:12px;color:#fff;font-weight:800;font-size:16px;cursor:pointer}
 .btn-secondary{background:transparent;color:#16a34a;text-align:center;margin-top:15px;cursor:pointer}
 .chat-list{padding:10px}
-.chat-item{display:flex;align-items:center;gap:12px;padding:12px 15px;cursor:pointer;border-radius:12px}
-.chat-item:hover{background:#111}
-.chat-item .info{flex:1}
-.chat-item .info .name{font-weight:600;font-size:15px}
-.chat-item .info .last{font-size:13px;color:#777;margin-top:2px}
+.chat-item{display:flex;align-items:center;gap:12px;padding:12px 15px;cursor:pointer}
 .chat-screen{position:fixed;inset:0;background:#000;z-index:30;display:flex;flex-direction:column;max-width:430px;margin:0 auto}
 .chat-header{padding:15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #222}
 .messages{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:10px}
-.msg{max-width:75%;padding:12px 16px;border-radius:18px;font-size:15px}
+.msg{max-width:80%;padding:10px 14px;border-radius:18px;font-size:15px}
 .msg.me{align-self:flex-end;background:#16a34a;border-bottom-right-radius:4px}
 .msg.other{align-self:flex-start;background:#222;border-bottom-left-radius:4px}
-.msg-voice{display:flex;align-items:center;gap:10px;min-width:180px}
-.chat-input{padding:12px;display:flex;gap:10px;align-items:center;border-top:1px solid #222;background:#000}
-.chat-input input{flex:1;padding:14px 18px;border-radius:25px;border:none;background:#222;color:#fff;font-size:15px}
-.icon-btn{width:44px;height:44px;border-radius:50%;border:none;background:#16a34a;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.msg img,.msg video{width:100%;border-radius:12px;max-width:200px}
+.chat-input{padding:12px;display:flex;gap:8px;align-items:center;border-top:1px solid #222}
+.chat-input input{flex:1;padding:14px 18px;border-radius:25px;border:none;background:#222;color:#fff}
+.icon-btn{width:44px;height:44px;border-radius:50%;border:none;background:#222;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.icon-btn.send{background:#16a34a}
 .icon-btn.recording{background:#ef4444;animation:pulse 1s infinite}
-.create-box{padding:20px}
-textarea.input{height:100px;resize:none}
+.upload-btns{display:flex;gap:8px;padding:10px 15px}
+.mini-btn{padding:8px 14px;background:#222;border:none;border-radius:20px;color:#fff;font-size:13px;cursor:pointer}
+.preview{width:100%;max-height:300px;border-radius:12px;margin-top:10px;display:none}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
 </style>
 </head>
 <body>
 
-<!-- AUTH -->
 <div id="authScreen" class="auth-screen">
-  <h1>BLENDED <b>SOCIAL</b></h1>
-  <input id="username" class="input" placeholder="Nom d'utilisateur">
-  <input id="password" class="input" type="password" placeholder="Mot de passe">
-  <button class="btn-primary" onclick="createAccount()">Créer mon compte</button>
-  <div class="btn-secondary" onclick="login()">J'ai déjà un compte → Se connecter</div>
-  <p style="text-align:center;color:#555;font-size:12px;margin-top:20px">Les comptes sont stockés sur ton téléphone. Pas de serveur, 100% privé entre amis.</p>
+<h1 style="text-align:center;font-size:32px;font-weight:900;margin-bottom:30px">BLENDED <span style="color:#16a34a">SOCIAL</span></h1>
+<input id="username" class="input" placeholder="Nom d'utilisateur">
+<input id="password" class="input" type="password" placeholder="Mot de passe">
+<button class="btn-primary" onclick="createAccount()">Créer mon compte</button>
+<div class="btn-secondary" onclick="login()">J'ai déjà un compte</div>
 </div>
 
-<!-- MAIN APP -->
 <div id="app" class="hidden">
-  <div class="header">
-    <div class="logo">BLENDED <span>SOCIAL</span></div>
-    <div style="display:flex;gap:15px;font-size:22px"><span onclick="showCreate()">➕</span><span onclick="logout()">⋯</span></div>
-  </div>
-
-  <div id="homeView">
-    <div class="stories" id="storiesList"></div>
-    <div id="feed"></div>
-  </div>
-
-  <div id="chatListView" class="hidden">
-    <div class="chat-list" id="chatList"></div>
-  </div>
-
-  <div id="createView" class="hidden">
-    <div class="create-box">
-      <h3 style="margin-bottom:15px">Nouvelle publication</h3>
-      <textarea id="postText" class="input" placeholder="Quoi de neuf ?"></textarea>
-      <input id="postEmoji" class="input" placeholder="Emoji pour ton post (ex: 🌿🔥😎)">
-      <button class="btn-primary" onclick="createPost()">Publier</button>
-      <button class="btn-secondary" onclick="showHome()">Annuler</button>
-    </div>
-  </div>
-
-  <div class="bottom-nav">
-    <span id="navHome" class="active" onclick="showHome()">🏠</span>
-    <span onclick="showCreate()">➕</span>
-    <span id="navChat" onclick="showChats()">💬</span>
-    <span onclick="showProfile()">👤</span>
-  </div>
+<div class="header"><div class="logo">BLENDED SOCIAL</div><div onclick="logout()">⋯</div></div>
+<div id="homeView"><div class="stories" id="storiesList"></div><div id="feed"></div></div>
+<div id="chatListView" class="hidden"><div class="chat-list" id="chatList"></div></div>
+<div id="createView" class="hidden">
+<div style="padding:20px">
+<h3>Nouvelle publication</h3><br>
+<textarea id="postText" class="input" style="height:80px" placeholder="Quoi de neuf ?"></textarea>
+<div class="upload-btns">
+<label class="mini-btn">📸 Photo<input type="file" id="postPhoto" accept="image/*" hidden onchange="previewFile(this,'postPreview')"></label>
+<label class="mini-btn">🎥 Vidéo<input type="file" id="postVideo" accept="video/*" hidden onchange="previewFile(this,'postPreview')"></label>
+</div>
+<img id="postPreview" class="preview">
+<video id="postPreviewVideo" class="preview" controls></video>
+<button class="btn-primary" onclick="createPost()">Publier</button>
+<button class="btn-secondary" onclick="showHome()">Annuler</button>
+</div>
+</div>
+<div class="bottom-nav"><span id="navHome" class="active" onclick="showHome()">🏠</span><span onclick="showCreate()">➕</span><span id="navChat" onclick="showChats()">💬</span><span onclick="logout()">👤</span></div>
 </div>
 
-<!-- CHAT -->
 <div id="chatScreen" class="hidden chat-screen">
-  <div class="chat-header">
-    <span onclick="closeChat()" style="font-size:22px;cursor:pointer">←</span>
-    <div class="avatar" id="chatAvatar">J</div>
-    <div><div id="chatName" style="font-weight:700">Junior</div><div style="font-size:11px;color:#16a34a">● en ligne</div></div>
-    <div style="margin-left:auto;display:flex;gap:12px"><span>📞</span><span>📹</span></div>
-  </div>
-  <div class="messages" id="messages"></div>
-  <div class="chat-input">
-    <input id="msgInput" placeholder="Message...">
-    <button class="icon-btn" id="voiceBtn" onmousedown="startRecord()" onmouseup="stopRecord()" ontouchstart="startRecord()" ontouchend="stopRecord()">🎙️</button>
-    <button class="icon-btn" onclick="sendMsg()">➤</button>
-  </div>
+<div class="chat-header"><span onclick="closeChat()" style="font-size:22px;cursor:pointer">←</span><div class="avatar" id="chatAvatar">G</div><div><div id="chatName" style="font-weight:700">Chat</div><div style="font-size:11px;color:#16a34a">● en ligne</div></div></div>
+<div class="messages" id="messages"></div>
+<div class="upload-btns" style="border-top:1px solid #222">
+<label class="mini-btn">📸<input type="file" id="chatPhoto" accept="image/*" hidden onchange="sendFile(this,'image')"></label>
+<label class="mini-btn">🎥<input type="file" id="chatVideo" accept="video/*" hidden onchange="sendFile(this,'video')"></label>
+</div>
+<div class="chat-input">
+<input id="msgInput" placeholder="Message...">
+<button class="icon-btn" id="voiceBtn" onmousedown="startRecord()" onmouseup="stopRecord()" ontouchstart="startRecord()" ontouchend="stopRecord()">🎙️</button>
+<button class="icon-btn send" onclick="sendMsg()">➤</button>
+</div>
 </div>
 
 <script>
-let currentUser = JSON.parse(localStorage.getItem('blended_user')||'null');
-let users = JSON.parse(localStorage.getItem('blended_users')||'[]');
-let posts = JSON.parse(localStorage.getItem('blended_posts')||'[]');
-let chats = JSON.parse(localStorage.getItem('blended_chats')||'{}');
-let stories = JSON.parse(localStorage.getItem('blended_stories')||'[]');
-let currentChat = null;
-let recorder, audioChunks = [], isRecording = false;
-
-if(currentUser){ showApp(); }
-
-function createAccount(){
-  let u = document.getElementById('username').value.trim();
-  let p = document.getElementById('password').value.trim();
-  if(!u||!p) return alert('Remplis tout !');
-  if(users.find(x=>x.name===u)) return alert('Ce nom existe déjà');
-  let newUser = {name:u, pass:p, avatar:u[0].toUpperCase()};
-  users.push(newUser); localStorage.setItem('blended_users',JSON.stringify(users));
-  currentUser = newUser; localStorage.setItem('blended_user',JSON.stringify(currentUser));
-  showApp();
-}
-function login(){
-  let u = document.getElementById('username').value.trim();
-  let p = document.getElementById('password').value.trim();
-  let found = users.find(x=>x.name===u && x.pass===p);
-  if(!found) return alert('Nom ou mot de passe incorrect');
-  currentUser = found; localStorage.setItem('blended_user',JSON.stringify(currentUser));
-  showApp();
-}
-function showApp(){
-  document.getElementById('authScreen').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
-  renderAll();
-}
-function logout(){ localStorage.removeItem('blended_user'); location.reload(); }
-
-function renderAll(){ renderStories(); renderFeed(); renderChatList(); }
-
-function renderStories(){
-  let html = `<div class="story story-add" onclick="addStory()"><div class="story-ring"><div>➕</div></div><p>Ta story</p></div>`;
-  stories.slice(-10).reverse().forEach(s=>{
-    html+=`<div class="story" onclick="viewStory('${s.name}')"><div class="story-ring"><div>${s.emoji}</div></div><p>${s.name}</p></div>`;
-  });
-  users.filter(u=>u.name!==currentUser.name).slice(0,5).forEach(u=>{
-    html+=`<div class="story" onclick="openChat('${u.name}')"><div class="story-ring"><div>${u.avatar}</div></div><p>${u.name}</p></div>`;
-  });
-  document.getElementById('storiesList').innerHTML = html;
-}
-function addStory(){
-  let emoji = prompt('Emoji pour ta story ? ex: 🔥🌿😎');
-  if(!emoji) return;
-  stories.push({name:currentUser.name, emoji, time:Date.now()});
-  localStorage.setItem('blended_stories',JSON.stringify(stories));
-  renderStories();
-}
-function renderFeed(){
-  let html = '';
-  if(posts.length===0){
-    html = `<div style="text-align:center;padding:60px 20px;color:#555"><div style="font-size:50px">🌿</div><p style="margin-top:10px">Pas encore de posts<br>Sois le premier à publier !</p><button class="btn-primary" style="margin-top:20px" onclick="showCreate()">Créer un post</button></div>`;
-  } else {
-    posts.slice().reverse().forEach(p=>{
-      html+=`<div class="post"><div class="post-head"><div class="avatar">${p.avatar}</div><b>${p.author}</b><span style="color:#555;font-size:12px;margin-left:auto">${timeAgo(p.time)}</span></div><div class="post-img">${p.emoji||'🌿'}</div><div class="post-actions"><span onclick="likePost(${p.id})">❤️ ${p.likes||0}</span><span onclick="openChat('${p.author}')">💬</span><span>↗️</span></div><div class="post-desc"><b>${p.author}</b> ${p.text}</div></div>`;
-    });
-  }
-  document.getElementById('feed').innerHTML = html;
-}
-function createPost(){
-  let text = document.getElementById('postText').value.trim();
-  let emoji = document.getElementById('postEmoji').value.trim() || '🌿';
-  if(!text) return alert('Écris quelque chose');
-  posts.push({id:Date.now(), author:currentUser.name, avatar:currentUser.avatar, text, emoji, likes:0, time:Date.now()});
-  localStorage.setItem('blended_posts',JSON.stringify(posts));
-  document.getElementById('postText').value=''; document.getElementById('postEmoji').value='';
-  showHome(); renderFeed();
-}
-function likePost(id){ let p=posts.find(x=>x.id===id); p.likes=(p.likes||0)+1; localStorage.setItem('blended_posts',JSON.stringify(posts)); renderFeed(); }
-
-function showHome(){ document.getElementById('homeView').classList.remove('hidden'); document.getElementById('chatListView').classList.add('hidden'); document.getElementById('createView').classList.add('hidden'); document.getElementById('navHome').classList.add('active'); document.getElementById('navChat').classList.remove('active'); }
-function showChats(){ document.getElementById('homeView').classList.add('hidden'); document.getElementById('createView').classList.add('hidden'); document.getElementById('chatListView').classList.remove('hidden'); document.getElementById('navHome').classList.remove('active'); document.getElementById('navChat').classList.add('active'); renderChatList(); }
-function showCreate(){ document.getElementById('homeView').classList.add('hidden'); document.getElementById('chatListView').classList.add('hidden'); document.getElementById('createView').classList.remove('hidden'); }
-function showProfile(){ alert('Profil: '+currentUser.name+'\n\nUtilisateurs inscrits: '+users.length+'\nPosts: '+posts.length+'\n\nDéconnexion dans le menu ⋯'); }
-
-function renderChatList(){
-  let html = '';
-  if(users.length<=1){ html='<div style="text-align:center;padding:40px;color:#555">Crée un 2e compte sur un autre téléphone pour chatter<br><br>Ou ajoute un ami : déconnecte-toi et crée un compte ami</div>'; }
-  users.filter(u=>u.name!==currentUser.name).forEach(u=>{
-    let key = getChatKey(currentUser.name, u.name);
-    let msgs = chats[key]||[];
-    let last = msgs[msgs.length-1];
-    html+=`<div class="chat-item" onclick="openChat('${u.name}')"><div class="avatar">${u.avatar}</div><div class="info"><div class="name">${u.name}</div><div class="last">${last? (last.type==='voice'?'🎙️ Message vocal':last.text) : 'Nouvelle conversation - Dis salut !'}</div></div><div style="color:#555;font-size:11px">${last?timeAgo(last.time):''}</div></div>`;
-  });
-  document.getElementById('chatList').innerHTML = html;
-}
-function getChatKey(a,b){ return [a,b].sort().join('_'); }
-function openChat(name){
-  currentChat=name;
-  document.getElementById('chatScreen').classList.remove('hidden');
-  document.getElementById('chatName').textContent=name;
-  document.getElementById('chatAvatar').textContent=name[0].toUpperCase();
-  renderMessages();
-}
-function closeChat(){ document.getElementById('chatScreen').classList.add('hidden'); currentChat=null; renderChatList(); }
-function renderMessages(){
-  if(!currentChat) return;
-  let key=getChatKey(currentUser.name,currentChat);
-  let msgs=chats[key]||[];
-  let html='';
-  msgs.forEach(m=>{
-    if(m.type==='voice'){
-      html+=`<div class="msg ${m.from===currentUser.name?'me':'other'}"><div class="msg-voice"><span onclick="this.nextElementSibling.play()" style="cursor:pointer">▶️</span><audio controls src="${m.audio}" style="width:150px;height:30px"></audio></div><div style="font-size:10px;margin-top:4px;opacity:0.7">${timeAgo(m.time)}</div></div>`;
-    } else {
-      html+=`<div class="msg ${m.from===currentUser.name?'me':'other'}">${m.text}<div style="font-size:10px;margin-top:4px;opacity:0.7">${timeAgo(m.time)}</div></div>`;
-    }
-  });
-  document.getElementById('messages').innerHTML=html;
-  document.getElementById('messages').scrollTop=99999;
-}
-function sendMsg(){
-  let input=document.getElementById('msgInput');
-  let text=input.value.trim();
-  if(!text||!currentChat) return;
-  let key=getChatKey(currentUser.name,currentChat);
-  if(!chats[key]) chats[key]=[];
-  chats[key].push({from:currentUser.name,to:currentChat,text,type:'text',time:Date.now()});
-  localStorage.setItem('blended_chats',JSON.stringify(chats));
-  input.value=''; renderMessages(); renderChatList();
-}
-document.getElementById('msgInput').addEventListener('keydown',e=>{ if(e.key==='Enter') sendMsg(); });
-
-// VOICE RECORD
-async function startRecord(){
-  if(isRecording) return;
-  try{
-    let stream=await navigator.mediaDevices.getUserMedia({audio:true});
-    recorder=new MediaRecorder(stream);
-    audioChunks=[];
-    recorder.ondataavailable=e=>audioChunks.push(e.data);
-    recorder.onstop=()=>{
-      let blob=new Blob(audioChunks,{type:'audio/webm'});
-      let reader=new FileReader();
-      reader.onload=()=>{
-        let key=getChatKey(currentUser.name,currentChat);
-        if(!chats[key]) chats[key]=[];
-        chats[key].push({from:currentUser.name,to:currentChat,audio:reader.result,type:'voice',time:Date.now()});
-        localStorage.setItem('blended_chats',JSON.stringify(chats));
-        renderMessages(); renderChatList();
-      };
-      reader.readAsDataURL(blob);
-    };
-    recorder.start(); isRecording=true;
-    document.getElementById('voiceBtn').classList.add('recording');
-  }catch(err){ alert('Micro non autorisé - Autorise le micro dans ton navigateur'); }
-}
-function stopRecord(){
-  if(!isRecording) return;
-  recorder.stop(); isRecording=false;
-  document.getElementById('voiceBtn').classList.remove('recording');
-  recorder.stream.getTracks().forEach(t=>t.stop());
-}
-function timeAgo(t){ let d=Date.now()-t; if(d<60000) return 'à l\'instant'; if(d<3600000) return Math.floor(d/60000)+'m'; if(d<86400000) return Math.floor(d/3600000)+'h'; return Math.floor(d/86400000)+'j'; }
+let currentUser=JSON.parse(localStorage.getItem('blended_user')||'null');
+let users=JSON.parse(localStorage.getItem('blended_users')||'[]');
+let posts=JSON.parse(localStorage.getItem('blended_posts')||'[]');
+let chats=JSON.parse(localStorage.getItem('blended_chats')||'{}');
+let stories=JSON.parse(localStorage.getItem('blended_stories')||'[]');
+let currentChat=null,recorder,audioChunks=[],isRecording=false;
+let tempPostMedia=null,tempPostType=null;
+if(currentUser) showApp();
+function createAccount(){let u=username.value.trim(),p=password.value.trim();if(!u||!p)return alert('Remplis tout');if(users.find(x=>x.name===u))return alert('Nom existe déjà');let nu={name:u,pass:p,avatar:u[0].toUpperCase()};users.push(nu);localStorage.setItem('blended_users',JSON.stringify(users));currentUser=nu;localStorage.setItem('blended_user',JSON.stringify(nu));showApp();}
+function login(){let u=username.value.trim(),p=password.value.trim();let f=users.find(x=>x.name===u&&x.pass===p);if(!f)return alert('Incorrect');currentUser=f;localStorage.setItem('blended_user',JSON.stringify(f));showApp();}
+function showApp(){authScreen.classList.add('hidden');app.classList.remove('hidden');renderAll();}
+function logout(){localStorage.removeItem('blended_user');location.reload();}
+function renderAll(){renderStories();renderFeed();renderChatList();}
+function renderStories(){let h=`<div class="story" onclick="addStory()"><div class="story-ring"><div>➕</div></div><p>Ta story</p></div>`;stories.slice(-10).reverse().forEach(s=>{h+=`<div class="story"><div class="story-ring"><div>${s.emoji||'🔥'}</div></div><p>${s.name}</p></div>`});users.filter(u=>u.name!==currentUser.name).forEach(u=>{h+=`<div class="story" onclick="openChat('${u.name}')"><div class="story-ring"><div>${u.avatar}</div></div><p>${u.name}</p></div>`});storiesList.innerHTML=h;}
+function addStory(){let e=prompt('Emoji story ?');if(!e)return;stories.push({name:currentUser.name,emoji:e,time:Date.now()});localStorage.setItem('blended_stories',JSON.stringify(stories));renderStories();}
+function previewFile(input,previewId){let file=input.files[0];if(!file)return;let r=new FileReader();r.onload=()=>{tempPostMedia=r.result;tempPostType=file.type.startsWith('video')?'video':'image';let img=document.getElementById('postPreview');let vid=document.getElementById('postPreviewVideo');if(tempPostType==='video'){vid.src=r.result;vid.style.display='block';img.style.display='none';}else{img.src=r.result;img.style.display='block';vid.style.display='none';}};r.readAsDataURL(file);}
+function renderFeed(){let html='';if(posts.length===0)html=`<div style="text-align:center;padding:60px;color:#555">Pas de posts - Sois le premier !</div>`;else posts.slice().reverse().forEach(p=>{let media='';if(p.media){if(p.mediaType==='video')media=`<video class="post-media" controls src="${p.media}"></video>`;else media=`<img class="post-media" src="${p.media}">`;}else media=`<div class="post-media" style="display:flex;align-items:center;justify-content:center;font-size:60px;height:200px">🌿</div>`;html+=`<div class="post"><div class="post-head"><div class="avatar">${p.avatar}</div><b>${p.author}</b><span style="margin-left:auto;color:#555;font-size:11px">${timeAgo(p.time)}</span></div>${media}<div class="post-actions"><span onclick="likePost(${p.id})">❤️ ${p.likes||0}</span><span onclick="openChat('${p.author}')">💬</span></div><div class="post-desc"><b>${p.author}</b> ${p.text}</div></div>`});feed.innerHTML=html;}
+function createPost(){let t=postText.value.trim();if(!t&&!tempPostMedia)return alert('Ajoute texte ou photo/vidéo');posts.push({id:Date.now(),author:currentUser.name,avatar:currentUser.avatar,text:t,media:tempPostMedia,mediaType:tempPostType,likes:0,time:Date.now()});localStorage.setItem('blended_posts',JSON.stringify(posts));postText.value='';tempPostMedia=null;postPreview.style.display='none';postPreviewVideo.style.display='none';showHome();renderFeed();}
+function likePost(id){let p=posts.find(x=>x.id===id);p.likes=(p.likes||0)+1;localStorage.setItem('blended_posts',JSON.stringify(posts));renderFeed();}
+function showHome(){homeView.classList.remove('hidden');chatListView.classList.add('hidden');createView.classList.add('hidden');navHome.classList.add('active');navChat.classList.remove('active');}
+function showChats(){homeView.classList.add('hidden');createView.classList.add('hidden');chatListView.classList.remove('hidden');navHome.classList.remove('active');navChat.classList.add('active');renderChatList();}
+function showCreate(){homeView.classList.add('hidden');chatListView.classList.add('hidden');createView.classList.remove('hidden');}
+function renderChatList(){let h='';if(users.length<=1)h='<div style="text-align:center;padding:40px;color:#555">Crée un 2e compte pour chatter</div>';users.filter(u=>u.name!==currentUser.name).forEach(u=>{let k=getChatKey(currentUser.name,u.name);let m=(chats[k]||[]).slice(-1)[0];h+=`<div class="chat-item" onclick="openChat('${u.name}')"><div class="avatar">${u.avatar}</div><div style="flex:1"><div style="font-weight:600">${u.name}</div><div style="font-size:12px;color:#777">${m? (m.type==='image'?'📸 Photo': m.type==='video'?'🎥 Vidéo': m.type==='voice'?'🎙️ Vocal': m.text) : 'Nouveau'}</div></div></div>`});chatList.innerHTML=h;}
+function getChatKey(a,b){return[a,b].sort().join('_');}
+function openChat(n){currentChat=n;chatScreen.classList.remove('hidden');chatName.textContent=n;chatAvatar.textContent=n[0].toUpperCase();renderMessages();}
+function closeChat(){chatScreen.classList.add('hidden');currentChat=null;renderChatList();}
+function renderMessages(){let k=getChatKey(currentUser.name,currentChat);let ms=chats[k]||[];let h='';ms.forEach(m=>{if(m.type==='image')h+=`<div class="msg ${m.from===currentUser.name?'me':'other'}"><img src="${m.media}"><div style="font-size:10px;opacity:0.7">${timeAgo(m.time)}</div></div>`;else if(m.type==='video')h+=`<div class="msg ${m.from===currentUser.name?'me':'other'}"><video src="${m.media}" controls style="width:100%"></video><div style="font-size:10px;opacity:0.7">${timeAgo(m.time)}</div></div>`;else if(m.type==='voice')h+=`<div class="msg ${m.from===currentUser.name?'me':'other'}"><audio controls src="${m.audio}" style="width:150px"></audio><div style="font-size:10px;opacity:0.7">${timeAgo(m.time)}</div></div>`;else h+=`<div class="msg ${m.from===currentUser.name?'me':'other'}">${m.text}<div style="font-size:10px;opacity:0.7">${timeAgo(m.time)}</div></div>`});messages.innerHTML=h;messages.scrollTop=99999;}
+function sendMsg(){let t=msgInput.value.trim();if(!t||!currentChat)return;let k=getChatKey(currentUser.name,currentChat);if(!chats[k])chats[k]=[];chats[k].push({from:currentUser.name,to:currentChat,text:t,type:'text',time:Date.now()});localStorage.setItem('blended_chats',JSON.stringify(chats));msgInput.value='';renderMessages();}
+function sendFile(input,type){let file=input.files[0];if(!file||!currentChat)return;let r=new FileReader();r.onload=()=>{let k=getChatKey(currentUser.name,currentChat);if(!chats[k])chats[k]=[];chats[k].push({from:currentUser.name,to:currentChat,media:r.result,type:type,time:Date.now()});localStorage.setItem('blended_chats',JSON.stringify(chats));renderMessages();renderChatList();};r.readAsDataURL(file);}
+msgInput.addEventListener('keydown',e=>{if(e.key==='Enter')sendMsg();});
+async function startRecord(){if(isRecording)return;try{let s=await navigator.mediaDevices.getUserMedia({audio:true});recorder=new MediaRecorder(s);audioChunks=[];recorder.ondataavailable=e=>audioChunks.push(e.data);recorder.onstop=()=>{let b=new Blob(audioChunks,{type:'audio/webm'});let rr=new FileReader();rr.onload=()=>{let k=getChatKey(currentUser.name,currentChat);if(!chats[k])chats[k]=[];chats[k].push({from:currentUser.name,to:currentChat,audio:rr.result,type:'voice',time:Date.now()});localStorage.setItem('blended_chats',JSON.stringify(chats));renderMessages();};rr.readAsDataURL(b);};recorder.start();isRecording=true;voiceBtn.classList.add('recording');}catch{alert('Micro bloqué ! Va dans les paramètres du site > Micro > Autoriser, puis recharge');}}
+function stopRecord(){if(!isRecording)return;recorder.stop();isRecording=false;voiceBtn.classList.remove('recording');recorder.stream.getTracks().forEach(t=>t.stop());}
+function timeAgo(t){let d=Date.now()-t;if(d<60000)return"à l'instant";if(d<3600000)return Math.floor(d/60000)+'m';if(d<86400000)return Math.floor(d/3600000)+'h';return Math.floor(d/86400000)+'j';}
 </script>
 </body>
 </html>
