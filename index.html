@@ -1,67 +1,147 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BLENDED</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blended - Learn English</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;color:#fff;font-family:Arial}
-.header{display:flex;justify-content:space-between;padding:12px 15px;border-bottom:1px solid #222;align-items:center;position:sticky;top:0;background:#000;z-index:10}
-.logo{font-weight:900;font-size:22px;letter-spacing:1px}
-.logo span{color:#8a5cf5}
-.stories{display:flex;gap:15px;overflow-x:auto;padding:12px 15px;border-bottom:1px solid #222}
-.story{text-align:center;min-width:65px;cursor:pointer}
-.story img{width:60px;height:60px;border-radius:50%;border:2px solid #8a5cf5}
-.story p{font-size:12px;margin-top:5px}
-.post{border-bottom:1px solid #222;padding:15px}
-.post-head{display:flex;gap:10px;align-items:center;margin-bottom:10px}
-.post-head img{width:40px;height:40px;border-radius:50%}
-.post-img{width:100%;border-radius:15px;margin:10px 0;max-height:400px;object-fit:cover}
-.actions{display:flex;gap:20px;font-size:22px;margin:10px 0}
-.input-box{position:fixed;bottom:0;left:0;right:0;background:#111;display:flex;gap:10px;padding:10px;border-top:1px solid #222}
-.input-box input{flex:1;background:#222;border:none;padding:12px;border-radius:20px;color:#fff;outline:none}
-.input-box button{background:linear-gradient(90deg,#8a5cf5,#ec4899);border:none;padding:10px 20px;border-radius:20px;color:#fff;font-weight:bold;cursor:pointer}
+* { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', sans-serif; }
+body { background:#f0fdf4; min-height:100vh; }
+.header { background:#16a34a; color:white; padding:20px; text-align:center; }
+.header h1 { font-size:28px; font-weight:800; }
+.header span { color:#bbf7d0; }
+.card-container { padding:20px; max-width:400px; margin:0 auto; }
+.card { background:white; border-radius:24px; padding:30px; box-shadow:0 10px 30px rgba(0,0,0,0.1); text-align:center; margin-top:20px; }
+.word-en { font-size:42px; font-weight:800; color:#15803d; margin:10px 0; }
+.word-fr { font-size:20px; color:#6b7280; margin-bottom:20px; }
+.voice-btn { background:#16a34a; color:white; border:none; width:80px; height:80px; border-radius:50%; font-size:32px; cursor:pointer; margin:15px; box-shadow:0 4px 15px rgba(22,163,74,0.4); transition:0.2s; }
+.voice-btn:active { transform:scale(0.9); }
+.voice-btn.playing { background:#dc2626; animation:pulse 1s infinite; }
+@keyframes pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.05); } }
+.controls { display:flex; gap:12px; margin-top:25px; }
+.btn { flex:1; padding:16px; border-radius:14px; border:none; font-weight:700; font-size:16px; cursor:pointer; }
+.btn-prev { background:#e5e7eb; color:#374151; }
+.btn-next { background:#16a34a; color:white; }
+.progress { text-align:center; margin-top:15px; color:#6b7280; font-size:14px; }
+.settings { display:flex; justify-content:center; gap:10px; margin-top:15px; }
+.speed-btn { padding:8px 14px; border-radius:20px; border:1px solid #16a34a; background:white; color:#16a34a; font-size:13px; cursor:pointer; }
+.speed-btn.active { background:#16a34a; color:white; }
 </style>
 </head>
 <body>
-
 <div class="header">
-<div class="logo"><span>B</span> BLENDED</div>
-<div><span style="cursor:pointer" onclick="location.href='chat.html'">🔔</span> <span style="cursor:pointer;margin-left:10px" onclick="location.href='ib.html'">✈️</span></div>
+  <h1>BLENDED <span>+</span></h1>
+  <p>Apprends l'anglais avec la voix</p>
 </div>
 
-<div class="stories">
-<div class="story" onclick="location.href='chat.html'"><img src="https://i.pravatar.cc/100?img=5"><p>MIRA</p></div>
-<div class="story" onclick="location.href='ib.html'"><img src="https://i.pravatar.cc/100?img=32"><p>IB</p></div>
-<div class="story" onclick="location.href='chat.html'"><img src="https://i.pravatar.cc/100?img=8"><p>Joni</p></div>
-<div class="story" onclick="location.href='chat.html'"><img src="https://i.pravatar.cc/100?img=9"><p>Indra</p></div>
-<div class="story" onclick="location.href='chat.html'"><img src="https://i.pravatar.cc/100?img=10"><p>Omos</p></div>
-</div>
+<div class="card-container">
+  <div class="card">
+    <div class="word-en" id="enWord">Hello</div>
+    <div class="word-fr" id="frWord">Bonjour</div>
+    
+    <button class="voice-btn" id="voiceBtn" onclick="speakCurrent()">🔊</button>
+    <p style="font-size:13px;color:#9ca3af;">Clique pour écouter</p>
 
-<div id="feed">
-<div class="post">
-<div class="post-head"><img src="https://i.pravatar.cc/100?img=1"><b>aicha__cm</b> • Douala</div>
-<img class="post-img" src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=600">
-<div class="actions"><span onclick="this.innerText=this.innerText=='🤍'?'❤️':'🤍'">🤍</span> <span>💬</span> <span onclick="location.href='ib.html'">✈️</span></div>
-<b>1,248 likes</b><p style="margin-top:5px"><b>aicha__cm</b> Belle journée à Kribi 🌴 #Cameroun #237</p>
-</div>
-</div>
+    <div class="settings">
+      <button class="speed-btn active" onclick="setSpeed(0.8)">Lent</button>
+      <button class="speed-btn" onclick="setSpeed(1)">Normal</button>
+      <button class="speed-btn" onclick="setSpeed(1.2)">Rapide</button>
+    </div>
 
-<div class="input-box">
-<input id="postInput" placeholder="Quoi de neuf à Bafoussam ?">
-<button onclick="post()">Poster</button>
+    <div class="controls">
+      <button class="btn btn-prev" onclick="prevWord()">← Précédent</button>
+      <button class="btn btn-next" onclick="nextWord()">Suivant →</button>
+    </div>
+    <div class="progress" id="progress">1 / 20</div>
+  </div>
 </div>
 
 <script>
-function post(){
-let v=document.getElementById('postInput').value;
-if(!v) return;
-let feed=document.getElementById('feed');
-feed.innerHTML='<div class="post"><div class="post-head"><img src="https://i.pravatar.cc/100?img=12"><b>junior</b> • Bafoussam</div><p style="padding:10px 0">'+v+'</p><div class="actions"><span>🤍</span> <span>💬</span> <span>✈️</span></div></div>'+feed.innerHTML;
-document.getElementById('postInput').value='';
-}
-</script>
+const words = [
+  {en:"Hello", fr:"Bonjour"},
+  {en:"Good morning", fr:"Bon matin"},
+  {en:"Thank you", fr:"Merci"},
+  {en:"Please", fr:"S'il vous plaît"},
+  {en:"Yes", fr:"Oui"},
+  {en:"No", fr:"Non"},
+  {en:"Water", fr:"Eau"},
+  {en:"Food", fr:"Nourriture"},
+  {en:"Friend", fr:"Ami"},
+  {en:"Family", fr:"Famille"},
+  {en:"Love", fr:"Amour"},
+  {en:"House", fr:"Maison"},
+  {en:"School", fr:"École"},
+  {en:"Book", fr:"Livre"},
+  {en:"Time", fr:"Temps"},
+  {en:"Day", fr:"Jour"},
+  {en:"Night", fr:"Nuit"},
+  {en:"Goodbye", fr:"Au revoir"},
+  {en:"How are you?", fr:"Comment ça va?"},
+  {en:"I love you", fr:"Je t'aime"}
+];
 
+let currentIndex = 0;
+let currentSpeed = 0.8;
+
+function updateCard() {
+  document.getElementById('enWord').textContent = words[currentIndex].en;
+  document.getElementById('frWord').textContent = words[currentIndex].fr;
+  document.getElementById('progress').textContent = (currentIndex+1) + ' / ' + words.length;
+  // Auto voice quand on change de mot
+  setTimeout(() => speakCurrent(), 300);
+}
+
+function speakCurrent() {
+  speak(words[currentIndex].en);
+}
+
+function speak(text) {
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'en-US';
+  utterance.rate = currentSpeed;
+  utterance.pitch = 1;
+  
+  const btn = document.getElementById('voiceBtn');
+  btn.classList.add('playing');
+  btn.textContent = '🔊';
+  
+  utterance.onend = () => {
+    btn.classList.remove('playing');
+  };
+  
+  window.speechSynthesis.speak(utterance);
+}
+
+function nextWord() {
+  currentIndex = (currentIndex + 1) % words.length;
+  updateCard();
+}
+
+function prevWord() {
+  currentIndex = (currentIndex - 1 + words.length) % words.length;
+  updateCard();
+}
+
+function setSpeed(speed) {
+  currentSpeed = speed;
+  document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  speakCurrent();
+}
+
+// Initial
+updateCard();
+
+// Swipe pour mobile
+let startX = 0;
+document.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+document.addEventListener('touchend', e => {
+  let diff = startX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) {
+    if (diff > 0) nextWord(); else prevWord();
+  }
+});
+</script>
 </body>
 </html>
